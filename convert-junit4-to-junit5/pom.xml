@@ -91,5 +91,11 @@
 			<!-- docs don't have this as test scope; trying anyway to see what happens -->
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
