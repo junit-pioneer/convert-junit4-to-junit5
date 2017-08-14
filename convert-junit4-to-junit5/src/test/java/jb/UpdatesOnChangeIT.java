@@ -1,7 +1,6 @@
 package jb;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static jb.AssertionsHelper.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -10,8 +9,14 @@ import java.nio.file.attribute.*;
 import java.util.*;
 
 import org.junit.jupiter.api.*;
-import org.opentest4j.*;
 
+/**
+ * Tests either a single file is updated (or not) based on whether it has JUnit
+ * 4 syntax in it.
+ * 
+ * @author jeanne
+ *
+ */
 public class UpdatesOnChangeIT {
 
 	private Updater updater;
@@ -36,27 +41,25 @@ public class UpdatesOnChangeIT {
 	// -------------------------------------------------------
 
 	@Test
-	public void updateImports() throws IOException {
+	public void updateImports() throws Exception {
 		String contents = "import static org.junit.Assert.*;\n" +
 				"import java.util.*;\n" +
 				"import org.junit.*;\n";
 		Files.write(path, contents.getBytes());
 		updater.update(path);
-		String actual = new String(Files.readAllBytes(path));
-		assertJunit5Styleimports(actual);
+		assertJunit5StyleImports(path);
 	}
 
 	@Test
-	public void noChangeToFileIfOnJunit5() throws IOException {
+	public void noChangeToFileIfOnJunit5() throws Exception {
 		String contents = "import static org.junit.jupiter.api.Assertions.*;\n" +
 				"import java.util.*;\n" +
 				"import org.junit.jupiter.api.*;\n";
 		Files.write(path, contents.getBytes());
 		FileTime lastModified = Files.getLastModifiedTime(path);
 		updater.update(path);
-		String actual = new String(Files.readAllBytes(path));
 		assertFileTimestampNotUpdated(lastModified);
-		assertJunit5Styleimports(actual);
+		assertJunit5StyleImports(path);
 	}
 
 	private void assertFileTimestampNotUpdated(FileTime originallyLastModified) throws IOException {
@@ -65,12 +68,4 @@ public class UpdatesOnChangeIT {
 				"file should not have been written to");
 	}
 
-	private void assertJunit5Styleimports(String actual) throws MultipleFailuresError {
-		assertAll("junit 5 style imports",
-				() -> assertThat(actual, containsString("import static org.junit.jupiter.api.Assertions.*;")),
-				() -> assertThat(actual, containsString("import org.junit.jupiter.api.*;")),
-				() -> assertThat(actual, not(containsString("import static org.junit.Assert."))),
-				() -> assertThat(actual, not(containsString("import org.junit.*"))),
-				() -> assertThat(actual, not(containsString("import org.junit.a*"))));
-	}
 }
