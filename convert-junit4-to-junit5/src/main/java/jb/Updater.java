@@ -35,9 +35,7 @@ public class Updater {
 	private void updateSingleFile(Path path) {
 		try {
 			String originalText = new String(Files.readAllBytes(path));
-			String updatedText = originalText.replace("import static org.junit.Assert.*;",
-					"import static org.junit.jupiter.api.Assertions.*;");
-			updatedText = updatedText.replace("import org.junit.*", "import org.junit.jupiter.api.*;");
+			String updatedText = JunitConversionLogic.convert(originalText);
 			if (!originalText.equals(updatedText)) {
 				Files.write(path, updatedText.getBytes());
 			}

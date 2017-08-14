@@ -14,8 +14,7 @@ public class AssertionsHelper {
 				() -> assertThat(actual, containsString("import static org.junit.jupiter.api.Assertions.*;")),
 				() -> assertThat(actual, containsString("import org.junit.jupiter.api.*;")),
 				() -> assertThat(actual, not(containsString("import static org.junit.Assert."))),
-				() -> assertThat(actual, not(containsString("import org.junit.*"))),
-				() -> assertThat(actual, not(containsString("import org.junit.a*"))));
+				() -> assertThat(actual, not(containsString("import org.junit.*"))));
 	}
 	
 	public static void assertJunit4StyleImports(Path path) throws Exception {
