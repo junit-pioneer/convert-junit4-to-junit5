@@ -63,16 +63,17 @@ class JunitConversionLogicTest {
 	
 	@Test
 	void importAlreadyPresentForAssertThat() {
-		String actual = JunitConversionLogic.convert("import static org.hamcrest.MatcherAssert.assertThat;\n"
-				+ "assertThat(xxx);");
-		assertEquals("import static org.hamcrest.MatcherAssert.assertThat;\n"
-				+ "assertThat(xxx);", actual);
+		String code = "import static org.hamcrest.MatcherAssert.assertThat;\n"
+				+ "assertThat(xxx);";
+		String actual = JunitConversionLogic.convert(code);
+		assertEquals(code, actual);
 	}
 	
 	@Test
 	void doNotUpdateIfAlreadyJupiter() {
-		String actual = JunitConversionLogic.convert("import static org.junit.jupiter.api.Assertions.*;");
-		assertEquals("import static org.junit.jupiter.api.Assertions.*;", actual);
+		String code = "import static org.junit.jupiter.api.Assertions.*;";
+		String actual = JunitConversionLogic.convert(code);
+		assertEquals(code, actual);
 	}
 
 	// -------------------------------------------------------
