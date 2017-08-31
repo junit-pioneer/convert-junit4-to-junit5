@@ -31,9 +31,18 @@ public class MoveAssertionMessageTest {
 	}
 
 	@Test
-	void whiteSpace() {
-		String code = "assertEquals  (  message, expected, actual  )  ;";
-		String expected = "assertEquals(expected, actual, message);";
+	void whiteSpaceForThreeParams() {
+		String code = "assertEquals  (  message,  expected,   actual  )  ;";
+		String expected = "assertEquals  (  expected,  actual,   message  )  ;";
+		String actual = MoveAssertionMessage.reorder(code);
+		assertEquals(expected, actual);
+	}
+	
+	
+	@Test
+	void whiteSpaceForTwoParams() {
+		String code = "assertNotNull  (  message,   actual  )  ;";
+		String expected = "assertNotNull  (  actual,   message  )  ;";
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(expected, actual);
 	}
@@ -85,8 +94,36 @@ public class MoveAssertionMessageTest {
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(code, actual);
 	}
-
-	// TODO methods, string concat, multiple lines, raw string
-	// TODO multiple assertions (or deal with in caller?)
-	// TODO implement assertThat/assumeThat - remains unchanged?
+	
+	@Test
+	void assertThatRemainsUnchanged() {
+		String code = "assertThat(message, actual, endsWith(abc))";
+		String actual = MoveAssertionMessage.reorder(code);
+		assertEquals(code, actual);
+	}
+	
+	@Test
+	void concatInParams() {
+		String code = "assertEquals(message + more, expected + more, actual + more);";
+		String expected = "assertEquals(expected + more, actual + more, message + more);";
+		String actual = MoveAssertionMessage.reorder(code);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	void methodsInParams() {
+		String code = "assertEquals(message(a,b,c), expected(1,2,3), actual(x,y,z));";
+		String expected = "assertEquals(expected(1,2,3), actual(x,y,z), message(a,b,c));";
+		String actual = MoveAssertionMessage.reorder(code);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	void newLines() {
+		String code = "assertEquals(\nmessage, \nexpected, \nactual);";
+		String expected = "assertEquals(\nexpected, \nactual, \nmessage);";
+		String actual = MoveAssertionMessage.reorder(code);
+		assertEquals(expected, actual);
+	}
+	
 }
