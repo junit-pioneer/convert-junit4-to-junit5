@@ -48,12 +48,14 @@ public class Updater {
 	}
 
 	private void updateSingleFile(Path path) {
-		System.out.println("Updating " + path.toAbsolutePath());
 		try {
 			String originalText = new String(Files.readAllBytes(path));
 			String updatedText = JunitConversionLogic.convert(originalText);
 			if (!originalText.equals(updatedText)) {
+				System.out.println("Updating " + path.toAbsolutePath());
 				Files.write(path, updatedText.getBytes());
+			} else {
+				System.out.println("No updates in " + path.toAbsolutePath());
 			}
 		} catch (IOException e) {
 			// convert to runtime exception so can use inside stream operation
