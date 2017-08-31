@@ -13,6 +13,21 @@ import java.nio.file.*;
  */
 public class Updater {
 
+	public static void main(String... args) throws IOException {
+		if (args.length == 0) {
+			throw new IllegalArgumentException(
+					"Please pass the absolute path of the file or directory you want to update.");
+		}
+
+		Path path = Paths.get(args[0]);
+		if (! path.toFile().exists()) {
+			throw new IllegalArgumentException(
+					"Please point to a valid file or directory.");
+		}
+		Updater updater = new Updater();
+		updater.update(path);
+	}
+
 	/**
 	 * Update to use JUnit 5 syntax where possible
 	 * 

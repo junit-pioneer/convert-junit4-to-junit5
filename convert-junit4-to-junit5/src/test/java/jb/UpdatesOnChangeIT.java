@@ -19,13 +19,7 @@ import org.junit.jupiter.api.*;
  */
 public class UpdatesOnChangeIT {
 
-	private Updater updater;
 	private Path path;
-
-	@BeforeEach
-	public void createUpdater() {
-		updater = new Updater();
-	}
 
 	@BeforeEach
 	public void createTestFile() {
@@ -41,12 +35,29 @@ public class UpdatesOnChangeIT {
 	// -------------------------------------------------------
 
 	@Test
+	public void missingArgument() {
+		Throwable actual = assertThrows(IllegalArgumentException.class, () -> {
+			Updater.main();
+		});
+		assertEquals("Please pass the absolute path of the file or directory you want to update.",
+				actual.getMessage());
+	}
+
+	@Test
+	public void nonExistantFile() {
+		Throwable actual = assertThrows(IllegalArgumentException.class, () -> {
+			Updater.main("/this/is/not/a/file/or/directory");
+		});
+		assertEquals("Please point to a valid file or directory.", actual.getMessage());
+	}
+
+	@Test
 	public void updateImports() throws Exception {
 		String contents = "import static org.junit.Assert.*;\n" +
 				"import java.util.*;\n" +
 				"import org.junit.*;\n";
 		Files.write(path, contents.getBytes());
-		updater.update(path);
+		Updater.main(path.toAbsolutePath().toString());
 		assertJunit5StyleImports(path);
 	}
 
@@ -57,7 +68,7 @@ public class UpdatesOnChangeIT {
 				"import org.junit.jupiter.api.*;\n";
 		Files.write(path, contents.getBytes());
 		FileTime lastModified = Files.getLastModifiedTime(path);
-		updater.update(path);
+		Updater.main(path.toAbsolutePath().toString());
 		assertFileTimestampNotUpdated(lastModified);
 		assertJunit5StyleImports(path);
 	}
