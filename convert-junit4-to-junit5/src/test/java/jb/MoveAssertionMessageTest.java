@@ -41,8 +41,8 @@ public class MoveAssertionMessageTest {
 	
 	@Test
 	void whiteSpaceForTwoParams() {
-		String code = "assertNotNull  (  message,   actual  )  ;";
-		String expected = "assertNotNull  (  actual,   message  )  ;";
+		String code = "assertNotNull  (  message,   actual  )  ; ";
+		String expected = "assertNotNull  (  actual,   message  )  ; ";
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(expected, actual);
 	}

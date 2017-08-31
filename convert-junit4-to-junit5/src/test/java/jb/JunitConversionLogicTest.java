@@ -75,6 +75,29 @@ class JunitConversionLogicTest {
 		String actual = JunitConversionLogic.convert(code);
 		assertEquals(code, actual);
 	}
+	
+	@Test
+	void singleAssertion() {
+		String code = "assertTrue(message, actual);";
+		String expected = "assertTrue(actual, message);";
+		String actual = JunitConversionLogic.convert(code);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	void mutlipleAssertions() {
+		String code = "assertTrue(message, actual);";
+		String expected = "assertTrue(actual, message);";
+		String actual = JunitConversionLogic.convert(code);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	void nonJunitMethodCall() {
+		String code = "doWork(message, actual);";
+		String actual = JunitConversionLogic.convert(code);
+		assertEquals(code, actual);
+	}
 
 	// -------------------------------------------------------
 

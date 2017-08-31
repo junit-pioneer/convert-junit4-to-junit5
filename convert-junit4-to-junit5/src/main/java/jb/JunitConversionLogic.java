@@ -1,5 +1,8 @@
 package jb;
 
+import java.util.regex.*;
+import java.util.stream.*;
+
 public class JunitConversionLogic {
 
 	private JunitConversionLogic() {
@@ -14,6 +17,7 @@ public class JunitConversionLogic {
 			result = convertAnnotations(result);
 			result = convertClassNames(result);
 			result = addAssertThatImport(result);
+			result = convertAssertionsAndAssumptions(result);
 		}
 		return result;
 	}
@@ -65,4 +69,23 @@ public class JunitConversionLogic {
 		return originalText.replaceAll(regex, replacement);
 	}
 
+	private static String convertAssertionsAndAssumptions(String originalText) {
+		String result = Pattern.compile(";").splitAsStream(originalText).map(JunitConversionLogic::convertSingleAssertOrAssume)
+				.collect(Collectors.joining(""));
+		
+		// remove final trailing space
+		if (!originalText.endsWith(";")) {
+			result = result.substring(0, originalText.length());
+		}
+		return result;
+	}
+
+	private static String convertSingleAssertOrAssume(String oneLine) {
+		String withSemicolon = oneLine + ";";
+		if (oneLine.trim().startsWith("assert") || oneLine.trim().startsWith("assume")) {
+			return MoveAssertionMessage.reorder(withSemicolon);
+		} 
+		return withSemicolon;
+		
+	}
 }

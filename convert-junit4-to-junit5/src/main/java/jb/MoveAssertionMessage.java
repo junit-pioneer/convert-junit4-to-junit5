@@ -34,8 +34,9 @@ public class MoveAssertionMessage {
 		String semicolon = ";";
 		String methodName = code.replaceFirst(dotAll + openParen + anyChar + "$", "");
 		String params = code.replaceFirst(dotAll + "^" + methodName + openParen, "")
-				.replaceFirst(closeParen + whitespace + ";$", "");
-		String closeParenAndSemicolon = code.replaceFirst(dotAll + anyChar + "(" + closeParen + whitespace + semicolon + ")",
+				.replaceFirst(closeParen + whitespace + semicolon + whitespace + "$", "");
+		String closeParenAndSemicolon = code.replaceFirst(
+				dotAll + anyChar + "(" + closeParen + whitespace + semicolon + whitespace + ")",
 				"$1");
 		String[] paramArray = splitParams(params);
 
