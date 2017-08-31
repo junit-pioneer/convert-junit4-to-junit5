@@ -48,6 +48,7 @@ public class Updater {
 	}
 
 	private void updateSingleFile(Path path) {
+		System.out.println("Updating " + path.toAbsolutePath());
 		try {
 			String originalText = new String(Files.readAllBytes(path));
 			String updatedText = JunitConversionLogic.convert(originalText);
