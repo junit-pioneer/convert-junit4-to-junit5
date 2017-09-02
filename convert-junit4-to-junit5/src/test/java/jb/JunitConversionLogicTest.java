@@ -123,20 +123,6 @@ class JunitConversionLogicTest {
 	}
 
 	@Test
-	void importJunit38Wildcard() {
-		String originalImport = "import junit.framework.*;";
-		String expectedImport = "import org.junit.jupiter.api.*;";
-		assertAfterAddingClassAfter(originalImport, expectedImport);
-	}
-
-	@Test
-	void importJunit38Assert() {
-		String originalImport = "import junit.framework.Assert;";
-		String expectedImport = "import org.junit.jupiter.api.Assertions;";
-		assertAfterAddingClassAfter(originalImport, expectedImport);
-	}
-
-	@Test
 	void specificTestAnnotation() {
 		String annotation = "import org.junit.Test;";
 		String expected = "import org.junit.jupiter.api.Test;";

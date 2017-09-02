@@ -18,7 +18,6 @@ public class JunitConversionLogic {
 		// don't update file if already on JUnit 5
 		if (!originalText.contains("org.junit.jupiter")) {
 			// easier to do these with plain text
-			result = convertFromJUnit38(result);
 			result = convertPackage(result);
 			result = convertAnnotations(result);
 			result = convertClassNames(result);
@@ -33,12 +32,7 @@ public class JunitConversionLogic {
 
 		return result;
 	}
-
-	// if on JUnit 3.8, convert to JUnit 4 first
-	private static String convertFromJUnit38(String result) {
-		return result.replaceAll("junit.framework", "org.junit");
-	}
-
+	
 	private static String convertPackage(String originalText) {
 		String result = originalText;
 		result = result.replaceAll("org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
