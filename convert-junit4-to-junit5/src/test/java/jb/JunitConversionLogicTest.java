@@ -15,9 +15,15 @@ class JunitConversionLogicTest {
 		String actual = JunitConversionLogic.convert("import static org.junit.Assert.*;");
 		assertEquals("import static org.junit.jupiter.api.Assertions.*;", actual);
 	}
-
+	
 	@Test
 	void specificStaticAssertions() {
+		String actual = JunitConversionLogic.convert("import org.junit.Assert; Assert.assertTrue;");
+		assertEquals("import org.junit.jupiter.api.Assertions; Assertions.assertTrue;", actual);
+	}
+
+	@Test
+	void specificFullyQualifiedStaticAssertions() {
 		String actual = JunitConversionLogic.convert("org.junit.Assert.assertTrue;");
 		assertEquals("org.junit.jupiter.api.Assertions.assertTrue;", actual);
 	}
@@ -27,9 +33,15 @@ class JunitConversionLogicTest {
 		String actual = JunitConversionLogic.convert("import static org.junit.Assume.*;");
 		assertEquals("import static org.junit.jupiter.api.Assumptions.*;", actual);
 	}
-
+	
 	@Test
 	void specificStaticAssumptions() {
+		String actual = JunitConversionLogic.convert("import org.junit.Assume; Assume.assumeTrue;");
+		assertEquals("import org.junit.jupiter.api.Assumptions; Assumptions.assumeTrue;", actual);
+	}
+
+	@Test
+	void specificFullyQualifiedStaticAssumptions() {
 		String actual = JunitConversionLogic.convert("org.junit.Assume.assumeFalse;");
 		assertEquals("org.junit.jupiter.api.Assumptions.assumeFalse;", actual);
 	}

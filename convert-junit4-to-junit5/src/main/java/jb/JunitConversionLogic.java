@@ -1,5 +1,6 @@
 package jb;
 
+import static jb.RegExHelper.*;
 import java.util.regex.*;
 import java.util.stream.*;
 
@@ -32,16 +33,16 @@ public class JunitConversionLogic {
 	private static String convertAnnotations(String originalText) {
 		String result = originalText;
 		result = result.replace("org.junit.jupiter.api.BeforeClass", "org.junit.jupiter.api.BeforeAll");
-		result = replaceUnlessFollowedBy(result, "org.junit.jupiter.api.Before", "All",
+		result = replaceUnlessFollowedByEscapingPackageName(result, "org.junit.jupiter.api.Before", "All",
 				"org.junit.jupiter.api.BeforeEach");
 		result = result.replace("org.junit.jupiter.api.AfterClass", "org.junit.jupiter.api.AfterAll");
-		result = replaceUnlessFollowedBy(result, "org.junit.jupiter.api.After", "All",
+		result = replaceUnlessFollowedByEscapingPackageName(result, "org.junit.jupiter.api.After", "All",
 				"org.junit.jupiter.api.AfterEach");
 		result = result.replace("org.junit.jupiter.api.Ignore", "org.junit.jupiter.api.Disabled");
 		result = result.replace("@BeforeClass", "@BeforeAll");
-		result = replaceUnlessFollowedBy(result, "@Before", "All", "@BeforeEach");
+		result = replaceUnlessFollowedByEscapingPackageName(result, "@Before", "All", "@BeforeEach");
 		result = result.replace("@AfterClass", "@AfterAll");
-		result = replaceUnlessFollowedBy(result, "@After", "All", "@AfterEach");
+		result = replaceUnlessFollowedByEscapingPackageName(result, "@After", "All", "@AfterEach");
 		return result.replace("@Ignore", "@Disabled");
 	}
 
@@ -49,6 +50,9 @@ public class JunitConversionLogic {
 		String result = originalText;
 		result = result.replace("org.junit.jupiter.api.Assert", "org.junit.jupiter.api.Assertions");
 		result = result.replace("org.junit.jupiter.api.Assume", "org.junit.jupiter.api.Assumptions");
+		// don't update for hamcrest "MatcherAssert"
+		result = replaceUnlessPreceededBy(result, "Assert.assert", "Matcher", "Assertions.assert");
+		result = result.replace("Assume.assume", "Assumptions.assume");
 		return result;
 	}
 
@@ -61,18 +65,11 @@ public class JunitConversionLogic {
 		return result;
 	}
 
-	private static String replaceUnlessFollowedBy(String originalText,
-			String targetFullyQualifiedName, String exceptIfFollowing, String replacement) {
-		String escapedDotsInPackageName = targetFullyQualifiedName.replace(".", "\\.");
-		String notFollowedBy = "(?!" + exceptIfFollowing + ")";
-		String regex = escapedDotsInPackageName + notFollowedBy;
-		return originalText.replaceAll(regex, replacement);
-	}
-
 	private static String convertAssertionsAndAssumptions(String originalText) {
-		String result = Pattern.compile(";").splitAsStream(originalText).map(JunitConversionLogic::convertSingleAssertOrAssume)
+		String result = Pattern.compile(";").splitAsStream(originalText)
+				.map(JunitConversionLogic::convertSingleAssertOrAssume)
 				.collect(Collectors.joining(""));
-		
+
 		// remove final trailing space
 		if (!originalText.endsWith(";")) {
 			result = result.substring(0, originalText.length());
@@ -84,8 +81,8 @@ public class JunitConversionLogic {
 		String withSemicolon = oneLine + ";";
 		if (oneLine.trim().startsWith("assert") || oneLine.trim().startsWith("assume")) {
 			return MoveAssertionMessage.reorder(withSemicolon);
-		} 
+		}
 		return withSemicolon;
-		
+
 	}
 }
