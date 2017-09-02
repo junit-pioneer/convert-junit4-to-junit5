@@ -8,7 +8,6 @@
 		<java.version>1.8</java.version>
 		<surefire.version>2.19.1</surefire.version>
 		<junit.jupiter.version>5.0.0-RC3</junit.jupiter.version>
-		<junit.vintage.version>${junit.version}.0-RC3</junit.vintage.version>
 		<junit.platform.version>1.0.0-RC3</junit.platform.version>
 	</properties>
 	<build>
