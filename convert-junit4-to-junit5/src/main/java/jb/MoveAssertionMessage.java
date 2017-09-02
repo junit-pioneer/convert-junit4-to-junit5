@@ -43,14 +43,17 @@ public class MoveAssertionMessage {
 		return moveMessageParamToEnd(code, methodName, closeParenAndSemicolon, paramArray);
 	}
 
+	// split by commas but not if within a string or parens
+	// what would be a better way of doing this?
 	private static String[] splitParams(String params) {
 		List<String> list = new ArrayList<>();
 		StringBuilder builder = new StringBuilder();
 		int numNestedParams = 0;
+		boolean insideQuotes = false;
 		for (int i = 0; i < params.length(); i++) {
 			char ch = params.charAt(i);
 			// start a new parameter where needed
-			if (ch == ',' && numNestedParams == 0) {
+			if (ch == ',' && numNestedParams == 0 && ! insideQuotes) {
 				list.add(builder.toString());
 				builder = new StringBuilder();
 			} else {
@@ -61,6 +64,8 @@ public class MoveAssertionMessage {
 				numNestedParams++;
 			} else if (ch == ')') {
 				numNestedParams--;
+			} else if (ch == '"' && ! previousCharacterIsBackslash(params, i)) {
+				insideQuotes = ! insideQuotes;
 			}
 
 		}
@@ -68,6 +73,13 @@ public class MoveAssertionMessage {
 		adjustParameterSpaces(list);
 
 		return list.toArray(new String[0]);
+	}
+
+	private static boolean previousCharacterIsBackslash(String params, int currentPosition) {
+		if (currentPosition == 0) {
+			return false;
+		}
+		return params.charAt(currentPosition - 1) == '\\';
 	}
 
 	// adjust spaces before/after each parameter to preserve logical position in

@@ -37,8 +37,7 @@ public class MoveAssertionMessageTest {
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(expected, actual);
 	}
-	
-	
+
 	@Test
 	void whiteSpaceForTwoParams() {
 		String code = "assertNotNull  (  message,   actual  )  ; ";
@@ -60,6 +59,8 @@ public class MoveAssertionMessageTest {
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(code, actual);
 	}
+	
+	// ------------------------------------------------------
 
 	@ParameterizedTest
 	@ValueSource(strings = { "assertArrayEquals", "assertEquals", "assertNotSame", "assertSame" })
@@ -79,6 +80,8 @@ public class MoveAssertionMessageTest {
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(expected, actual);
 	}
+	
+	// ------------------------------------------------------
 
 	void deltaDoubleReorders() {
 		String code = "assertEquals(message, expected, actual, delta);";
@@ -94,14 +97,14 @@ public class MoveAssertionMessageTest {
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(code, actual);
 	}
-	
+
 	@Test
 	void assertThatRemainsUnchanged() {
 		String code = "assertThat(message, actual, endsWith(abc))";
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(code, actual);
 	}
-	
+
 	@Test
 	void concatInParams() {
 		String code = "assertEquals(message + more, expected + more, actual + more);";
@@ -109,7 +112,7 @@ public class MoveAssertionMessageTest {
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	void methodsInParams() {
 		String code = "assertEquals(message(a,b,c), expected(1,2,3), actual(x,y,z));";
@@ -117,11 +120,36 @@ public class MoveAssertionMessageTest {
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	void newLines() {
 		String code = "assertEquals(\nmessage, \nexpected, \nactual);";
 		String expected = "assertEquals(\nexpected, \nactual, \nmessage);";
+		String actual = MoveAssertionMessage.reorder(code);
+		assertEquals(expected, actual);
+	}
+	
+	// ------------------------------------------------------
+
+	@Test
+	void commaInStringButNoMessage() {
+		String code = "assertEquals(\"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1));";
+		String actual = MoveAssertionMessage.reorder(code);
+		assertEquals(code, actual);
+	}
+
+	@Test
+	void commaInStringInsideMessage() {
+		String code = "assertEquals(\"a,b,c\", \"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1));";
+		String expected = "assertEquals(\"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1), \"a,b,c\");";
+		String actual = MoveAssertionMessage.reorder(code);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void commaAndEscapedQuoteInStringInsideMessage() {
+		String code = "assertEquals(\"a,\\\",c\", \"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1));";
+		String expected = "assertEquals(\"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1), \"a,\\\",c\");";
 		String actual = MoveAssertionMessage.reorder(code);
 		assertEquals(expected, actual);
 	}
