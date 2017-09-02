@@ -21,7 +21,13 @@ class JunitConversionLogicTest {
 		String actual = JunitConversionLogic.convert("import org.junit.Assert; Assert.assertTrue;");
 		assertEquals("import org.junit.jupiter.api.Assertions; Assertions.assertTrue;", actual);
 	}
-
+	
+	@Test
+	void specificStaticFail() {
+		String actual = JunitConversionLogic.convert("import org.junit.Assert; Assert.fail;");
+		assertEquals("import org.junit.jupiter.api.Assertions; Assertions.fail;", actual);
+	}
+	
 	@Test
 	void specificFullyQualifiedStaticAssertions() {
 		String actual = JunitConversionLogic.convert("org.junit.Assert.assertTrue;");
@@ -52,6 +58,19 @@ class JunitConversionLogicTest {
 		assertEquals("import org.junit.jupiter.api.*;", actual);
 	}
 
+	@Test
+	void importJunit38Wildcard() {
+		String actual = JunitConversionLogic.convert("import junit.framework.*;");
+		assertEquals("import org.junit.jupiter.api.*;", actual);
+	}
+	
+	@Test
+	void importJunit38Assert() {
+		String actual = JunitConversionLogic.convert("import junit.framework.Assert;");
+		assertEquals("import org.junit.jupiter.api.Assertions;", actual);
+	}
+
+	
 	@Test
 	void specificMainPackage() {
 		String actual = JunitConversionLogic.convert("org.junit.Test");

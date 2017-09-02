@@ -1,6 +1,7 @@
 package jb;
 
 import static jb.RegExHelper.*;
+
 import java.util.regex.*;
 import java.util.stream.*;
 
@@ -14,6 +15,7 @@ public class JunitConversionLogic {
 		String result = originalText;
 		// don't update file if already on JUnit 5
 		if (!originalText.contains("org.junit.jupiter")) {
+			result = convertFromJUnit38(result);
 			result = convertPackage(result);
 			result = convertAnnotations(result);
 			result = convertClassNames(result);
@@ -21,6 +23,11 @@ public class JunitConversionLogic {
 			result = convertAssertionsAndAssumptions(result);
 		}
 		return result;
+	}
+
+	// if on JUnit 3.8, convert to JUnit 4 first
+	private static String convertFromJUnit38(String result) {
+		return result.replaceAll("junit.framework", "org.junit");
 	}
 
 	private static String convertPackage(String originalText) {
@@ -52,6 +59,7 @@ public class JunitConversionLogic {
 		result = result.replace("org.junit.jupiter.api.Assume", "org.junit.jupiter.api.Assumptions");
 		// don't update for hamcrest "MatcherAssert"
 		result = replaceUnlessPreceededBy(result, "Assert.assert", "Matcher", "Assertions.assert");
+		result = result.replace("Assert.fail", "Assertions.fail");
 		result = result.replace("Assume.assume", "Assumptions.assume");
 		return result;
 	}
