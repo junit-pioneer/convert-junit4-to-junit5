@@ -1,6 +1,6 @@
 package jb;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static jb.JunitConversionLogicTest.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -10,56 +10,49 @@ public class MoveAssertionMessageTest {
 
 	@Test
 	void notAnAssertion() {
-		String code = "// ignore me";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(code, actual);
+		String code = "// ignore me \n";
+		assertAfterWrappingInMethod(code, code);
 	}
 
 	@Test
 	void noMessage() {
 		String code = "assertEquals(expected, actual);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(code, actual);
+		assertAfterWrappingInMethod(code, code);
 	}
 
 	@Test
 	void message() {
 		String code = "assertEquals(message, expected, actual);";
 		String expected = "assertEquals(expected, actual, message);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
 
 	@Test
 	void whiteSpaceForThreeParams() {
 		String code = "assertEquals  (  message,  expected,   actual  )  ;";
 		String expected = "assertEquals  (  expected,  actual,   message  )  ;";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
 
 	@Test
 	void whiteSpaceForTwoParams() {
 		String code = "assertNotNull  (  message,   actual  )  ; ";
 		String expected = "assertNotNull  (  actual,   message  )  ; ";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
 
 	@Test
 	void notEnoughParameters() {
 		String code = "assertEquals(random);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(code, actual);
+		assertAfterWrappingInMethod(code, code);
 	}
 
 	@Test
 	void tooManyParameters() {
 		String code = "assertEquals(a, b, c, d, e);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(code, actual);
+		assertAfterWrappingInMethod(code, code);
 	}
-	
+
 	// ------------------------------------------------------
 
 	@ParameterizedTest
@@ -67,8 +60,7 @@ public class MoveAssertionMessageTest {
 	void allJunit4MethodNamesReorderExpectedActual(String methodName) {
 		String code = methodName + "(message, expected, actual);";
 		String expected = methodName + "(expected, actual, message);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
 
 	@ParameterizedTest
@@ -77,81 +69,71 @@ public class MoveAssertionMessageTest {
 	void allJunit4MethodNamesReorderSingleParam(String methodName) {
 		String code = methodName + "(message, actual);";
 		String expected = methodName + "(actual, message);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
-	
+
 	// ------------------------------------------------------
 
 	void deltaDoubleReorders() {
 		String code = "assertEquals(message, expected, actual, delta);";
 		String expected = "assertEquals(expected, actual, delta, message);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = { "assertDoubles", "assertCustom", "assumeBecauseISaidSo" })
 	void otherMethodNamesDoNotChangeParamOrder(String methodName) {
 		String code = methodName + "(message, expected, actual);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(code, actual);
+		assertAfterWrappingInMethod(code, code);
 	}
 
 	@Test
 	void assertThatRemainsUnchanged() {
-		String code = "assertThat(message, actual, endsWith(abc))";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(code, actual);
+		String code = "assertThat(message, actual, endsWith(abc));";
+		assertAfterWrappingInMethod(code, code);
 	}
 
 	@Test
 	void concatInParams() {
 		String code = "assertEquals(message + more, expected + more, actual + more);";
 		String expected = "assertEquals(expected + more, actual + more, message + more);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
 
 	@Test
 	void methodsInParams() {
 		String code = "assertEquals(message(a,b,c), expected(1,2,3), actual(x,y,z));";
 		String expected = "assertEquals(expected(1,2,3), actual(x,y,z), message(a,b,c));";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
 
 	@Test
 	void newLines() {
 		String code = "assertEquals(\nmessage, \nexpected, \nactual);";
 		String expected = "assertEquals(\nexpected, \nactual, \nmessage);";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
-	
+
 	// ------------------------------------------------------
 
 	@Test
 	void commaInStringButNoMessage() {
 		String code = "assertEquals(\"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1));";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(code, actual);
+		assertAfterWrappingInMethod(code, code);
 	}
 
 	@Test
 	void commaInStringInsideMessage() {
 		String code = "assertEquals(\"a,b,c\", \"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1));";
 		String expected = "assertEquals(\"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1), \"a,b,c\");";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
 
 	@Test
 	void commaAndEscapedQuoteInStringInsideMessage() {
 		String code = "assertEquals(\"a,\\\",c\", \"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1));";
 		String expected = "assertEquals(\"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1), \"a,\\\",c\");";
-		String actual = MoveAssertionMessage.reorder(code);
-		assertEquals(expected, actual);
+		assertAfterWrappingInMethod(code, expected);
 	}
-	
+
 }

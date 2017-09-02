@@ -2,8 +2,10 @@ package jb;
 
 import static jb.RegExHelper.*;
 
-import java.util.regex.*;
-import java.util.stream.*;
+import java.io.*;
+
+import com.github.javaparser.*;
+import com.github.javaparser.ast.*;
 
 public class JunitConversionLogic {
 
@@ -15,13 +17,20 @@ public class JunitConversionLogic {
 		String result = originalText;
 		// don't update file if already on JUnit 5
 		if (!originalText.contains("org.junit.jupiter")) {
+			// easier to do these with plain text
 			result = convertFromJUnit38(result);
 			result = convertPackage(result);
 			result = convertAnnotations(result);
 			result = convertClassNames(result);
 			result = addAssertThatImport(result);
-			result = convertAssertionsAndAssumptions(result);
+
+			// easier to do move parameter order with AST parser
+			CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(result.getBytes()));
+			convertAssertionsAndAssumptionMethodParamOrder(cu);
+
+			result = cu.toString();
 		}
+
 		return result;
 	}
 
@@ -73,19 +82,7 @@ public class JunitConversionLogic {
 		return result;
 	}
 
-	private static String convertAssertionsAndAssumptions(String originalText) {
-		// split to find statements by separating on blocks or semicolon delimiters
-		// and include the delimiter in the match
-		return Pattern.compile("(?<=[;{}])").splitAsStream(originalText)
-				.map(JunitConversionLogic::convertSingleAssertOrAssume)
-				.collect(Collectors.joining(""));
-	}
-
-	private static String convertSingleAssertOrAssume(String oneLine) {
-		if (oneLine.trim().startsWith("assert") || oneLine.trim().startsWith("assume")) {
-			return MoveAssertionMessage.reorder(oneLine);
-		}
-		return oneLine;
-
+	private static void convertAssertionsAndAssumptionMethodParamOrder(CompilationUnit cu) {
+		new MoveMessageParameterVisitor().visit(cu, null);
 	}
 }
