@@ -13,7 +13,7 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 					"assumeNoException", "assumeNull", "assumeNotNull"));
 
 	private static final Set<String> TWO_PARAM_METHODS = new HashSet<>(
-			Arrays.asList("assertEquals", "assertArrayEquals", "assertNotSame", "assertSame"));
+			Arrays.asList("assertEquals", "assertArrayEquals", "assertNotEquals", "assertNotSame", "assertSame"));
 
 	private static final Set<String> THREE_PARAM_METHODS = new HashSet<>(Arrays.asList("assertEquals"));
 

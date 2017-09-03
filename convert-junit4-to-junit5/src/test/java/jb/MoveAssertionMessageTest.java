@@ -56,7 +56,7 @@ public class MoveAssertionMessageTest {
 	// ------------------------------------------------------
 
 	@ParameterizedTest
-	@ValueSource(strings = { "assertArrayEquals", "assertEquals", "assertNotSame", "assertSame" })
+	@ValueSource(strings = { "assertArrayEquals", "assertEquals", "assertNotEquals", "assertNotSame", "assertSame" })
 	void allJunit4MethodNamesReorderExpectedActual(String methodName) {
 		String code = methodName + "(message, expected, actual);";
 		String expected = methodName + "(expected, actual, message);";
