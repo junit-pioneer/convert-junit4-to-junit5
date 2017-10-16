@@ -7,6 +7,7 @@ import java.io.*;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 
+
 public class JunitConversionLogic {
 
 	private JunitConversionLogic() {
@@ -28,15 +29,18 @@ public class JunitConversionLogic {
 			convertAssertionsAndAssumptionMethodParamOrder(cu);
 
 			result = cu.toString();
+			result = addFIXMEForExpectedException(result);
+
 		}
 
 		return result;
 	}
-	
+
 	private static String convertPackage(String originalText) {
 		String result = originalText;
 		result = result.replaceAll("org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
 		result = result.replaceAll("org.junit.", "org.junit.jupiter.api.");
+
 		return result;
 	}
 
@@ -53,12 +57,16 @@ public class JunitConversionLogic {
 		result = replaceUnlessFollowedByEscapingPackageName(result, "@Before", "All", "@BeforeEach");
 		result = result.replace("@AfterClass", "@AfterAll");
 		result = replaceUnlessFollowedByEscapingPackageName(result, "@After", "All", "@AfterEach");
+		result = convertParameter(result);
+
 		return result.replace("@Ignore", "@Disabled");
 	}
 
 	private static String convertClassNames(String originalText) {
 		String result = originalText;
 		result = result.replace("org.junit.jupiter.api.Assert", "org.junit.jupiter.api.Assertions");
+		result = result.replace("junit.framework.Assert", "org.junit.jupiter.api.Assertions");
+		
 		result = result.replace("org.junit.jupiter.api.Assume", "org.junit.jupiter.api.Assumptions");
 		// don't update for hamcrest "MatcherAssert"
 		result = replaceUnlessPreceededBy(result, "Assert.assert", "Matcher", "Assertions.assert");
@@ -66,6 +74,7 @@ public class JunitConversionLogic {
 		result = result.replace("Assume.assume", "Assumptions.assume");
 		return result;
 	}
+
 
 	// Assert that moved from junit core to hamcrest matchers
 	private static String addAssertThatImport(String originalText) {
@@ -78,5 +87,40 @@ public class JunitConversionLogic {
 
 	private static void convertAssertionsAndAssumptionMethodParamOrder(CompilationUnit cu) {
 		new MoveMessageParameterVisitor().visit(cu, null);
+	}
+
+	private static String convertParameter(String originalText) {
+		String result = originalText;
+		String fullMethodRegex = "@Parameters(.)*\\((.)*method(.)*=";
+		String parameterReplacement = "@ParameterizedTest\\\n@MethodSource(";
+		String csvSourceRegex = "@Parameters(.)*\\((.)*\\{";
+		String csvSourceReplacement = "@ParameterizedTest\\\n@CsvSource({";
+
+		result = result.replaceAll("junitparams.Parameters","org.junit.jupiter.params.ParameterizedTest");
+		result = result.replaceAll("import junitparams.JUnitParamsRunner;\n", "");
+
+		result = result.replaceAll("@RunWith(.)*[\\(](.)*JUnitParams(.)*", "");
+		result = result.replaceAll(csvSourceRegex, csvSourceReplacement);
+		result = result.replaceAll(fullMethodRegex, parameterReplacement);
+
+		if (result.contains("@MethodSource") && !result.contains("import org.junit.jupiter.params.provider.MethodSource;")) {
+			result = result.replaceFirst("org.junit.jupiter.params.ParameterizedTest;", "org.junit.jupiter.params.ParameterizedTest;\nimport org.junit.jupiter.params.provider.MethodSource;");
+		}
+		
+		if (result.contains("@CsvSource") && !result.contains("import org.junit.jupiter.params.provider.CsvSource;")) {
+			result = result.replaceFirst("org.junit.jupiter.params.ParameterizedTest;", "org.junit.jupiter.params.ParameterizedTest;\nimport org.junit.jupiter.params.provider.CsvSource;");
+		}
+		
+		result = result.replaceAll("import org.junit.jupiter.api.runner.RunWith;\n","");
+
+		return result;
+	}
+	
+	private static String addFIXMEForExpectedException(String originalText) {
+		String result = originalText;
+		String exceptionTest = "@Test(.)*[\\(](.)*expected";
+		result = result.replaceAll(exceptionTest, "//FIXME: replace expected with assertThrows statement.\n@Test //(expected");
+		
+		return result;
 	}
 }
