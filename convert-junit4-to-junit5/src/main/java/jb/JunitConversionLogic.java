@@ -29,7 +29,7 @@ public class JunitConversionLogic {
 			convertAssertionsAndAssumptionMethodParamOrder(cu);
 
 			result = cu.toString();
-			result = addToDoForExpectedException(result);
+			result = addFIXMEForExpectedException(result);
 
 		}
 
@@ -116,10 +116,10 @@ public class JunitConversionLogic {
 		return result;
 	}
 	
-	private static String addToDoForExpectedException(String originalText) {
+	private static String addFIXMEForExpectedException(String originalText) {
 		String result = originalText;
 		String exceptionTest = "@Test(.)*[\\(](.)*expected";
-		result = result.replaceAll(exceptionTest, "//ToDo: replace expected with assertThrows statement.\n@Test //(expected");
+		result = result.replaceAll(exceptionTest, "//FIXME: replace expected with assertThrows statement.\n@Test //(expected");
 		
 		return result;
 	}
