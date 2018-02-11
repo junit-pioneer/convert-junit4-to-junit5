@@ -1,5 +1,7 @@
 This is a project I wrote for myself to [facilitate migrating a good number of tests to JUnit 5 syntax](https://www.selikoff.net/?p=7915&preview=true). Feel free to use it/enhance it/etc if you find it useful.
 
+Note that IntelliJ has functionality to migrate from JUnit 4 to 5. I recommend trying that before this program. (This program was written in September 2016 when no IDEs had the functionality).
+
 # Pre-reqs
 Before starting out, the program assumes you have:
 * Updated your Maven POM/Groovy build file/whatever to reference the new JUnit 5 jars
