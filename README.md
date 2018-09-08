@@ -14,6 +14,8 @@ Then make manual edits at end (or rollback those test classes and deal with them
 1. Tests that use expected parameter
 1. Tests that use timeout parameter
 
+This program is also available as a shaded jar. To run:
+java -jar jb.Updater /my/dir/src/test/java
 
 # Side effects
 This program updates every class and reformats your code. This is a side effect of using [Java Parser](https://github.com/javaparser/javaparser). If you have a standard coding format, you can always reapply it after running. Regardless, make sure to commit your code before running the program so this commit only has the refactoring to JUnit 5.
