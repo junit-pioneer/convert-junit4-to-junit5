@@ -2,6 +2,7 @@ package jb;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.stream.*;
 
 /**
  * Converts a file or nested directories to use JUnit 5 syntax where possible.
@@ -39,11 +40,12 @@ public class Updater {
 		if (path.toFile().isFile()) {
 			updateSingleFile(path);
 		} else {
-			Files.walk(path)
+			try (Stream<Path> stream = Files.walk(path)) {
 					// only update java files
-					.filter(p -> p.toFile().isFile())
+			  stream.filter(p -> p.toFile().isFile())
 					.filter(p -> p.toString().endsWith(".java"))
 					.forEach(this::updateSingleFile);
+			}		
 		}
 	}
 
