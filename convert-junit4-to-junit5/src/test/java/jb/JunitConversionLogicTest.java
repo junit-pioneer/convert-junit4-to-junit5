@@ -12,7 +12,7 @@ import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 
 class JunitConversionLogicTest {
-	
+
 	private static String convertWhitespaceForJavaParser(String string) {
 		CompilationUnit cu = JavaParser.parse(string);
 		return cu.toString();
@@ -28,6 +28,15 @@ class JunitConversionLogicTest {
 		assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
 	}
 
+	// wrap in class so well formed for parser
+	private static void assertUnchangedWrappingInClass(String code) {
+		String prefix = "public class A { ";
+		String postfix = " }";
+		String codeWrapped = prefix + code + postfix;
+		String actual = JunitConversionLogic.convert(codeWrapped);
+		assertEquals(codeWrapped, actual);
+	}
+
 	// wrap in class/method so well formed for parser
 	public static void assertAfterWrappingInMethod(String code, String expected) {
 		String prefix = "public class A { public void m() { ";
@@ -36,6 +45,15 @@ class JunitConversionLogicTest {
 		String expectedWrapped = prefix + expected + postfix;
 		String actual = JunitConversionLogic.convert(codeWrapped);
 		assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
+	}
+
+	// wrap in class/method so well formed for parser
+	public static void assertUnchangedAfterWrappingInMethod(String code) {
+		String prefix = "public class A { public void m() { ";
+		String postfix = " }}";
+		String codeWrapped = prefix + code + postfix;
+		String actual = JunitConversionLogic.convert(codeWrapped);
+		assertEquals(codeWrapped, actual);
 	}
 
 	// add class after import so well formed for parser
@@ -55,6 +73,13 @@ class JunitConversionLogicTest {
 		String actual = JunitConversionLogic.convert(codeWrapped);
 		assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
 	}
+	
+	// wrap in class/method so well formed for parser
+	private static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
+			String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
+			String actual = JunitConversionLogic.convert(codeWrapped);
+			assertEquals(codeWrapped, actual);
+		}
 
 	// ------------------------------------------------------------------
 
@@ -149,7 +174,7 @@ class JunitConversionLogicTest {
 	void importAlreadyPresentForAssertThat() {
 		String originalImport = "import static org.hamcrest.MatcherAssert.assertThat;\n";
 		String originalMethod = "assertThat(xxx);";
-		assertAfterWrappingInMethod(originalImport, originalMethod, originalImport, originalMethod);
+		assertUnchangedAfterWrappingInMethod(originalImport, originalMethod);
 	}
 
 	@Test
@@ -176,7 +201,7 @@ class JunitConversionLogicTest {
 	@Test
 	void nonJunitMethodCall() {
 		String code = "doWork(message, actual);";
-		assertAfterWrappingInMethod(code, code);
+		assertUnchangedAfterWrappingInMethod(code);
 	}
 
 	// -------------------------------------------------------
@@ -195,6 +220,14 @@ class JunitConversionLogicTest {
 		String expected = "public void method() { assertTrue(actual, message); // comment \n"
 				+ "assertTrue(actual, message); }";
 		assertWrappingInClass(code, expected);
+	}
+
+	// -------------------------------------------------------
+
+	@Test
+	void doNotEditClassifNotJUnit() {
+		String code = "public void randomMethod() {}";
+		assertUnchangedWrappingInClass(code);
 	}
 
 	// -------------------------------------------------------

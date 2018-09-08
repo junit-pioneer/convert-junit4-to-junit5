@@ -16,6 +16,8 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 			Arrays.asList("assertEquals", "assertArrayEquals", "assertNotEquals", "assertNotSame", "assertSame"));
 
 	private static final Set<String> THREE_PARAM_METHODS = new HashSet<>(Arrays.asList("assertEquals"));
+	
+	private boolean updated = false;
 
 	@Override
 	public void visit(final MethodCallExpr n, final Object arg) {
@@ -26,8 +28,13 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 			Expression message = (Expression) getMessageParam(methodName, children);
 			n.remove(message);
 			n.addArgument(message);
+			updated = true;
 		}
 		super.visit(n, arg);
+	}
+	
+	public boolean performedUpdate() {
+		return updated;
 	}
 
 	private boolean needsUpdating(String methodName, List<Node> children) {

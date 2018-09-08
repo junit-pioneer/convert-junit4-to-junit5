@@ -25,9 +25,11 @@ public class JunitConversionLogic {
 
 			// easier to do move parameter order with AST parser
 			CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(result.getBytes()));
-			convertAssertionsAndAssumptionMethodParamOrder(cu);
-
-			result = cu.toString();
+			boolean updated = convertAssertionsAndAssumptionMethodParamOrder(cu);
+			if (! originalText.equals(result) || updated) {
+				// only update result if there were changes
+				result = cu.toString();
+			}
 		}
 
 		return result;
@@ -76,7 +78,9 @@ public class JunitConversionLogic {
 		return result;
 	}
 
-	private static void convertAssertionsAndAssumptionMethodParamOrder(CompilationUnit cu) {
-		new MoveMessageParameterVisitor().visit(cu, null);
+	private static boolean convertAssertionsAndAssumptionMethodParamOrder(CompilationUnit cu) {
+		MoveMessageParameterVisitor visitor = new MoveMessageParameterVisitor();
+		visitor.visit(cu, null);
+		return visitor.performedUpdate();
 	}
 }

@@ -11,13 +11,13 @@ public class MoveAssertionMessageTest {
 	@Test
 	void notAnAssertion() {
 		String code = "// ignore me \n";
-		assertAfterWrappingInMethod(code, code);
+		assertUnchangedAfterWrappingInMethod(code);
 	}
 
 	@Test
 	void noMessage() {
 		String code = "assertEquals(expected, actual);";
-		assertAfterWrappingInMethod(code, code);
+		assertUnchangedAfterWrappingInMethod(code);
 	}
 
 	@Test
@@ -44,13 +44,13 @@ public class MoveAssertionMessageTest {
 	@Test
 	void notEnoughParameters() {
 		String code = "assertEquals(random);";
-		assertAfterWrappingInMethod(code, code);
+		assertUnchangedAfterWrappingInMethod(code);
 	}
 
 	@Test
 	void tooManyParameters() {
 		String code = "assertEquals(a, b, c, d, e);";
-		assertAfterWrappingInMethod(code, code);
+		assertUnchangedAfterWrappingInMethod(code);
 	}
 
 	// ------------------------------------------------------
@@ -84,13 +84,13 @@ public class MoveAssertionMessageTest {
 	@ValueSource(strings = { "assertDoubles", "assertCustom", "assumeBecauseISaidSo" })
 	void otherMethodNamesDoNotChangeParamOrder(String methodName) {
 		String code = methodName + "(message, expected, actual);";
-		assertAfterWrappingInMethod(code, code);
+		assertUnchangedAfterWrappingInMethod(code);
 	}
 
 	@Test
 	void assertThatRemainsUnchanged() {
 		String code = "assertThat(message, actual, endsWith(abc));";
-		assertAfterWrappingInMethod(code, code);
+		assertUnchangedAfterWrappingInMethod(code);
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class MoveAssertionMessageTest {
 	@Test
 	void commaInStringButNoMessage() {
 		String code = "assertEquals(\"Empty message, please enter a message or quit.\", PostCommon.validatePost(post, true, 1));";
-		assertAfterWrappingInMethod(code, code);
+		assertUnchangedAfterWrappingInMethod(code);
 	}
 
 	@Test
