@@ -6,6 +6,7 @@ import java.io.*;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 
 public class JunitConversionLogic {
 
@@ -27,10 +28,11 @@ public class JunitConversionLogic {
 
 		// easier to do move parameter order with AST parser
 		CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(result.getBytes()));
+		LexicalPreservingPrinter.setup(cu);
 		boolean updated = convertAssertionsAndAssumptionMethodParamOrder(cu);
 		if (! originalText.equals(result) || updated) {
 			// only update result if there were changes
-			result = cu.toString();
+			result = LexicalPreservingPrinter.print(cu);
 		}
 		return result;
 	}
