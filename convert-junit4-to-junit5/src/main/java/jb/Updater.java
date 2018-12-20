@@ -34,9 +34,8 @@ public class Updater {
 	 * 
 	 * @param path
 	 *            a file or directory to update recursively
-	 * @throws IOException
 	 */
-	public void update(Path path) throws IOException {
+	void update(Path path) throws IOException {
 		if (path.toFile().isFile()) {
 			updateSingleFile(path);
 		} else {
