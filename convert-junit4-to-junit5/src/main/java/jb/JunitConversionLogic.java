@@ -14,24 +14,24 @@ public class JunitConversionLogic {
 	}
 
 	public static String convert(String originalText) {
-		String result = originalText;
 		// don't update file if already on JUnit 5
-		if (!originalText.contains("org.junit.jupiter")) {
-			// easier to do these with plain text
-			result = convertPackage(result);
-			result = convertAnnotations(result);
-			result = convertClassNames(result);
-			result = addAssertThatImport(result);
-
-			// easier to do move parameter order with AST parser
-			CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(result.getBytes()));
-			boolean updated = convertAssertionsAndAssumptionMethodParamOrder(cu);
-			if (! originalText.equals(result) || updated) {
-				// only update result if there were changes
-				result = cu.toString();
-			}
+		if (originalText.contains("org.junit.jupiter")) {
+			return originalText;
 		}
+		// easier to do these with plain text
+		String result = originalText;
+		result = convertPackage(result);
+		result = convertAnnotations(result);
+		result = convertClassNames(result);
+		result = addAssertThatImport(result);
 
+		// easier to do move parameter order with AST parser
+		CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(result.getBytes()));
+		boolean updated = convertAssertionsAndAssumptionMethodParamOrder(cu);
+		if (! originalText.equals(result) || updated) {
+			// only update result if there were changes
+			result = cu.toString();
+		}
 		return result;
 	}
 	
