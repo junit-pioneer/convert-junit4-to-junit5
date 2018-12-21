@@ -30,7 +30,7 @@ class ScanAndUpdateDirIT {
 
 	@BeforeEach
 	void createUpdater() {
-		updater = new Updater(Configuration.prettyPrint());
+		updater = new Updater(Configuration.prettyPrintAndPersistChanges());
 	}
 
 	@BeforeEach

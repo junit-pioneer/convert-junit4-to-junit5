@@ -2,6 +2,7 @@ package jb;
 
 import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.JunitConversionLogicConfiguration;
+import org.junit.jupiter.api.Assertions;
 
 import static jb.RegExHelper.replaceUnlessFollowedByEscapingPackageName;
 import static jb.RegExHelper.replaceUnlessPreceededBy;
@@ -26,7 +27,14 @@ class JunitConversionLogic {
 
 
 		// easier to do move parameter order with AST parser
-		CompilationUnit cu = configuration.javaParser().parse(result);
+
+		CompilationUnit cu = null;
+		try {
+			cu = configuration.javaParser().parse(result);
+		} catch (Exception e) {
+			Assertions.assertEquals(originalText, result);
+			Assertions.fail("the original source is not parsable");
+		}
 		boolean updated = convertAssertionsAndAssumptionMethodParamOrder(cu);
 		if (! originalText.equals(result) || updated) {
 			// only update result if there were changes

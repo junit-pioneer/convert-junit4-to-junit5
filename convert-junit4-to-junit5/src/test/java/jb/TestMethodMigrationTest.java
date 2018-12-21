@@ -1,8 +1,9 @@
 package jb;
 
+import jb.configuration.Configuration;
 import org.junit.jupiter.api.Test;
 
-import static jb.configuration.Configuration.preserveFormatting;
+import static jb.configuration.Configuration.preserverFormatting;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -60,7 +61,7 @@ class TestMethodMigrationTest {
     }
 
     private String migrated(String junit4) {
-        return JunitConversionLogic.convert(preserveFormatting(), junit4);
+        return JunitConversionLogic.convert(preserverFormatting().build(), junit4);
     }
 
 }

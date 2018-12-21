@@ -14,7 +14,7 @@ import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMetho
 import static jb.JunitConversionLogicFixture.assertUnchangedWrappingInClass;
 import static jb.JunitConversionLogicFixture.assertWrappingInClass;
 import static jb.JunitConversionLogicFixture.convertWhitespaceForJavaParser;
-import static jb.configuration.Configuration.prettyPrint;
+import static jb.configuration.Configuration.prettyPrintAndPersistChanges;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JunitConversionLogicTest {
@@ -116,7 +116,7 @@ class JunitConversionLogicTest {
 	@Test
 	void doNotUpdateIfAlreadyJupiter() {
 		String code = "import static org.junit.jupiter.api.Assertions.*;";
-		String actual = convert(prettyPrint(), code);
+		String actual = convert(prettyPrintAndPersistChanges(), code);
 		assertEquals(code, actual);
 	}
 
@@ -176,7 +176,7 @@ class JunitConversionLogicTest {
 		String expected = "import org.junit.jupiter.api." + newAnnotationName + ";\n"
 				+ "public class A { \n@" + newAnnotationName + "\npublic void m() { }}";
 
-		String actual = convert(prettyPrint(), code);
+		String actual = convert(prettyPrintAndPersistChanges(), code);
 		assertEquals(convertWhitespaceForJavaParser(expected), actual);
 	}
 

@@ -3,7 +3,7 @@ package jb;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
-import static jb.configuration.Configuration.prettyPrint;
+import static jb.configuration.Configuration.prettyPrintAndPersistChanges;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JunitConversionLogicFixture {
@@ -77,7 +77,7 @@ class JunitConversionLogicFixture {
     }
 
     private static String convertAndPrettyPrint(String codeWrapped) {
-        return JunitConversionLogic.convert(prettyPrint(), codeWrapped);
+        return JunitConversionLogic.convert(prettyPrintAndPersistChanges(), codeWrapped);
     }
 
 }

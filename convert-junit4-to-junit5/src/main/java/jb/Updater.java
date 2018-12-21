@@ -30,7 +30,7 @@ public class Updater {
 			throw new IllegalArgumentException(
 					"Please point to a valid file or directory.");
 		}
-		new Updater(Configuration.prettyPrint()).update(path);
+		new Updater(Configuration.prettyPrintAndPersistChanges()).update(path);
 	}
 
 	Updater(JunitConversionLogicConfiguration configuration) {
@@ -66,7 +66,7 @@ public class Updater {
 				return;
 			}
 			System.out.println("Updating " + path.toAbsolutePath());
-			Files.write(path, updatedText.getBytes());
+			configuration.changeWriter().write(path, updatedText);
 		} catch (IOException | RuntimeException e) {
 			System.out.println("Failed " + path.toAbsolutePath());
 			// convert to runtime exception so can use inside stream operation
