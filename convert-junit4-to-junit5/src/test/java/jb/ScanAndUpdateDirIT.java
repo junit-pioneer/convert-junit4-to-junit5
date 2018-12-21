@@ -16,24 +16,24 @@ import org.junit.jupiter.api.*;
  * @author jeanne
  *
  */
-public class ScanAndUpdateDirIT {
+class ScanAndUpdateDirIT {
 
 	private Updater updater;
 	private Path path;
 
 	@BeforeEach
-	public void createUpdater() {
+	void createUpdater() {
 		updater = new Updater();
 	}
 
 	@BeforeEach
-	public void createTestFile() {
+	void createTestFile() {
 		Random random = new Random();
 		path = Paths.get("target/junit-test-" + random.nextInt());
 	}
 
 	@AfterEach
-	public void deleteTestFileOrDirectory() throws IOException {
+	void deleteTestFileOrDirectory() throws IOException {
 		if (Files.isRegularFile(path)) {
 			Files.deleteIfExists(path);
 		} else {
@@ -44,7 +44,7 @@ public class ScanAndUpdateDirIT {
 	// -------------------------------------------------------
 
 	@Test
-	public void singleFile() throws Exception {
+	void singleFile() throws Exception {
 		Path source = Paths.get("src/test/resources/dir/subdir/Class.java");
 		Files.copy(source, path);
 		updater.update(path);
@@ -52,7 +52,7 @@ public class ScanAndUpdateDirIT {
 	}
 
 	@Test
-	public void directory() throws Exception {
+	void directory() throws Exception {
 		File source = new File("src/test/resources/dir/subdir");
 		FileUtils.copyDirectory(source, path.toFile());
 		updater.update(path);
@@ -63,7 +63,7 @@ public class ScanAndUpdateDirIT {
 	}
 
 	@Test
-	public void nestedDirectories() throws Exception {
+	void nestedDirectories() throws Exception {
 		File source = new File("src/test/resources/dir");
 		FileUtils.copyDirectory(source, path.toFile());
 		updater.update(path);

@@ -5,15 +5,15 @@ import com.github.javaparser.ast.CompilationUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JunitConversionLogicFixture {
+class JunitConversionLogicFixture {
 
-    public static String convertWhitespaceForJavaParser(String string) {
+    static String convertWhitespaceForJavaParser(String string) {
         CompilationUnit cu = JavaParser.parse(string);
         return cu.toString();
     }
 
     // wrap in class so well formed for parser
-    public static void assertWrappingInClass(String code, String expected) {
+    static void assertWrappingInClass(String code, String expected) {
         String prefix = "public class A { ";
         String postfix = " }";
         String codeWrapped = prefix + code + postfix;
@@ -23,7 +23,7 @@ public class JunitConversionLogicFixture {
     }
 
     // wrap in class so well formed for parser
-    public static void assertUnchangedWrappingInClass(String code) {
+    static void assertUnchangedWrappingInClass(String code) {
         String prefix = "public class A { ";
         String postfix = " }";
         String codeWrapped = prefix + code + postfix;
@@ -32,7 +32,7 @@ public class JunitConversionLogicFixture {
     }
 
     // wrap in class/method so well formed for parser
-    public static void assertAfterWrappingInMethod(String code, String expected) {
+    static void assertAfterWrappingInMethod(String code, String expected) {
         String prefix = "public class A { public void m() { ";
         String postfix = " }}";
         String codeWrapped = prefix + code + postfix;
@@ -42,7 +42,7 @@ public class JunitConversionLogicFixture {
     }
 
     // wrap in class/method so well formed for parser
-    public static void assertUnchangedAfterWrappingInMethod(String code) {
+    static void assertUnchangedAfterWrappingInMethod(String code) {
         String prefix = "public class A { public void m() { ";
         String postfix = " }}";
         String codeWrapped = prefix + code + postfix;
@@ -51,7 +51,7 @@ public class JunitConversionLogicFixture {
     }
 
     // add class after import so well formed for parser
-    public static void assertAfterAddingClassAfter(String code, String expected) {
+    static void assertAfterAddingClassAfter(String code, String expected) {
         String postfix = "public class A {}";
         String codeWrapped = code + postfix;
         String expectedWrapped = expected + postfix;
@@ -60,8 +60,8 @@ public class JunitConversionLogicFixture {
     }
 
     // wrap in class/method so well formed for parser
-    public static void assertAfterWrappingInMethod(String originalImport, String originalMethod, String expectedImport,
-            String expectedMethod) {
+    static void assertAfterWrappingInMethod(String originalImport, String originalMethod, String expectedImport,
+                                            String expectedMethod) {
         String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
         String expectedWrapped = expectedImport + "public class A { public void m() { " + expectedMethod + "}}";
         String actual = JunitConversionLogic.convert(codeWrapped);
@@ -69,7 +69,7 @@ public class JunitConversionLogicFixture {
     }
 
     // wrap in class/method so well formed for parser
-    public static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
+    static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
             String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
             String actual = JunitConversionLogic.convert(codeWrapped);
             assertEquals(codeWrapped, actual);

@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.*;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
 
-public class MoveAssertionMessageTest {
+class MoveAssertionMessageTest {
 
 	@Test
 	void notAnAssertion() {

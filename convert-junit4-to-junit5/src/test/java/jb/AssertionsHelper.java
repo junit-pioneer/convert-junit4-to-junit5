@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
 
-public class AssertionsHelper {
+class AssertionsHelper {
 
-	public static void assertJunit5StyleImports(Path path) throws Exception {
+	static void assertJunit5StyleImports(Path path) throws Exception {
 		String actual = new String(Files.readAllBytes(path));
 		assertAll("junit 5 style imports",
 				() -> assertThat(actual, containsString("import static org.junit.jupiter.api.Assertions.*;")),
@@ -17,7 +17,7 @@ public class AssertionsHelper {
 				() -> assertThat(actual, not(containsString("import org.junit.*"))));
 	}
 	
-	public static void assertJunit4StyleImports(Path path) throws Exception {
+	static void assertJunit4StyleImports(Path path) throws Exception {
 		String actual = new String(Files.readAllBytes(path));
 		assertAll("not updated - junit 4 style imports",
 				() -> assertThat(actual, not(containsString("import static org.junit.jupiter.api.Assertions.*;"))),

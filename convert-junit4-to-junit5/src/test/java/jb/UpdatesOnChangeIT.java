@@ -17,25 +17,25 @@ import org.junit.jupiter.api.*;
  * @author jeanne
  *
  */
-public class UpdatesOnChangeIT {
+class UpdatesOnChangeIT {
 
 	private Path path;
 
 	@BeforeEach
-	public void createTestFile() {
+	void createTestFile() {
 		Random random = new Random();
 		path = Paths.get("target/junit-test-" + random.nextInt());
 	}
 
 	@AfterEach
-	public void deleteTestFile() throws IOException {
+	void deleteTestFile() throws IOException {
 		Files.deleteIfExists(path);
 	}
 
 	// -------------------------------------------------------
 
 	@Test
-	public void missingArgument() {
+	void missingArgument() {
 		Throwable actual = assertThrows(IllegalArgumentException.class, () -> {
 			Updater.main();
 		});
@@ -44,7 +44,7 @@ public class UpdatesOnChangeIT {
 	}
 
 	@Test
-	public void nonExistantFile() {
+	void nonExistantFile() {
 		Throwable actual = assertThrows(IllegalArgumentException.class, () -> {
 			Updater.main("/this/is/not/a/file/or/directory");
 		});
@@ -52,7 +52,7 @@ public class UpdatesOnChangeIT {
 	}
 
 	@Test
-	public void updateImports() throws Exception {
+	void updateImports() throws Exception {
 		String contents = "import static org.junit.Assert.*;\n" +
 				"import java.util.*;\n" +
 				"import org.junit.*;\n";
@@ -62,7 +62,7 @@ public class UpdatesOnChangeIT {
 	}
 
 	@Test
-	public void noChangeToFileIfOnJunit5() throws Exception {
+	void noChangeToFileIfOnJunit5() throws Exception {
 		String contents = "import static org.junit.jupiter.api.Assertions.*;\n" +
 				"import java.util.*;\n" +
 				"import org.junit.jupiter.api.*;\n";
