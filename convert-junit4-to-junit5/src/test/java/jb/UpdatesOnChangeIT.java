@@ -1,14 +1,19 @@
 package jb;
 
-import static jb.AssertionsHelper.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.io.*;
-import java.nio.file.*;
-import java.nio.file.attribute.*;
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
+import java.util.Random;
 
-import org.junit.jupiter.api.*;
+import static jb.AssertionsHelper.assertJunit5StyleImports;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests either a single file is updated (or not) based on whether it has JUnit

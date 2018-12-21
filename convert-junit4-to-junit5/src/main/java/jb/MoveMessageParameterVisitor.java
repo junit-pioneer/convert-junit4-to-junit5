@@ -1,10 +1,14 @@
 package jb;
 
-import java.util.*;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.visitor.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 
@@ -33,7 +37,7 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 		super.visit(n, arg);
 	}
 	
-	public boolean performedUpdate() {
+	boolean performedUpdate() {
 		return updated;
 	}
 

@@ -1,5 +1,12 @@
 package jb;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
 import static jb.JunitConversionLogic.convert;
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
@@ -8,14 +15,7 @@ import static jb.JunitConversionLogicFixture.assertUnchangedWrappingInClass;
 import static jb.JunitConversionLogicFixture.assertWrappingInClass;
 import static jb.JunitConversionLogicFixture.convertWhitespaceForJavaParser;
 import static jb.configuration.Configuration.prettyPrint;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.*;
-
-import jb.configuration.Configuration;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.*;
-import org.junit.jupiter.params.provider.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JunitConversionLogicTest {
 

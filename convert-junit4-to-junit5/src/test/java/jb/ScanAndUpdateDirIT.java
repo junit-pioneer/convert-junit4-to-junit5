@@ -1,13 +1,19 @@
 package jb;
 
-import static jb.AssertionsHelper.*;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Random;
 
-import org.apache.commons.io.*;
-import org.junit.jupiter.api.*;
+import static jb.AssertionsHelper.assertJunit4StyleImports;
+import static jb.AssertionsHelper.assertJunit5StyleImports;
 
 /**
  * Tests the program can be run against a single file, directory or nested

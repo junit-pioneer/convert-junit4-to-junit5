@@ -1,7 +1,6 @@
 package jb;
 
 import com.github.javaparser.ast.CompilationUnit;
-import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
 
 import static jb.RegExHelper.replaceUnlessFollowedByEscapingPackageName;

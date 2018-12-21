@@ -3,9 +3,11 @@ package jb;
 import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.stream.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 /**
  * Converts a file or nested directories to use JUnit 5 syntax where possible.

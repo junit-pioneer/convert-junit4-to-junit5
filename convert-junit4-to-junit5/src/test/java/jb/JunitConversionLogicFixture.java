@@ -2,7 +2,6 @@ package jb;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import jb.configuration.Configuration;
 
 import static jb.configuration.Configuration.prettyPrint;
 import static org.junit.jupiter.api.Assertions.assertEquals;
