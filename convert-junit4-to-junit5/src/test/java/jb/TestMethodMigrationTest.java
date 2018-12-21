@@ -44,12 +44,8 @@ class TestMethodMigrationTest {
                 "        System.out.println(\"I'm fast\");\n" +
                 "    }\n" +
                 "}";
-        String junit5 = "import org.junit.jupiter.api.Test;" +
-                "
-
-import java.time.Duration;
-
-" +
+        String junit5 = "import org.junit.jupiter.api.Test;\n" +
+                "import java.time.Duration;\n" +
                 "import static org.junit.jupiter.api.Assertions.assertTimeout;\n" +
                 "\n" +
                 "public class A {\n" +
