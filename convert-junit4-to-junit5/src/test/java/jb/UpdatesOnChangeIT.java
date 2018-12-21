@@ -44,7 +44,7 @@ class UpdatesOnChangeIT {
 	}
 
 	@Test
-	void nonExistantFile() {
+	void nonExistentFile() {
 		Throwable actual = assertThrows(IllegalArgumentException.class, () -> {
 			Updater.main("/this/is/not/a/file/or/directory");
 		});
