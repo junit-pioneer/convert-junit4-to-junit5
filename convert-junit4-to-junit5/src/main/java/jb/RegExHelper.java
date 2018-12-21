@@ -1,5 +1,7 @@
 package jb;
 
+import java.util.regex.Pattern;
+
 public class RegExHelper {
 
 	private RegExHelper() {
@@ -27,4 +29,7 @@ public class RegExHelper {
 		return originalText.replaceAll(regex, replacement);
 	}
 
+	static String replaceAllLiterals(String result, String regex, String replacement) {
+        return result.replaceAll(Pattern.quote(regex), replacement);
+    }
 }

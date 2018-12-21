@@ -46,8 +46,8 @@ class JunitConversionLogic {
 
 	private static String convertPackage(String originalText) {
 		String result = originalText;
-		result = result.replaceAll("org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
-		result = result.replaceAll("org.junit.", "org.junit.jupiter.api.");
+		result = RegExHelper.replaceAllLiterals(result, "org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
+		result = RegExHelper.replaceAllLiterals(result, "org.junit.", "org.junit.jupiter.api.");
 		return result;
 	}
 
