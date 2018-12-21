@@ -28,11 +28,10 @@ public class JunitConversionLogic {
 
 		// easier to do move parameter order with AST parser
 		CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(result.getBytes()));
-		LexicalPreservingPrinter.setup(cu);
 		boolean updated = convertAssertionsAndAssumptionMethodParamOrder(cu);
 		if (! originalText.equals(result) || updated) {
 			// only update result if there were changes
-			result = LexicalPreservingPrinter.print(cu);
+			result = cu.toString();
 		}
 		return result;
 	}
