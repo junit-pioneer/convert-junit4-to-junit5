@@ -1,6 +1,7 @@
 package jb;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import jb.configuration.JunitConversionLogicConfiguration;
 import org.junit.jupiter.api.Assertions;
 
@@ -16,6 +17,10 @@ class JunitConversionLogic {
 	static String convert(JunitConversionLogicConfiguration configuration, String originalText) {
 		// don't update file if already on JUnit 5
 		if (originalText.contains("org.junit.jupiter")) {
+			return originalText;
+		}
+		// only look at files that contain JUnit 4 imports
+		if (!originalText.contains("org.junit.")) {
 			return originalText;
 		}
 		// easier to do these with plain text
