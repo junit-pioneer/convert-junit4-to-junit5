@@ -32,6 +32,7 @@ class JunitConversionLogic {
 		try {
 			cu = configuration.javaParser().parse(result);
 		} catch (Exception e) {
+		    e.printStackTrace();
 			Assertions.assertEquals(originalText, result);
 			Assertions.fail("the original source is not parsable");
 		}
