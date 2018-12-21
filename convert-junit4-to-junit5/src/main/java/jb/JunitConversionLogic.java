@@ -1,12 +1,11 @@
 package jb;
 
-import static jb.RegExHelper.*;
+import com.github.javaparser.ast.CompilationUnit;
+import jb.configuration.JunitConversionLogicConfiguration;
+import jb.configuration.PrettyPrint;
 
-import java.io.*;
-
-import com.github.javaparser.*;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import static jb.RegExHelper.replaceUnlessFollowedByEscapingPackageName;
+import static jb.RegExHelper.replaceUnlessPreceededBy;
 
 public class JunitConversionLogic {
 
@@ -15,6 +14,11 @@ public class JunitConversionLogic {
 	}
 
 	public static String convert(String originalText) {
+		JunitConversionLogicConfiguration configuration = new JunitConversionLogicConfiguration(new PrettyPrint());
+		return convert(configuration, originalText);
+	}
+
+	public static String convert(JunitConversionLogicConfiguration configuration, String originalText) {
 		// don't update file if already on JUnit 5
 		if (originalText.contains("org.junit.jupiter")) {
 			return originalText;
@@ -26,16 +30,17 @@ public class JunitConversionLogic {
 		result = convertClassNames(result);
 		result = addAssertThatImport(result);
 
+
 		// easier to do move parameter order with AST parser
-		CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(result.getBytes()));
+		CompilationUnit cu = configuration.javaParser().parse(result);
 		boolean updated = convertAssertionsAndAssumptionMethodParamOrder(cu);
 		if (! originalText.equals(result) || updated) {
 			// only update result if there were changes
-			result = cu.toString();
+			result = configuration.javaParser().print(cu);
 		}
 		return result;
 	}
-	
+
 	private static String convertPackage(String originalText) {
 		String result = originalText;
 		result = result.replaceAll("org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
@@ -86,4 +91,5 @@ public class JunitConversionLogic {
 		testMethodMigration.visit(cu, null);
 		return messageParameterLocation.performedUpdate()|| testMethodMigration.performedUpdate();
 	}
+
 }
