@@ -1,5 +1,6 @@
 package jb;
 
+import jb.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,7 @@ class ScanAndUpdateDirIT {
 
 	@BeforeEach
 	void createUpdater() {
-		updater = new Updater();
+		updater = new Updater(Configuration.prettyPrint());
 	}
 
 	@BeforeEach
