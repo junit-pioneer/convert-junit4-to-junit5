@@ -58,7 +58,8 @@ public class Updater {
 			}
 			System.out.println("Updating " + path.toAbsolutePath());
 			Files.write(path, updatedText.getBytes());
-		} catch (IOException e) {
+		} catch (IOException | RuntimeException e) {
+			System.out.println("Failed " + path.toAbsolutePath());
 			// convert to runtime exception so can use inside stream operation
 			throw new RuntimeException(e);
 		}
