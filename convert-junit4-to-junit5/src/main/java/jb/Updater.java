@@ -1,5 +1,8 @@
 package jb;
 
+import jb.configuration.Configuration;
+import jb.configuration.JunitConversionLogicConfiguration;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.stream.*;
@@ -14,7 +17,7 @@ import java.util.stream.*;
  */
 public class Updater {
 
-	public static void main(String... args) throws IOException {
+    public static void main(String... args) throws IOException {
 		if (args.length == 0) {
 			throw new IllegalArgumentException(
 					"Please pass the absolute path of the file or directory you want to update.");
@@ -28,6 +31,8 @@ public class Updater {
 		Updater updater = new Updater();
 		updater.update(path);
 	}
+
+    private final JunitConversionLogicConfiguration configuration = Configuration.prettyPrint();
 
 	/**
 	 * Update to use JUnit 5 syntax where possible
@@ -51,7 +56,7 @@ public class Updater {
 	private void updateSingleFile(Path path) {
 		try {
 			String originalText = new String(Files.readAllBytes(path));
-			String updatedText = JunitConversionLogic.convert(originalText);
+            String updatedText = JunitConversionLogic.convert(configuration, originalText);
 			if (originalText.equals(updatedText)) {
 				System.out.println("No updates in " + path.toAbsolutePath());
 				return;

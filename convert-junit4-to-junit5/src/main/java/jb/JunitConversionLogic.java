@@ -1,24 +1,19 @@
 package jb;
 
 import com.github.javaparser.ast.CompilationUnit;
+import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
-import jb.configuration.PrettyPrint;
 
 import static jb.RegExHelper.replaceUnlessFollowedByEscapingPackageName;
 import static jb.RegExHelper.replaceUnlessPreceededBy;
 
-public class JunitConversionLogic {
+class JunitConversionLogic {
 
 	private JunitConversionLogic() {
 		super();
 	}
 
-	public static String convert(String originalText) {
-		JunitConversionLogicConfiguration configuration = new JunitConversionLogicConfiguration(new PrettyPrint());
-		return convert(configuration, originalText);
-	}
-
-	public static String convert(JunitConversionLogicConfiguration configuration, String originalText) {
+	static String convert(JunitConversionLogicConfiguration configuration, String originalText) {
 		// don't update file if already on JUnit 5
 		if (originalText.contains("org.junit.jupiter")) {
 			return originalText;

@@ -1,15 +1,18 @@
 package jb;
 
+import static jb.JunitConversionLogic.convert;
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedWrappingInClass;
 import static jb.JunitConversionLogicFixture.assertWrappingInClass;
 import static jb.JunitConversionLogicFixture.convertWhitespaceForJavaParser;
+import static jb.configuration.Configuration.prettyPrint;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.*;
 
+import jb.configuration.Configuration;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -113,7 +116,7 @@ class JunitConversionLogicTest {
 	@Test
 	void doNotUpdateIfAlreadyJupiter() {
 		String code = "import static org.junit.jupiter.api.Assertions.*;";
-		String actual = JunitConversionLogic.convert(code);
+		String actual = convert(prettyPrint(), code);
 		assertEquals(code, actual);
 	}
 
@@ -173,7 +176,7 @@ class JunitConversionLogicTest {
 		String expected = "import org.junit.jupiter.api." + newAnnotationName + ";\n"
 				+ "public class A { \n@" + newAnnotationName + "\npublic void m() { }}";
 
-		String actual = JunitConversionLogic.convert(code);
+		String actual = convert(prettyPrint(), code);
 		assertEquals(convertWhitespaceForJavaParser(expected), actual);
 	}
 

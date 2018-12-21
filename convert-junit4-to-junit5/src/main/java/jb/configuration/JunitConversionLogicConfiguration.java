@@ -4,7 +4,7 @@ public class JunitConversionLogicConfiguration {
 
     private final JavaParserAdapter javaParserAdapter;
 
-    public JunitConversionLogicConfiguration(JavaParserAdapter javaParserAdapter) {
+    JunitConversionLogicConfiguration(JavaParserAdapter javaParserAdapter) {
         this.javaParserAdapter = javaParserAdapter;
     }
 

@@ -1,13 +1,8 @@
 package jb;
 
-import jb.configuration.JavaParserAdapter;
-import jb.configuration.JunitConversionLogicConfiguration;
-import jb.configuration.PreserveFormatting;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-
+import static jb.configuration.Configuration.preserveFormatting;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -49,8 +44,12 @@ class TestMethodMigrationTest {
                 "        System.out.println(\"I'm fast\");\n" +
                 "    }\n" +
                 "}";
-        String junit5 = "import org.junit.jupiter.api.Test;\n" +
-                "import java.time.Duration;\n" +
+        String junit5 = "import org.junit.jupiter.api.Test;" +
+                "
+
+import java.time.Duration;
+
+" +
                 "import static org.junit.jupiter.api.Assertions.assertTimeout;\n" +
                 "\n" +
                 "public class A {\n" +
@@ -65,7 +64,7 @@ class TestMethodMigrationTest {
     }
 
     private String migrated(String junit4) {
-        JavaParserAdapter javaParserAdapter = new PreserveFormatting();
-        return JunitConversionLogic.convert(new JunitConversionLogicConfiguration(javaParserAdapter), junit4);
+        return JunitConversionLogic.convert(preserveFormatting(), junit4);
     }
+
 }
