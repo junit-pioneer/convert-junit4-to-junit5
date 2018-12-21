@@ -1,5 +1,11 @@
 package jb;
 
+import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
+import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
+import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
+import static jb.JunitConversionLogicFixture.assertUnchangedWrappingInClass;
+import static jb.JunitConversionLogicFixture.assertWrappingInClass;
+import static jb.JunitConversionLogicFixture.convertWhitespaceForJavaParser;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.*;
@@ -8,80 +14,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.*;
-
 class JunitConversionLogicTest {
-
-	private static String convertWhitespaceForJavaParser(String string) {
-		CompilationUnit cu = JavaParser.parse(string);
-		return cu.toString();
-	}
-
-	// wrap in class so well formed for parser
-	private static void assertWrappingInClass(String code, String expected) {
-		String prefix = "public class A { ";
-		String postfix = " }";
-		String codeWrapped = prefix + code + postfix;
-		String expectedWrapped = prefix + expected + postfix;
-		String actual = JunitConversionLogic.convert(codeWrapped);
-		assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
-	}
-
-	// wrap in class so well formed for parser
-	private static void assertUnchangedWrappingInClass(String code) {
-		String prefix = "public class A { ";
-		String postfix = " }";
-		String codeWrapped = prefix + code + postfix;
-		String actual = JunitConversionLogic.convert(codeWrapped);
-		assertEquals(codeWrapped, actual);
-	}
-
-	// wrap in class/method so well formed for parser
-	public static void assertAfterWrappingInMethod(String code, String expected) {
-		String prefix = "public class A { public void m() { ";
-		String postfix = " }}";
-		String codeWrapped = prefix + code + postfix;
-		String expectedWrapped = prefix + expected + postfix;
-		String actual = JunitConversionLogic.convert(codeWrapped);
-		assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
-	}
-
-	// wrap in class/method so well formed for parser
-	public static void assertUnchangedAfterWrappingInMethod(String code) {
-		String prefix = "public class A { public void m() { ";
-		String postfix = " }}";
-		String codeWrapped = prefix + code + postfix;
-		String actual = JunitConversionLogic.convert(codeWrapped);
-		assertEquals(codeWrapped, actual);
-	}
-
-	// add class after import so well formed for parser
-	private static void assertAfterAddingClassAfter(String code, String expected) {
-		String postfix = "public class A {}";
-		String codeWrapped = code + postfix;
-		String expectedWrapped = expected + postfix;
-		String actual = JunitConversionLogic.convert(codeWrapped);
-		assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
-	}
-
-	// wrap in class/method so well formed for parser
-	private static void assertAfterWrappingInMethod(String originalImport, String originalMethod, String expectedImport,
-			String expectedMethod) {
-		String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
-		String expectedWrapped = expectedImport + "public class A { public void m() { " + expectedMethod + "}}";
-		String actual = JunitConversionLogic.convert(codeWrapped);
-		assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
-	}
-	
-	// wrap in class/method so well formed for parser
-	private static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
-			String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
-			String actual = JunitConversionLogic.convert(codeWrapped);
-			assertEquals(codeWrapped, actual);
-		}
-
-	// ------------------------------------------------------------------
 
 	@Test
 	void importWildcardStaticAssertions() {

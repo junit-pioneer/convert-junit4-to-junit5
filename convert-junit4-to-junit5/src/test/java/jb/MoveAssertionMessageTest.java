@@ -1,10 +1,11 @@
 package jb;
 
-import static jb.JunitConversionLogicTest.*;
-
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+
+import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
+import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
 
 public class MoveAssertionMessageTest {
 
