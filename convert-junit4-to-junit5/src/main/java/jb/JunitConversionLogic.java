@@ -80,8 +80,10 @@ public class JunitConversionLogic {
 	}
 
 	private static boolean convertAssertionsAndAssumptionMethodParamOrder(CompilationUnit cu) {
-		MoveMessageParameterVisitor visitor = new MoveMessageParameterVisitor();
-		visitor.visit(cu, null);
-		return visitor.performedUpdate();
+		MoveMessageParameterVisitor messageParameterLocation = new MoveMessageParameterVisitor();
+		messageParameterLocation.visit(cu, null);
+		TestMethodMigration testMethodMigration = new TestMethodMigration();
+		testMethodMigration.visit(cu, null);
+		return messageParameterLocation.performedUpdate()|| testMethodMigration.performedUpdate();
 	}
 }
