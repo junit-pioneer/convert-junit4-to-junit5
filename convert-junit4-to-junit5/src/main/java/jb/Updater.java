@@ -71,10 +71,12 @@ public class Updater {
     private ConversionResult updateSingleFile(Path path) {
         try {
             String originalText = new String(Files.readAllBytes(path));
-            ConversionResult result = new JunitConversionLogic(configuration).convert(originalText).path(path).build();
+            ConversionResultBuilder resultBuilder = new JunitConversionLogic(configuration).convert(originalText).path(path);
+            ConversionResult result = resultBuilder.build();
+
             System.out.println(result.outcome + " " + path);
 
-            if (result.outcome == ConversionOutcome.Converted) {
+            if (result.outcome == ConversionOutcome.Converted && (result.unsupportedFeatures.isEmpty() || !configuration.skipFilesWithUnsupportedFeatures())) {
                 configuration.changeWriter().write(path, result.code);
             }
             return result;

@@ -6,6 +6,7 @@ public class Configuration {
 
         private JavaParserAdapter javaParserAdapter = new PrettyPrint();
         private ChangeWriter changeWriter = new FileWriter();
+        private boolean skipFilesWithUnsupportedFeatures = false;
 
         public ConfigurationBuilder dryRun() {
             changeWriter = new DryRun();
@@ -17,10 +18,14 @@ public class Configuration {
             return this;
         }
 
-        public JunitConversionLogicConfiguration build(){
-            return new JunitConversionLogicConfiguration(javaParserAdapter, changeWriter);
+        public ConfigurationBuilder skipFilesWithUnsupportedFeatures() {
+            skipFilesWithUnsupportedFeatures = true;
+            return this;
         }
 
+        public JunitConversionLogicConfiguration build(){
+            return new JunitConversionLogicConfiguration(javaParserAdapter, changeWriter, skipFilesWithUnsupportedFeatures);
+        }
     }
 
     public static JunitConversionLogicConfiguration prettyPrintAndPersistChanges() {
