@@ -1,5 +1,7 @@
 package jb;
 
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -29,6 +31,21 @@ class MoveAssertionMessageTest {
 	}
 
 	@Test
+	void noneZeroDoubleDeltaNoMessage() {
+		String code = "assertEquals(expected, actual, 0.1);";
+
+		assertUnchangedAfterWrappingInMethod(code);
+	}
+
+    @Test
+    void zeroDeltaIsNotSupportedInJunitJupiterRemoveIt() {
+        String code = "assertEquals(expected, actual, 0.0);";
+        String expected = "assertEquals(expected, actual);";
+
+        assertAfterWrappingInMethod(code, expected);
+    }
+
+    @Test
 	void whiteSpaceForThreeParams() {
 		String code = "assertEquals  (  message,  expected,   actual  )  ;";
 		String expected = "assertEquals  (  expected,  actual,   message  )  ;";
