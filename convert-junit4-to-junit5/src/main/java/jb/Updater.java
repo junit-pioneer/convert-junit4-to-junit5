@@ -7,10 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,31 +49,21 @@ public class Updater {
         if (path.toFile().isFile()) {
             updateSingleFile(path);
         } else {
-            List<ConversionResult> results = convertAll(path);
-            Map<ConversionOutcome, List<ConversionResult>> byOutcome = results.stream().collect(Collectors.groupingBy(it -> it.outcome));
-            List<ConversionResult> unchanged = byOutcome.getOrDefault(ConversionOutcome.Unchanged, Collections.emptyList());
-            List<ConversionResult> converted = byOutcome.getOrDefault(ConversionOutcome.Converted, Collections.emptyList());
-            List<ConversionResult> skipped = byOutcome.getOrDefault(ConversionOutcome.Skipped, Collections.emptyList());
-            Map<String, List<ConversionResult>> skippedByDetails = skipped.stream().collect(Collectors.groupingBy(it -> it.details));
-
-            List<String> reportLines = new ArrayList<>();
-            reportLines.add(unchanged.size() + " unchanged");
-            reportLines.add(converted.size() + " converted");
-            reportLines.add(skipped.size() + " skipped");
-            skippedByDetails.forEach((key, value) -> reportLines.add("   " + value.size() + " " + key));
-
-            System.out.println(String.join("\n", reportLines));
+            ConversionReport report = convertAll(path);
+            System.out.println(report.print());
         }
     }
 
-    private List<ConversionResult> convertAll(Path path) throws IOException {
+    private ConversionReport convertAll(Path path) throws IOException {
+        List<ConversionResult> result;
         try (Stream<Path> stream = Files.walk(path)) {
             // only update java files
-            return stream.filter(p -> p.toFile().isFile())
+            result = stream.filter(p -> p.toFile().isFile())
                     .filter(p -> p.toString().endsWith(".java"))
                     .map(this::updateSingleFile)
                     .collect(Collectors.toList());
         }
+        return new ConversionReport(result);
     }
 
     private ConversionResult updateSingleFile(Path path) {
