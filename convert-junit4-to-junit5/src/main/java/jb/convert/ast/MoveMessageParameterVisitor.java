@@ -1,13 +1,11 @@
 package jb.convert.ast;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
@@ -23,20 +21,21 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 
 	private boolean updated = false;
 
+    public boolean performedUpdate() {
+        return updated;
+    }
+
 	@Override
 	public void visit(final MethodCallExpr n, final Object arg) {
 		String methodName = n.getNameAsString();
         if (needsUpdating(n, methodName)) {
-			Expression message = (Expression) getMessageParam(methodName, n.getChildNodes());
+			Expression message;
+            message = n.getArgument(0);
 			n.remove(message);
 			n.addArgument(message);
 			updated = true;
 		}
 		super.visit(n, arg);
-	}
-
-	public boolean performedUpdate() {
-		return updated;
 	}
 
 	private boolean needsUpdating(MethodCallExpr methodCall, String methodName) {
@@ -45,19 +44,5 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
         return (numParams == 2 && ONE_PARAM_METHODS.contains(methodName))
 				|| (numParams == 3 && TWO_PARAM_METHODS.contains(methodName))
 				|| (numParams == 4 && THREE_PARAM_METHODS.contains(methodName));
-	}
-
-	private Node getMessageParam(String methodName, List<Node> children) {
-
-		boolean foundMethodName = false;
-		for (Node node : children) {
-			if (foundMethodName) {
-				return node;
-			}
-			if (methodName.equals(node.toString())) {
-				foundMethodName = true;
-			}
-		}
-		throw new RuntimeException("Message parameter for " + methodName + " should be found in " + children);
 	}
 }
