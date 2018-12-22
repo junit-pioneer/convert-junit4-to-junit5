@@ -16,7 +16,7 @@ class JunitConversionLogic {
 		this.configuration = configuration;
 	}
 
-	ConversionResult convert(String originalText) {
+	ConversionResultBuilder convert(String originalText) {
 		// don't update file if already on JUnit 5
 		if (originalText.contains("org.junit.jupiter")) {
 			return ConversionResult.skipped("already using junit 5");

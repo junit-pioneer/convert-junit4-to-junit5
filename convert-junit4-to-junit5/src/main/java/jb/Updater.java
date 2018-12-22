@@ -82,7 +82,7 @@ public class Updater {
     private ConversionResult updateSingleFile(Path path) {
         try {
             String originalText = new String(Files.readAllBytes(path));
-            ConversionResult result = new JunitConversionLogic(configuration).convert(originalText);
+            ConversionResult result = new JunitConversionLogic(configuration).convert(originalText).path(path).build();
             System.out.println(result.outcome + " " + path);
 
             if (result.outcome == ConversionOutcome.Converted) {

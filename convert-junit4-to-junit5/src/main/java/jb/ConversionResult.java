@@ -1,25 +1,29 @@
 package jb;
 
+import java.nio.file.Path;
+
 class ConversionResult {
-    static ConversionResult skipped(String details) {
-        return new ConversionResult(ConversionOutcome.Skipped, details, null);
+    static ConversionResultBuilder skipped(String details) {
+        return new ConversionResultBuilder().outcome(ConversionOutcome.Skipped).details(details);
     }
 
-    static ConversionResult unchanged() {
-        return new ConversionResult(ConversionOutcome.Unchanged, null, null);
+    static ConversionResultBuilder unchanged() {
+        return new ConversionResultBuilder().outcome(ConversionOutcome.Unchanged);
     }
 
-    static ConversionResult converted(String code){
-        return new ConversionResult(ConversionOutcome.Converted, null, code);
+    static ConversionResultBuilder converted(String code) {
+        return new ConversionResultBuilder().outcome(ConversionOutcome.Converted).code(code);
     }
 
     final ConversionOutcome outcome;
     final String details;
     final String code;
+    final Path path;
 
-    private ConversionResult(ConversionOutcome outcome, String details, String code) {
+    ConversionResult(ConversionOutcome outcome, String details, String code, Path path) {
         this.outcome = outcome;
         this.details = details;
         this.code = code;
+        this.path = path;
     }
 }

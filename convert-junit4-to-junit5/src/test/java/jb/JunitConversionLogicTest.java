@@ -188,8 +188,8 @@ class JunitConversionLogicTest {
 				Arguments.of("Ignore", "Disabled"));
 	}
 
-	public ConversionResult convert(String code){
-		return new JunitConversionLogic(prettyPrintAndPersistChanges()).convert(code);
+	private ConversionResult convert(String code){
+		return new JunitConversionLogic(prettyPrintAndPersistChanges()).convert(code).build();
 	}
 
 }
