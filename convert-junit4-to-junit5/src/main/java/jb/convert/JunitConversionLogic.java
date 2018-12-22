@@ -36,19 +36,10 @@ public class JunitConversionLogic {
             result.unsupportedFeature("runner");
 		}
 
-		// easier to do these with plain text
 		String currentCode = searchAndReplace.convert(originalCode);
 
-		// easier to do move parameter order with AST parser
-		CompilationUnit cu = null;
-		try {
-			cu = configuration.javaParser().parse(currentCode);
-		} catch (Exception e) {
-		    e.printStackTrace();
-			Assertions.assertEquals(originalCode, currentCode);
-			Assertions.fail("the original source is not parsable");
-		}
-		boolean updated = performAstBasecConversions(cu);
+		CompilationUnit cu = parseAst(currentCode, originalCode);
+		boolean updated = performAstBasedConversions(cu);
 		if (updated) {
 			// only update result if there were changes
 			currentCode = configuration.javaParser().print(cu);
@@ -59,7 +50,19 @@ public class JunitConversionLogic {
         return result.outcome(ConversionOutcome.Converted).code(currentCode);
 	}
 
-	private boolean performAstBasecConversions(CompilationUnit cu) {
+	private CompilationUnit parseAst(String currentCode, String originalCode) {
+		CompilationUnit cu = null;
+		try {
+			cu = configuration.javaParser().parse(currentCode);
+		} catch (Exception e) {
+		    e.printStackTrace();
+			Assertions.assertEquals(originalCode, currentCode);
+			Assertions.fail("the original source is not parsable");
+		}
+		return cu;
+	}
+
+	private boolean performAstBasedConversions(CompilationUnit cu) {
 		MoveMessageParameterVisitor messageParameterLocation = new MoveMessageParameterVisitor();
 		messageParameterLocation.visit(cu, null);
 		TestMethodMigration testMethodMigration = new TestMethodMigration();

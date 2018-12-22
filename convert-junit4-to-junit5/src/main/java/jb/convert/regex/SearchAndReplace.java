@@ -7,6 +7,7 @@ import static jb.convert.regex.RegExHelper.replaceUnlessPreceededBy;
 public class SearchAndReplace {
 
     public String convert(String originalCode) {
+        // easier to do these with plain text
         String currentCode = originalCode;
         currentCode = convertPackage(currentCode);
         currentCode = convertAnnotations(currentCode);
