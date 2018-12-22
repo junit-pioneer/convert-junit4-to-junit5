@@ -2,7 +2,6 @@ package jb;
 
 import jb.convert.ConversionOutcome;
 import jb.convert.ConversionResult;
-import jb.convert.JunitConversionLogic;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -16,7 +15,6 @@ import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMetho
 import static jb.JunitConversionLogicFixture.assertUnchangedWrappingInClass;
 import static jb.JunitConversionLogicFixture.assertWrappingInClass;
 import static jb.JunitConversionLogicFixture.prettyPrint;
-import static jb.configuration.Configuration.prettyPrintAndPersistChanges;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JunitConversionLogicTest {
@@ -118,7 +116,7 @@ class JunitConversionLogicTest {
 	@Test
 	void doNotUpdateIfAlreadyJupiter() {
 		String code = "import static org.junit.jupiter.api.Assertions.*;";
-		ConversionResult result = convert(code);
+		ConversionResult result = JunitConversionLogicFixture.convert(code);
 		assertEquals(ConversionOutcome.Skipped, result.outcome);
 		assertEquals("already using junit 5", result.details);
 	}
@@ -192,12 +190,7 @@ class JunitConversionLogicTest {
 	}
 
 	private String convertAndPrettyPrint(String code){
-		return JunitConversionLogicFixture.prettyPrint(convert(code).code);
-	}
-
-	private ConversionResult convert(String code) {
-		JunitConversionLogic junitConversionLogic = new JunitConversionLogic(prettyPrintAndPersistChanges());
-		return junitConversionLogic.convert(code).build();
+		return JunitConversionLogicFixture.prettyPrint(JunitConversionLogicFixture.convert(code).code);
 	}
 
 }

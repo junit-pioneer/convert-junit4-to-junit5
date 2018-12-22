@@ -82,7 +82,7 @@ class JunitConversionLogicFixture {
     }
 
     private static String convertAndPrettyPrint(String code) {
-        ConversionResult result = new JunitConversionLogic(prettyPrintAndPersistChanges()).convert(code).build();
+        ConversionResult result = convert(code);
         String convertedCode = code;
         if (result.outcome == ConversionOutcome.Converted) {
             convertedCode = result.code;
@@ -90,4 +90,8 @@ class JunitConversionLogicFixture {
         return prettyPrint(convertedCode);
     }
 
+    static ConversionResult convert(String code) {
+        JunitConversionLogic junitConversionLogic = new JunitConversionLogic(prettyPrintAndPersistChanges());
+        return junitConversionLogic.convert(code).build();
+    }
 }

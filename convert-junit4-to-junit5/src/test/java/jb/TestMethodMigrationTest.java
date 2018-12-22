@@ -33,7 +33,7 @@ class TestMethodMigrationTest {
                 "    });\n" +
                 "    }\n" +
                 "}";
-        assertThat(migrated(junit4), equalTo(junit5));
+        assertThat(converted(junit4), equalTo(junit5));
     }
 
     @Test
@@ -58,10 +58,10 @@ class TestMethodMigrationTest {
                 "    });\n" +
                 "    }\n" +
                 "}";
-        assertThat(migrated(junit4), equalTo(junit5));
+        assertThat(converted(junit4), equalTo(junit5));
     }
 
-    private String migrated(String junit4) {
+    private String converted(String junit4) {
         JunitConversionLogicConfiguration configuration = new Configuration.ConfigurationBuilder().preserverFormatting().build();
         return new JunitConversionLogic(configuration).convert(junit4).build().code;
     }
