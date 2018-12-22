@@ -12,7 +12,7 @@ class JunitConversionLogic {
 
 	private JunitConversionLogicConfiguration configuration;
 
-	public JunitConversionLogic(JunitConversionLogicConfiguration configuration) {
+	JunitConversionLogic(JunitConversionLogicConfiguration configuration) {
 		this.configuration = configuration;
 	}
 
