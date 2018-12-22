@@ -4,6 +4,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.JunitConversionLogicConfiguration;
 import org.junit.jupiter.api.Assertions;
 
+import static jb.RegExHelper.replaceAllLiterals;
 import static jb.RegExHelper.replaceUnlessFollowedByEscapingPackageName;
 import static jb.RegExHelper.replaceUnlessPreceededBy;
 
@@ -62,8 +63,8 @@ class JunitConversionLogic {
 
 	private static String convertPackage(String originalText) {
 		String result = originalText;
-		result = RegExHelper.replaceAllLiterals(result, "org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
-		result = RegExHelper.replaceAllLiterals(result, "org.junit.", "org.junit.jupiter.api.");
+		result = replaceAllLiterals(result, "org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
+		result = replaceAllLiterals(result, "org.junit.", "org.junit.jupiter.api.");
 		return result;
 	}
 
