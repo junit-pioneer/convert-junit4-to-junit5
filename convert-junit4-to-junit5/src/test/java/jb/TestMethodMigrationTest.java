@@ -61,7 +61,7 @@ class TestMethodMigrationTest {
     }
 
     private String migrated(String junit4) {
-        return JunitConversionLogic.convert(preserverFormatting().build(), junit4);
+        return JunitConversionLogic.convert(preserverFormatting().build(), junit4).code;
     }
 
 }

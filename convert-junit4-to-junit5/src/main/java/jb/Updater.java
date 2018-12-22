@@ -60,13 +60,12 @@ public class Updater {
 	private void updateSingleFile(Path path) {
 		try {
 			String originalText = new String(Files.readAllBytes(path));
-			String updatedText = JunitConversionLogic.convert(configuration, originalText);
-			if (originalText.equals(updatedText)) {
-				System.out.println("No updates in " + path.toAbsolutePath());
+			ConversionResult result = JunitConversionLogic.convert(configuration, originalText);
+
+			if (result.outcome != ConversionOutcome.Converted){
 				return;
 			}
-			System.out.println("Updating " + path.toAbsolutePath());
-			configuration.changeWriter().write(path, updatedText);
+			configuration.changeWriter().write(path, result.code);
 		} catch (IOException | RuntimeException e) {
 			System.out.println("Failed " + path.toAbsolutePath());
 			// convert to runtime exception so can use inside stream operation

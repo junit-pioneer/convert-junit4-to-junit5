@@ -1,7 +1,6 @@
 package jb;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import jb.configuration.JunitConversionLogicConfiguration;
 import org.junit.jupiter.api.Assertions;
 
@@ -14,14 +13,14 @@ class JunitConversionLogic {
 		super();
 	}
 
-	static String convert(JunitConversionLogicConfiguration configuration, String originalText) {
+	static ConversionResult convert(JunitConversionLogicConfiguration configuration, String originalText) {
 		// don't update file if already on JUnit 5
 		if (originalText.contains("org.junit.jupiter")) {
-			return originalText;
+			return ConversionResult.skipped("already using junit 5");
 		}
 		// only look at files that contain JUnit 4 imports
 		if (!originalText.contains("org.junit.")) {
-			return originalText;
+			return ConversionResult.skipped("no junit 4 code to migrate");
 		}
 		// easier to do these with plain text
 		String result = originalText;
@@ -46,7 +45,10 @@ class JunitConversionLogic {
 			// only update result if there were changes
 			result = configuration.javaParser().print(cu);
 		}
-		return result;
+		if (originalText.equals(result)) {
+			return ConversionResult.unchanged();
+		}
+		return ConversionResult.converted(result);
 	}
 
 	private static String convertPackage(String originalText) {

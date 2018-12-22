@@ -116,8 +116,9 @@ class JunitConversionLogicTest {
 	@Test
 	void doNotUpdateIfAlreadyJupiter() {
 		String code = "import static org.junit.jupiter.api.Assertions.*;";
-		String actual = convert(prettyPrintAndPersistChanges(), code);
-		assertEquals(code, actual);
+		ConversionResult result = convert(prettyPrintAndPersistChanges(), code);
+		assertEquals(ConversionOutcome.Skipped, result.outcome);
+		assertEquals("already using junit 5", result.details);
 	}
 
 	@Test
@@ -128,7 +129,7 @@ class JunitConversionLogicTest {
 	}
 
 	@Test
-	void mutlipleAssertions() {
+	void multipleAssertions() {
 		String code = "assertTrue(message, actual);";
 		String expected = "assertTrue(actual, message);";
 		assertAfterWrappingInMethod(code, expected);
@@ -161,7 +162,7 @@ class JunitConversionLogicTest {
 	// -------------------------------------------------------
 
 	@Test
-	void doNotEditClassifNotJUnit() {
+	void doNotEditClassIfNotJUnit() {
 		String code = "public void randomMethod() {}";
 		assertUnchangedWrappingInClass(code);
 	}
@@ -176,7 +177,7 @@ class JunitConversionLogicTest {
 		String expected = "import org.junit.jupiter.api." + newAnnotationName + ";\n"
 				+ "public class A { \n@" + newAnnotationName + "\npublic void m() { }}";
 
-		String actual = convert(prettyPrintAndPersistChanges(), code);
+		String actual = convert(prettyPrintAndPersistChanges(), code).code;
 		assertEquals(convertWhitespaceForJavaParser(expected), actual);
 	}
 

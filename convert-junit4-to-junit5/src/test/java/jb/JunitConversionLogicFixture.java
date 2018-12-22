@@ -7,6 +7,8 @@ import static jb.configuration.Configuration.prettyPrintAndPersistChanges;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JunitConversionLogicFixture {
+    private static final String importJunit4 = "import org.junit.Assert;";
+    private static final String importJunit5 = "import org.junit.jupiter.api.Assertions;";
 
     static String convertWhitespaceForJavaParser(String string) {
         CompilationUnit cu = JavaParser.parse(string);
@@ -17,8 +19,8 @@ class JunitConversionLogicFixture {
     static void assertWrappingInClass(String code, String expected) {
         String prefix = "public class A { ";
         String postfix = " }";
-        String codeWrapped = prefix + code + postfix;
-        String expectedWrapped = prefix + expected + postfix;
+        String codeWrapped = importJunit4 + prefix + code + postfix;
+        String expectedWrapped = importJunit5 + prefix + expected + postfix;
         String actual = convertAndPrettyPrint(codeWrapped);
         assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
     }
@@ -36,8 +38,8 @@ class JunitConversionLogicFixture {
     static void assertAfterWrappingInMethod(String code, String expected) {
         String prefix = "public class A { public void m() { ";
         String postfix = " }}";
-        String codeWrapped = prefix + code + postfix;
-        String expectedWrapped = prefix + expected + postfix;
+        String codeWrapped = importJunit4 + prefix + code + postfix;
+        String expectedWrapped = importJunit5 + prefix + expected + postfix;
         String actual = convertAndPrettyPrint(codeWrapped);
         assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
     }
@@ -76,8 +78,12 @@ class JunitConversionLogicFixture {
         assertEquals(codeWrapped, actual);
     }
 
-    private static String convertAndPrettyPrint(String codeWrapped) {
-        return JunitConversionLogic.convert(prettyPrintAndPersistChanges(), codeWrapped);
+    private static String convertAndPrettyPrint(String code) {
+        ConversionResult result = JunitConversionLogic.convert(prettyPrintAndPersistChanges(), code);
+        if (result.outcome == ConversionOutcome.Converted) {
+            return result.code;
+        }
+        return code;
     }
 
 }
