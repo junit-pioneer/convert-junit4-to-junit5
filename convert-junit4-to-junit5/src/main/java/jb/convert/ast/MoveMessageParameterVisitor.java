@@ -20,31 +20,29 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 			Arrays.asList("assertEquals", "assertArrayEquals", "assertNotEquals", "assertNotSame", "assertSame"));
 
 	private static final Set<String> THREE_PARAM_METHODS = new HashSet<>(Arrays.asList("assertEquals"));
-	
+
 	private boolean updated = false;
 
 	@Override
 	public void visit(final MethodCallExpr n, final Object arg) {
-
 		String methodName = n.getNameAsString();
-		List<Node> children = n.getChildNodes();
-		if (needsUpdating(methodName, children)) {
-			Expression message = (Expression) getMessageParam(methodName, children);
+        if (needsUpdating(n, methodName)) {
+			Expression message = (Expression) getMessageParam(methodName, n.getChildNodes());
 			n.remove(message);
 			n.addArgument(message);
 			updated = true;
 		}
 		super.visit(n, arg);
 	}
-	
+
 	public boolean performedUpdate() {
 		return updated;
 	}
 
-	private boolean needsUpdating(String methodName, List<Node> children) {
-		int numParams = getNumberParameters(methodName, children);
+	private boolean needsUpdating(MethodCallExpr methodCall, String methodName) {
+        int numParams = methodCall.getArguments().size();
 
-		return (numParams == 2 && ONE_PARAM_METHODS.contains(methodName))
+        return (numParams == 2 && ONE_PARAM_METHODS.contains(methodName))
 				|| (numParams == 3 && TWO_PARAM_METHODS.contains(methodName))
 				|| (numParams == 4 && THREE_PARAM_METHODS.contains(methodName));
 	}
@@ -62,18 +60,4 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 		}
 		throw new RuntimeException("Message parameter for " + methodName + " should be found in " + children);
 	}
-
-	// child nodes could be [assertTrue, a, b] or [Assertions, assertTrue, a, b]
-	// list is the method name and parameters
-	private int getNumberParameters(String methodName, List<Node> children) {
-		int numPositionsBeforeParams = 0;
-		for (Node node : children) {
-			numPositionsBeforeParams++;
-			if (methodName.equals(node.toString())) {
-				return children.size() - numPositionsBeforeParams;
-			}
-		}
-		throw new RuntimeException("Method name " + methodName + " should be found in " + children);
-	}
-
 }
