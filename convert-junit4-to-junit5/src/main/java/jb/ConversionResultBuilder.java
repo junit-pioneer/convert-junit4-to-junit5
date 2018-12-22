@@ -1,8 +1,11 @@
 package jb;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConversionResultBuilder {
+    private List<String> unsupportedFeatures = new ArrayList<>();
     private ConversionOutcome outcome;
     private String details;
     private String code;
@@ -28,7 +31,12 @@ public class ConversionResultBuilder {
         return this;
     }
 
+    public ConversionResultBuilder unsupportedFeature(String feature) {
+        unsupportedFeatures.add(feature);
+        return this;
+    }
+
     ConversionResult build() {
-        return new ConversionResult(outcome, details, code, path);
+        return new ConversionResult(outcome, details, code, path, unsupportedFeatures);
     }
 }

@@ -16,51 +16,53 @@ class JunitConversionLogic {
 		this.configuration = configuration;
 	}
 
-	ConversionResultBuilder convert(String originalText) {
+	ConversionResultBuilder convert(String originalCode) {
 		// don't update file if already on JUnit 5
-		if (originalText.contains("org.junit.jupiter")) {
+		if (originalCode.contains("org.junit.jupiter")) {
 			return ConversionResult.skipped("already using junit 5");
 		}
 		// only look at files that contain JUnit 4 imports
-		if (!originalText.contains("org.junit.")) {
+		if (!originalCode.contains("org.junit.")) {
 			return ConversionResult.skipped("no junit 4 code to migrate");
 		}
-		if (originalText.contains("@Rule")) {
-			return ConversionResult.skipped("rules not supported");
+        ConversionResultBuilder result = new ConversionResultBuilder();
+        if (originalCode.contains("@Rule")) {
+            result.unsupportedFeature("rules");
 		}
-		if (originalText.contains("@Category")) {
-			return ConversionResult.skipped("category not supported");
+		if (originalCode.contains("@Category")) {
+            result.unsupportedFeature("categories");
 		}
-		if (originalText.contains("@RunWith")) {
-			return ConversionResult.skipped("runner not supported");
+		if (originalCode.contains("@RunWith")) {
+            result.unsupportedFeature("runner");
 		}
+
 		// easier to do these with plain text
-		String result = originalText;
-		result = convertPackage(result);
-		result = convertAnnotations(result);
-		result = convertClassNames(result);
-		result = addAssertThatImport(result);
+		String currentCode = originalCode;
+		currentCode = convertPackage(currentCode);
+		currentCode = convertAnnotations(currentCode);
+		currentCode = convertClassNames(currentCode);
+		currentCode = addAssertThatImport(currentCode);
 
 
 		// easier to do move parameter order with AST parser
 
 		CompilationUnit cu = null;
 		try {
-			cu = configuration.javaParser().parse(result);
+			cu = configuration.javaParser().parse(currentCode);
 		} catch (Exception e) {
 		    e.printStackTrace();
-			Assertions.assertEquals(originalText, result);
+			Assertions.assertEquals(originalCode, currentCode);
 			Assertions.fail("the original source is not parsable");
 		}
-		boolean updated = convertAssertionsAndAssumptionMethodParamOrder(cu);
-		if (! originalText.equals(result) || updated) {
+		boolean updated = performAstBasecConversions(cu);
+		if (! originalCode.equals(currentCode) || updated) {
 			// only update result if there were changes
-			result = configuration.javaParser().print(cu);
+			currentCode = configuration.javaParser().print(cu);
 		}
-		if (originalText.equals(result)) {
-			return ConversionResult.unchanged();
+		if (originalCode.equals(currentCode)) {
+            return result.outcome(ConversionOutcome.Unchanged);
 		}
-		return ConversionResult.converted(result);
+        return result.outcome(ConversionOutcome.Converted).code(currentCode);
 	}
 
 	private String convertPackage(String originalText) {
@@ -106,7 +108,7 @@ class JunitConversionLogic {
 		return result;
 	}
 
-	private boolean convertAssertionsAndAssumptionMethodParamOrder(CompilationUnit cu) {
+	private boolean performAstBasecConversions(CompilationUnit cu) {
 		MoveMessageParameterVisitor messageParameterLocation = new MoveMessageParameterVisitor();
 		messageParameterLocation.visit(cu, null);
 		TestMethodMigration testMethodMigration = new TestMethodMigration();
