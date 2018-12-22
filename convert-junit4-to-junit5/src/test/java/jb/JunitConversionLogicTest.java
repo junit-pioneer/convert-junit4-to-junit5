@@ -15,7 +15,7 @@ import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedWrappingInClass;
 import static jb.JunitConversionLogicFixture.assertWrappingInClass;
-import static jb.JunitConversionLogicFixture.convertWhitespaceForJavaParser;
+import static jb.JunitConversionLogicFixture.prettyPrint;
 import static jb.configuration.Configuration.prettyPrintAndPersistChanges;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -179,8 +179,8 @@ class JunitConversionLogicTest {
 		String expected = "import org.junit.jupiter.api." + newAnnotationName + ";\n"
 				+ "public class A { \n@" + newAnnotationName + "\npublic void m() { }}";
 
-		String actual = convert(code).code;
-		assertEquals(convertWhitespaceForJavaParser(expected), actual);
+		String actual = convertAndPrettyPrint(code);
+		assertEquals(prettyPrint(expected), actual);
 	}
 
 	static Stream<Arguments> annotationsProvider() {
@@ -191,8 +191,13 @@ class JunitConversionLogicTest {
 				Arguments.of("Ignore", "Disabled"));
 	}
 
-	private ConversionResult convert(String code){
-		return new JunitConversionLogic(prettyPrintAndPersistChanges()).convert(code).build();
+	private String convertAndPrettyPrint(String code){
+		return JunitConversionLogicFixture.prettyPrint(convert(code).code);
+	}
+
+	private ConversionResult convert(String code) {
+		JunitConversionLogic junitConversionLogic = new JunitConversionLogic(prettyPrintAndPersistChanges());
+		return junitConversionLogic.convert(code).build();
 	}
 
 }

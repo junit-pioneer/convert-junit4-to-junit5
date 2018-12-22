@@ -13,7 +13,7 @@ class JunitConversionLogicFixture {
     private static final String importJunit4 = "import org.junit.Assert;";
     private static final String importJunit5 = "import org.junit.jupiter.api.Assertions;";
 
-    static String convertWhitespaceForJavaParser(String string) {
+    static String prettyPrint(String string) {
         CompilationUnit cu = JavaParser.parse(string);
         return cu.toString();
     }
@@ -25,7 +25,7 @@ class JunitConversionLogicFixture {
         String codeWrapped = importJunit4 + prefix + code + postfix;
         String expectedWrapped = importJunit5 + prefix + expected + postfix;
         String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
+        assertEquals(prettyPrint(expectedWrapped), actual);
     }
 
     // wrap in class so well formed for parser
@@ -34,7 +34,7 @@ class JunitConversionLogicFixture {
         String postfix = " }";
         String codeWrapped = prefix + code + postfix;
         String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(codeWrapped, actual);
+        assertEquals(prettyPrint(codeWrapped), actual);
     }
 
     // wrap in class/method so well formed for parser
@@ -44,7 +44,7 @@ class JunitConversionLogicFixture {
         String codeWrapped = importJunit4 + prefix + code + postfix;
         String expectedWrapped = importJunit5 + prefix + expected + postfix;
         String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
+        assertEquals(prettyPrint(expectedWrapped), actual);
     }
 
     // wrap in class/method so well formed for parser
@@ -53,7 +53,7 @@ class JunitConversionLogicFixture {
         String postfix = " }}";
         String codeWrapped = prefix + code + postfix;
         String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(codeWrapped, actual);
+        assertEquals(prettyPrint(codeWrapped), actual);
     }
 
     // add class after import so well formed for parser
@@ -62,7 +62,7 @@ class JunitConversionLogicFixture {
         String codeWrapped = code + postfix;
         String expectedWrapped = expected + postfix;
         String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
+        assertEquals(prettyPrint(expectedWrapped), actual);
     }
 
     // wrap in class/method so well formed for parser
@@ -71,22 +71,23 @@ class JunitConversionLogicFixture {
         String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
         String expectedWrapped = expectedImport + "public class A { public void m() { " + expectedMethod + "}}";
         String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(convertWhitespaceForJavaParser(expectedWrapped), actual);
+        assertEquals(prettyPrint(expectedWrapped), actual);
     }
 
     // wrap in class/method so well formed for parser
     static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
         String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
         String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(codeWrapped, actual);
+        assertEquals(prettyPrint(codeWrapped), actual);
     }
 
     private static String convertAndPrettyPrint(String code) {
         ConversionResult result = new JunitConversionLogic(prettyPrintAndPersistChanges()).convert(code).build();
+        String convertedCode = code;
         if (result.outcome == ConversionOutcome.Converted) {
-            return result.code;
+            convertedCode = result.code;
         }
-        return code;
+        return prettyPrint(convertedCode);
     }
 
 }

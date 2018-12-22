@@ -57,7 +57,7 @@ public class JunitConversionLogic {
 			Assertions.fail("the original source is not parsable");
 		}
 		boolean updated = performAstBasecConversions(cu);
-		if (! originalCode.equals(currentCode) || updated) {
+		if (updated) {
 			// only update result if there were changes
 			currentCode = configuration.javaParser().print(cu);
 		}
