@@ -48,13 +48,7 @@ public class Updater {
      * @param path a file or directory to update recursively
      */
     void update(Path path) throws IOException {
-        List<Path> filesToMigrate;
-        if (path.toFile().isFile()) {
-            filesToMigrate = Collections.singletonList(path);
-        } else {
-            filesToMigrate = javaFilesIn(path);
-        }
-        ConversionReport report = convertAll(filesToMigrate);
+        ConversionReport report = convertAll(javaFilesIn(path));
         System.out.println(report.print());
     }
 
