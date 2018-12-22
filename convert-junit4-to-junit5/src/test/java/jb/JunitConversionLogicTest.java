@@ -11,10 +11,11 @@ import java.util.stream.Stream;
 
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
+import static jb.JunitConversionLogicFixture.assertPrettyPrintEqual;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedWrappingInClass;
 import static jb.JunitConversionLogicFixture.assertWrappingInClass;
-import static jb.JunitConversionLogicFixture.prettyPrint;
+import static jb.JunitConversionLogicFixture.converted;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JunitConversionLogicTest {
@@ -168,17 +169,25 @@ class JunitConversionLogicTest {
 	}
 
 	// -------------------------------------------------------
+    @Test
+	void doNotTouchJBehaveAnnotations() {
+		String compatibleCode = "import org.jbehave.core.annotations.BeforeScenario;\n"
+				+ "public class A { \n"
+                + "@BeforeScenario\n"
+                + "public void m() { }}";
+
+		assertPrettyPrintEqual(compatibleCode, converted(compatibleCode));
+	}
 
 	@ParameterizedTest
 	@MethodSource("annotationsProvider")
 	void newAnnotationNames(String oldAnnotationName, String newAnnotationName) {
-		String code = "import org.junit." + oldAnnotationName + ";\n"
+		String junit4 = "import org.junit." + oldAnnotationName + ";\n"
 				+ "public class A { \n@" + oldAnnotationName + "\npublic void m() { }}";
-		String expected = "import org.junit.jupiter.api." + newAnnotationName + ";\n"
+		String junit5 = "import org.junit.jupiter.api." + newAnnotationName + ";\n"
 				+ "public class A { \n@" + newAnnotationName + "\npublic void m() { }}";
 
-		String actual = convertAndPrettyPrint(code);
-		assertEquals(prettyPrint(expected), actual);
+		assertPrettyPrintEqual(junit5, converted(junit4));
 	}
 
 	static Stream<Arguments> annotationsProvider() {
@@ -186,11 +195,8 @@ class JunitConversionLogicTest {
 				Arguments.of("BeforeClass", "BeforeAll"),
 				Arguments.of("After", "AfterEach"),
 				Arguments.of("AfterClass", "AfterAll"),
-				Arguments.of("Ignore", "Disabled"));
-	}
-
-	private String convertAndPrettyPrint(String code){
-		return JunitConversionLogicFixture.prettyPrint(JunitConversionLogicFixture.convert(code).code);
+				Arguments.of("Ignore", "Disabled")
+		);
 	}
 
 }

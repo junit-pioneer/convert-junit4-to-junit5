@@ -13,12 +13,6 @@ class JunitConversionLogicFixture {
     private static final String importJunit4 = "import org.junit.Assert;";
     private static final String importJunit5 = "import org.junit.jupiter.api.Assertions;";
 
-    static String prettyPrint(String string) {
-        CompilationUnit cu = JavaParser.parse(string);
-        return cu.toString();
-    }
-
-
     static void assertAfterAddingClassAfter(String code, String expected) {
         String postfix = "public class A {}";
         String junit4 = code + postfix;
@@ -67,11 +61,11 @@ class JunitConversionLogicFixture {
         assertPrettyPrintEqual(junit5, converted(junit4));
     }
 
-    private static void assertPrettyPrintEqual(String expected, String actual) {
+    static void assertPrettyPrintEqual(String expected, String actual) {
         assertEquals(prettyPrint(expected), prettyPrint(actual));
     }
 
-    private static String converted(String code) {
+    static String converted(String code) {
         ConversionResult result = convert(code);
         String convertedCode = code;
         if (result.outcome == ConversionOutcome.Converted) {
@@ -84,4 +78,10 @@ class JunitConversionLogicFixture {
         JunitConversionLogic junitConversionLogic = new JunitConversionLogic(prettyPrintAndPersistChanges());
         return junitConversionLogic.convert(code).build();
     }
+
+    private static String prettyPrint(String string) {
+        CompilationUnit cu = JavaParser.parse(string);
+        return cu.toString();
+    }
+
 }

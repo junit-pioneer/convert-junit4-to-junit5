@@ -33,7 +33,7 @@ public class SearchAndReplace {
                 "org.junit.jupiter.api.AfterEach");
         result = result.replace("org.junit.jupiter.api.Ignore", "org.junit.jupiter.api.Disabled");
         result = result.replace("@BeforeClass", "@BeforeAll");
-        result = replaceUnlessFollowedByEscapingPackageName(result, "@Before", "All", "@BeforeEach");
+        result = replaceUnlessFollowedByEscapingPackageName(result, "@Before", "[All|Scenario]", "@BeforeEach");
         result = result.replace("@AfterClass", "@AfterAll");
         result = replaceUnlessFollowedByEscapingPackageName(result, "@After", "All", "@AfterEach");
         return result.replace("@Ignore", "@Disabled");
