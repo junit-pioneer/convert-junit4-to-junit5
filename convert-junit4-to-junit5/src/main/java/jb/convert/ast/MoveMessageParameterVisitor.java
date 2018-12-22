@@ -1,4 +1,4 @@
-package jb.convert;
+package jb.convert.ast;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
@@ -37,7 +37,7 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
 		super.visit(n, arg);
 	}
 	
-	boolean performedUpdate() {
+	public boolean performedUpdate() {
 		return updated;
 	}
 

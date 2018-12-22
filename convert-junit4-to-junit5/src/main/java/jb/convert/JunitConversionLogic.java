@@ -2,11 +2,13 @@ package jb.convert;
 
 import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.JunitConversionLogicConfiguration;
+import jb.convert.ast.MoveMessageParameterVisitor;
+import jb.convert.ast.TestMethodMigration;
 import org.junit.jupiter.api.Assertions;
 
-import static jb.convert.RegExHelper.replaceAllLiterals;
-import static jb.convert.RegExHelper.replaceUnlessFollowedByEscapingPackageName;
-import static jb.convert.RegExHelper.replaceUnlessPreceededBy;
+import static jb.convert.regex.RegExHelper.replaceAllLiterals;
+import static jb.convert.regex.RegExHelper.replaceUnlessFollowedByEscapingPackageName;
+import static jb.convert.regex.RegExHelper.replaceUnlessPreceededBy;
 
 public class JunitConversionLogic {
 

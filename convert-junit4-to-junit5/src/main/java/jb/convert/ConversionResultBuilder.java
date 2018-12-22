@@ -26,13 +26,13 @@ public class ConversionResultBuilder {
         return this;
     }
 
-    public ConversionResultBuilder path(Path path) {
-        this.path = path;
+    ConversionResultBuilder unsupportedFeature(String feature) {
+        unsupportedFeatures.add(feature);
         return this;
     }
 
-    public ConversionResultBuilder unsupportedFeature(String feature) {
-        unsupportedFeatures.add(feature);
+    public ConversionResultBuilder path(Path path) {
+        this.path = path;
         return this;
     }
 
