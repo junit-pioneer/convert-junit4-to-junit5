@@ -1,4 +1,4 @@
-package jb;
+package jb.convert;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;

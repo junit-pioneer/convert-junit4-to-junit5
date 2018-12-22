@@ -2,6 +2,9 @@ package jb;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import jb.convert.ConversionOutcome;
+import jb.convert.ConversionResult;
+import jb.convert.JunitConversionLogic;
 
 import static jb.configuration.Configuration.prettyPrintAndPersistChanges;
 import static org.junit.jupiter.api.Assertions.assertEquals;

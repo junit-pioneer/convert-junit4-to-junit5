@@ -1,5 +1,8 @@
 package jb;
 
+import jb.convert.ConversionOutcome;
+import jb.convert.ConversionResult;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

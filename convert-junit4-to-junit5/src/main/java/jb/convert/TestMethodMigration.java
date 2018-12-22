@@ -1,4 +1,4 @@
-package jb;
+package jb.convert;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -17,6 +17,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import jb.convert.ImportDeclarations;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 

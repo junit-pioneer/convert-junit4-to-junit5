@@ -2,6 +2,7 @@ package jb;
 
 import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
+import jb.convert.JunitConversionLogic;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

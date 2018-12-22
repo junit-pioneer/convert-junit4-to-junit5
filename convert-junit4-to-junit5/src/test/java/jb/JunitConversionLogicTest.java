@@ -1,5 +1,8 @@
 package jb;
 
+import jb.convert.ConversionOutcome;
+import jb.convert.ConversionResult;
+import jb.convert.JunitConversionLogic;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

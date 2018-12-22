@@ -1,4 +1,4 @@
-package jb;
+package jb.convert;
 
 public enum ConversionOutcome {
     Skipped,

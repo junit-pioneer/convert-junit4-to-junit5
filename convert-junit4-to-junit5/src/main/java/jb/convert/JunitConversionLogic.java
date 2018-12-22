@@ -1,22 +1,22 @@
-package jb;
+package jb.convert;
 
 import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.JunitConversionLogicConfiguration;
 import org.junit.jupiter.api.Assertions;
 
-import static jb.RegExHelper.replaceAllLiterals;
-import static jb.RegExHelper.replaceUnlessFollowedByEscapingPackageName;
-import static jb.RegExHelper.replaceUnlessPreceededBy;
+import static jb.convert.RegExHelper.replaceAllLiterals;
+import static jb.convert.RegExHelper.replaceUnlessFollowedByEscapingPackageName;
+import static jb.convert.RegExHelper.replaceUnlessPreceededBy;
 
-class JunitConversionLogic {
+public class JunitConversionLogic {
 
 	private JunitConversionLogicConfiguration configuration;
 
-	JunitConversionLogic(JunitConversionLogicConfiguration configuration) {
+	public JunitConversionLogic(JunitConversionLogicConfiguration configuration) {
 		this.configuration = configuration;
 	}
 
-	ConversionResultBuilder convert(String originalCode) {
+	public ConversionResultBuilder convert(String originalCode) {
 		// don't update file if already on JUnit 5
 		if (originalCode.contains("org.junit.jupiter")) {
 			return ConversionResult.skipped("already using junit 5");

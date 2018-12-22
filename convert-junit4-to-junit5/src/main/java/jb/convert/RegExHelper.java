@@ -1,4 +1,4 @@
-package jb;
+package jb.convert;
 
 import java.util.regex.Pattern;
 
