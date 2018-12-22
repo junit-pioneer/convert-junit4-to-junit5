@@ -36,7 +36,7 @@ class ScanAndUpdateDirIT {
 	@BeforeEach
 	void createTestFile() {
 		Random random = new Random();
-		path = Paths.get("target/junit-test-" + random.nextInt());
+		path = Paths.get("target/junit-test-" + random.nextInt()+ ".java");
 	}
 
 	@AfterEach
