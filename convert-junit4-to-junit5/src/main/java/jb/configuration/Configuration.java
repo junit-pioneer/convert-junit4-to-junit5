@@ -1,5 +1,8 @@
 package jb.configuration;
 
+import java.nio.file.Path;
+import java.util.function.Predicate;
+
 public class Configuration {
 
     public static class ConfigurationBuilder {
@@ -7,6 +10,7 @@ public class Configuration {
         private JavaParserAdapter javaParserAdapter = new PrettyPrint();
         private ChangeWriter changeWriter = new FileWriter();
         private boolean skipFilesWithUnsupportedFeatures = false;
+        private Predicate<Path> exclude = path -> false;
 
         public ConfigurationBuilder dryRun() {
             changeWriter = new DryRun();
@@ -23,17 +27,18 @@ public class Configuration {
             return this;
         }
 
+        public ConfigurationBuilder excludeMatching(Predicate<Path> exclude) {
+            this.exclude = exclude;
+            return this;
+        }
+
         public JunitConversionLogicConfiguration build(){
-            return new JunitConversionLogicConfiguration(javaParserAdapter, changeWriter, skipFilesWithUnsupportedFeatures);
+            return new JunitConversionLogicConfiguration(javaParserAdapter, changeWriter, skipFilesWithUnsupportedFeatures, exclude);
         }
     }
 
     public static JunitConversionLogicConfiguration prettyPrintAndPersistChanges() {
         return new ConfigurationBuilder().build();
-    }
-
-    public static ConfigurationBuilder preserverFormatting() {
-        return new ConfigurationBuilder().preserverFormatting();
     }
 
 }

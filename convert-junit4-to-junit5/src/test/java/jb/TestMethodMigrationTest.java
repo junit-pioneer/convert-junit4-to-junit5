@@ -1,9 +1,9 @@
 package jb;
 
+import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
 import org.junit.jupiter.api.Test;
 
-import static jb.configuration.Configuration.preserverFormatting;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -61,7 +61,7 @@ class TestMethodMigrationTest {
     }
 
     private String migrated(String junit4) {
-        JunitConversionLogicConfiguration configuration = preserverFormatting().build();
+        JunitConversionLogicConfiguration configuration = new Configuration.ConfigurationBuilder().preserverFormatting().build();
         return new JunitConversionLogic(configuration).convert(junit4).build().code;
     }
 

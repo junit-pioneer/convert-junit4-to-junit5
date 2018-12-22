@@ -54,6 +54,7 @@ public class Updater {
 
     private ConversionReport convertAll(List<Path> filesToMigrate) {
         List<ConversionResult> result = filesToMigrate.stream()
+                .filter(configuration.exclude().negate())
                 .map(this::updateSingleFile)
                 .collect(toList());
         return new ConversionReport(result);
