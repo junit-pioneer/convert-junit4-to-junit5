@@ -10,11 +10,13 @@ import static jb.RegExHelper.replaceUnlessPreceededBy;
 
 class JunitConversionLogic {
 
-	private JunitConversionLogic() {
-		super();
+	private JunitConversionLogicConfiguration configuration;
+
+	public JunitConversionLogic(JunitConversionLogicConfiguration configuration) {
+		this.configuration = configuration;
 	}
 
-	static ConversionResult convert(JunitConversionLogicConfiguration configuration, String originalText) {
+	ConversionResult convert(String originalText) {
 		// don't update file if already on JUnit 5
 		if (originalText.contains("org.junit.jupiter")) {
 			return ConversionResult.skipped("already using junit 5");
@@ -61,14 +63,14 @@ class JunitConversionLogic {
 		return ConversionResult.converted(result);
 	}
 
-	private static String convertPackage(String originalText) {
+	private String convertPackage(String originalText) {
 		String result = originalText;
 		result = replaceAllLiterals(result, "org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
 		result = replaceAllLiterals(result, "org.junit.", "org.junit.jupiter.api.");
 		return result;
 	}
 
-	private static String convertAnnotations(String originalText) {
+	private String convertAnnotations(String originalText) {
 		String result = originalText;
 		result = result.replace("org.junit.jupiter.api.BeforeClass", "org.junit.jupiter.api.BeforeAll");
 		result = replaceUnlessFollowedByEscapingPackageName(result, "org.junit.jupiter.api.Before", "All",
@@ -84,7 +86,7 @@ class JunitConversionLogic {
 		return result.replace("@Ignore", "@Disabled");
 	}
 
-	private static String convertClassNames(String originalText) {
+	private String convertClassNames(String originalText) {
 		String result = originalText;
 		result = result.replace("org.junit.jupiter.api.Assert", "org.junit.jupiter.api.Assertions");
 		result = result.replace("org.junit.jupiter.api.Assume", "org.junit.jupiter.api.Assumptions");
@@ -96,7 +98,7 @@ class JunitConversionLogic {
 	}
 
 	// Assert that moved from junit core to hamcrest matchers
-	private static String addAssertThatImport(String originalText) {
+	private String addAssertThatImport(String originalText) {
 		String result = originalText;
 		if (originalText.contains("assertThat") && !originalText.contains("org.hamcrest.MatcherAssert")) {
 			result = result.replaceFirst("import", "import static org.hamcrest.MatcherAssert.assertThat;\nimport");
@@ -104,7 +106,7 @@ class JunitConversionLogic {
 		return result;
 	}
 
-	private static boolean convertAssertionsAndAssumptionMethodParamOrder(CompilationUnit cu) {
+	private boolean convertAssertionsAndAssumptionMethodParamOrder(CompilationUnit cu) {
 		MoveMessageParameterVisitor messageParameterLocation = new MoveMessageParameterVisitor();
 		messageParameterLocation.visit(cu, null);
 		TestMethodMigration testMethodMigration = new TestMethodMigration();

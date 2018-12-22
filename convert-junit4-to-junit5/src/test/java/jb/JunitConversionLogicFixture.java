@@ -79,7 +79,7 @@ class JunitConversionLogicFixture {
     }
 
     private static String convertAndPrettyPrint(String code) {
-        ConversionResult result = JunitConversionLogic.convert(prettyPrintAndPersistChanges(), code);
+        ConversionResult result = new JunitConversionLogic(prettyPrintAndPersistChanges()).convert(code);
         if (result.outcome == ConversionOutcome.Converted) {
             return result.code;
         }

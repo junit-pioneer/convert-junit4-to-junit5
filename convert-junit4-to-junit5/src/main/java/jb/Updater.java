@@ -63,9 +63,9 @@ public class Updater {
             reportLines.add(unchanged.size() + " unchanged");
             reportLines.add(converted.size() + " converted");
             reportLines.add(skipped.size() + " skipped");
-            skippedByDetails.entrySet().stream().forEach(it -> reportLines.add("   " + it.getValue().size() + " " + it.getKey()));
+            skippedByDetails.forEach((key, value) -> reportLines.add("   " + value.size() + " " + key));
 
-            System.out.println(reportLines.stream().collect(Collectors.joining("\n")));
+            System.out.println(String.join("\n", reportLines));
         }
     }
 
@@ -82,7 +82,7 @@ public class Updater {
     private ConversionResult updateSingleFile(Path path) {
         try {
             String originalText = new String(Files.readAllBytes(path));
-            ConversionResult result = JunitConversionLogic.convert(configuration, originalText);
+            ConversionResult result = new JunitConversionLogic(configuration).convert(originalText);
             System.out.println(result.outcome + " " + path);
 
             if (result.outcome == ConversionOutcome.Converted) {

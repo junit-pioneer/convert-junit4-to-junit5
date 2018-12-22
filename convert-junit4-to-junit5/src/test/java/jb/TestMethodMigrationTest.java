@@ -1,6 +1,6 @@
 package jb;
 
-import jb.configuration.Configuration;
+import jb.configuration.JunitConversionLogicConfiguration;
 import org.junit.jupiter.api.Test;
 
 import static jb.configuration.Configuration.preserverFormatting;
@@ -61,7 +61,8 @@ class TestMethodMigrationTest {
     }
 
     private String migrated(String junit4) {
-        return JunitConversionLogic.convert(preserverFormatting().build(), junit4).code;
+        JunitConversionLogicConfiguration configuration = preserverFormatting().build();
+        return new JunitConversionLogic(configuration).convert(junit4).code;
     }
 
 }

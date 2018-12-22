@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static jb.JunitConversionLogic.convert;
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
@@ -116,7 +115,7 @@ class JunitConversionLogicTest {
 	@Test
 	void doNotUpdateIfAlreadyJupiter() {
 		String code = "import static org.junit.jupiter.api.Assertions.*;";
-		ConversionResult result = convert(prettyPrintAndPersistChanges(), code);
+		ConversionResult result = convert(code);
 		assertEquals(ConversionOutcome.Skipped, result.outcome);
 		assertEquals("already using junit 5", result.details);
 	}
@@ -177,7 +176,7 @@ class JunitConversionLogicTest {
 		String expected = "import org.junit.jupiter.api." + newAnnotationName + ";\n"
 				+ "public class A { \n@" + newAnnotationName + "\npublic void m() { }}";
 
-		String actual = convert(prettyPrintAndPersistChanges(), code).code;
+		String actual = convert(code).code;
 		assertEquals(convertWhitespaceForJavaParser(expected), actual);
 	}
 
@@ -187,6 +186,10 @@ class JunitConversionLogicTest {
 				Arguments.of("After", "AfterEach"),
 				Arguments.of("AfterClass", "AfterAll"),
 				Arguments.of("Ignore", "Disabled"));
+	}
+
+	public ConversionResult convert(String code){
+		return new JunitConversionLogic(prettyPrintAndPersistChanges()).convert(code);
 	}
 
 }
