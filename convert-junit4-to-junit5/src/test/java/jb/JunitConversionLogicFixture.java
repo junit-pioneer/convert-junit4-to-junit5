@@ -18,76 +18,66 @@ class JunitConversionLogicFixture {
         return cu.toString();
     }
 
-    // wrap in class so well formed for parser
-    static void assertWrappingInClass(String code, String expected) {
-        String prefix = "public class A { ";
-        String postfix = " }";
-        String codeWrapped = importJunit4 + prefix + code + postfix;
-        String expectedWrapped = importJunit5 + prefix + expected + postfix;
-        String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(prettyPrint(expectedWrapped), actual);
+
+    static void assertAfterAddingClassAfter(String code, String expected) {
+        String postfix = "public class A {}";
+        String junit4 = code + postfix;
+        String junit5 = expected + postfix;
+        assertPrettyPrintEqual(junit5, converted(junit4));
     }
 
-    // wrap in class so well formed for parser
     static void assertUnchangedWrappingInClass(String code) {
         String prefix = "public class A { ";
         String postfix = " }";
-        String codeWrapped = prefix + code + postfix;
-        String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(prettyPrint(codeWrapped), actual);
+        String compatibleCode = prefix + code + postfix;
+        assertPrettyPrintEqual(compatibleCode, converted(compatibleCode));
     }
 
-    // wrap in class/method so well formed for parser
+    static void assertWrappingInClass(String code, String expected) {
+        String prefix = "public class A { ";
+        String postfix = " }";
+        String junit4 = importJunit4 + prefix + code + postfix;
+        String junit5 = importJunit5 + prefix + expected + postfix;
+        assertPrettyPrintEqual(junit5, converted(junit4));
+    }
+
+    static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
+        String compatibleCode = originalImport + "public class A { public void m() { " + originalMethod + "}}";
+        assertPrettyPrintEqual(compatibleCode, converted(compatibleCode));
+    }
+
     static void assertAfterWrappingInMethod(String code, String expected) {
         String prefix = "public class A { public void m() { ";
         String postfix = " }}";
-        String codeWrapped = importJunit4 + prefix + code + postfix;
-        String expectedWrapped = importJunit5 + prefix + expected + postfix;
-        String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(prettyPrint(expectedWrapped), actual);
+        String junit4 = importJunit4 + prefix + code + postfix;
+        String junit5 = importJunit5 + prefix + expected + postfix;
+        assertPrettyPrintEqual(junit5, converted(junit4));
     }
 
-    // wrap in class/method so well formed for parser
     static void assertUnchangedAfterWrappingInMethod(String code) {
         String prefix = "public class A { public void m() { ";
         String postfix = " }}";
-        String codeWrapped = prefix + code + postfix;
-        String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(prettyPrint(codeWrapped), actual);
+        String compatibleCode = prefix + code + postfix;
+        assertPrettyPrintEqual(compatibleCode, converted(compatibleCode));
     }
 
-    // add class after import so well formed for parser
-    static void assertAfterAddingClassAfter(String code, String expected) {
-        String postfix = "public class A {}";
-        String codeWrapped = code + postfix;
-        String expectedWrapped = expected + postfix;
-        String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(prettyPrint(expectedWrapped), actual);
+    static void assertAfterWrappingInMethod(String originalImport, String originalMethod, String expectedImport, String expectedMethod) {
+        String junit4 = originalImport + "public class A { public void m() { " + originalMethod + "}}";
+        String junit5 = expectedImport + "public class A { public void m() { " + expectedMethod + "}}";
+        assertPrettyPrintEqual(junit5, converted(junit4));
     }
 
-    // wrap in class/method so well formed for parser
-    static void assertAfterWrappingInMethod(String originalImport, String originalMethod, String expectedImport,
-                                            String expectedMethod) {
-        String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
-        String expectedWrapped = expectedImport + "public class A { public void m() { " + expectedMethod + "}}";
-        String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(prettyPrint(expectedWrapped), actual);
+    private static void assertPrettyPrintEqual(String expected, String actual) {
+        assertEquals(prettyPrint(expected), prettyPrint(actual));
     }
 
-    // wrap in class/method so well formed for parser
-    static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
-        String codeWrapped = originalImport + "public class A { public void m() { " + originalMethod + "}}";
-        String actual = convertAndPrettyPrint(codeWrapped);
-        assertEquals(prettyPrint(codeWrapped), actual);
-    }
-
-    private static String convertAndPrettyPrint(String code) {
+    private static String converted(String code) {
         ConversionResult result = convert(code);
         String convertedCode = code;
         if (result.outcome == ConversionOutcome.Converted) {
             convertedCode = result.code;
         }
-        return prettyPrint(convertedCode);
+        return convertedCode;
     }
 
     static ConversionResult convert(String code) {
