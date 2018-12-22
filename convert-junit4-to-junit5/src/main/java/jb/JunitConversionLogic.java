@@ -22,6 +22,15 @@ class JunitConversionLogic {
 		if (!originalText.contains("org.junit.")) {
 			return ConversionResult.skipped("no junit 4 code to migrate");
 		}
+		if (originalText.contains("@Rule")) {
+			return ConversionResult.skipped("rules not supported");
+		}
+		if (originalText.contains("@Category")) {
+			return ConversionResult.skipped("category not supported");
+		}
+		if (originalText.contains("@RunWith")) {
+			return ConversionResult.skipped("runner not supported");
+		}
 		// easier to do these with plain text
 		String result = originalText;
 		result = convertPackage(result);
