@@ -2,6 +2,8 @@ package jb;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import jb.configuration.Configuration;
+import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ConversionOutcome;
 import jb.convert.ConversionResult;
 import jb.convert.JunitConversionLogic;
@@ -9,7 +11,7 @@ import jb.convert.JunitConversionLogic;
 import static jb.configuration.Configuration.prettyPrintAndPersistChanges;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class JunitConversionLogicFixture {
+public class JunitConversionLogicFixture {
     private static final String importJunit4 = "import org.junit.Assert;";
     private static final String importJunit5 = "import org.junit.jupiter.api.Assertions;";
 
@@ -85,4 +87,8 @@ class JunitConversionLogicFixture {
         return cu.toString();
     }
 
+    public static String convertedWithPreservedFormatting(String junit4) {
+        JunitConversionLogicConfiguration configuration = new Configuration.ConfigurationBuilder().preserverFormatting().build();
+        return new JunitConversionLogic(configuration).convert(junit4).build().code;
+    }
 }

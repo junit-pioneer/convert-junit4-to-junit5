@@ -1,10 +1,8 @@
 package jb;
 
-import jb.configuration.Configuration;
-import jb.configuration.JunitConversionLogicConfiguration;
-import jb.convert.JunitConversionLogic;
 import org.junit.jupiter.api.Test;
 
+import static jb.JunitConversionLogicFixture.convertedWithPreservedFormatting;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -25,15 +23,15 @@ class TestMethodMigrationTest {
                 "import org.junit.jupiter.api.Test;\n" +
                 "import static org.junit.jupiter.api.Assertions.assertThrows;\n" +
                 "\n" +
-                "public class A {\n" +
+                "class A {\n" +
                 "    @Test\n" +
-                "    public void m() {\n" +
+                "    void m() {\n" +
                 "        assertThrows(IllegalArgumentException.class, () -> {\n" +
                 "            throw new IllegalArgumentException();\n" +
                 "    });\n" +
                 "    }\n" +
                 "}";
-        assertThat(converted(junit4), equalTo(junit5));
+        assertThat(convertedWithPreservedFormatting(junit4), equalTo(junit5));
     }
 
     @Test
@@ -50,20 +48,15 @@ class TestMethodMigrationTest {
                 "import java.time.Duration;\n" +
                 "import static org.junit.jupiter.api.Assertions.assertTimeout;\n" +
                 "\n" +
-                "public class A {\n" +
+                "class A {\n" +
                 "    @Test\n" +
-                "    public void m() {\n" +
+                "    void m() {\n" +
                 "        assertTimeout(Duration.ofMillis(42L), () -> {\n" +
                 "            System.out.println(\"I'm fast\");\n" +
                 "    });\n" +
                 "    }\n" +
                 "}";
-        assertThat(converted(junit4), equalTo(junit5));
-    }
-
-    private String converted(String junit4) {
-        JunitConversionLogicConfiguration configuration = new Configuration.ConfigurationBuilder().preserverFormatting().build();
-        return new JunitConversionLogic(configuration).convert(junit4).build().code;
+        assertThat(convertedWithPreservedFormatting(junit4), equalTo(junit5));
     }
 
 }

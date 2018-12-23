@@ -193,13 +193,33 @@ class JunitConversionLogicTest {
 		assertPrettyPrintEqual(compatibleCode, converted(compatibleCode));
 	}
 
+	@Test
+	void ignoreToDisabled() {
+		String junit4 = "import org.junit.Ignore;\n" +
+				"import org.junit.Test;\n" +
+				"public class A { \n" +
+				"@Test @Ignore\n" +
+				"public void m() { }}";
+		String junit5 = "import org.junit.jupiter.api.Disabled;\n" +
+				"import org.junit.jupiter.api.Test;\n" +
+				"class A { \n" +
+				"@Test @Disabled\n" +
+				"void m() { }}";
+
+		assertPrettyPrintEqual(junit5, converted(junit4));
+	}
+
 	@ParameterizedTest
 	@MethodSource("annotationsProvider")
 	void newAnnotationNames(String oldAnnotationName, String newAnnotationName) {
 		String junit4 = "import org.junit." + oldAnnotationName + ";\n"
-				+ "public class A { \n@" + oldAnnotationName + "\npublic void m() { }}";
+				+ "public class A { \n"
+				+ "@" + oldAnnotationName + "\n"
+				+ "public void m() { }}";
 		String junit5 = "import org.junit.jupiter.api." + newAnnotationName + ";\n"
-				+ "public class A { \n@" + newAnnotationName + "\npublic void m() { }}";
+				+ "public class A { \n"
+				+ "@" + newAnnotationName + "\n"
+				+ "void m() { }}";
 
 		assertPrettyPrintEqual(junit5, converted(junit4));
 	}
@@ -208,8 +228,7 @@ class JunitConversionLogicTest {
 		return Stream.of(Arguments.of("Before", "BeforeEach"),
 				Arguments.of("BeforeClass", "BeforeAll"),
 				Arguments.of("After", "AfterEach"),
-				Arguments.of("AfterClass", "AfterAll"),
-				Arguments.of("Ignore", "Disabled")
+				Arguments.of("AfterClass", "AfterAll")
 		);
 	}
 
