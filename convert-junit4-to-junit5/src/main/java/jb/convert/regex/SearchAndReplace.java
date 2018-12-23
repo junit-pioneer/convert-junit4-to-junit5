@@ -19,6 +19,7 @@ public class SearchAndReplace {
     private String convertPackage(String originalText) {
         String result = originalText;
         result = replaceAllLiterals(result, "org.junit.Assert.assertThat", "org.hamcrest.MatcherAssert.assertThat");
+        result = replaceAllLiterals(result, "import org.junit.experimental.categories.Category;\n", "");
         result = replaceAllLiterals(result, "org.junit.", "org.junit.jupiter.api.");
         return result;
     }

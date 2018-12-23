@@ -25,7 +25,7 @@ public class RegExHelper {
         return originalText.replaceAll(regex, replacement);
     }
 
-    public static String replaceAllLiterals(String result, String regex, String replacement) {
-        return result.replaceAll(Pattern.quote(regex), replacement);
+    public static String replaceAllLiterals(String originalText, String regex, String replacement) {
+        return originalText.replaceAll(Pattern.quote(regex), replacement);
     }
 }
