@@ -11,12 +11,12 @@ public class ConversionResultBuilder {
     private String code;
     private Path path;
 
-    ConversionResultBuilder outcome(ConversionOutcome outcome) {
+    public ConversionResultBuilder outcome(ConversionOutcome outcome) {
         this.outcome = outcome;
         return this;
     }
 
-    ConversionResultBuilder details(String details) {
+    public ConversionResultBuilder details(String details) {
         this.details = details;
         return this;
     }

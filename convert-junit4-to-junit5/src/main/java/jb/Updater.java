@@ -77,12 +77,16 @@ public class Updater {
             String originalText = new String(Files.readAllBytes(path));
             ConversionResultBuilder resultBuilder = new JunitConversionLogic(configuration).convert(originalText).path(path);
             ConversionResult result = resultBuilder.build();
-
-            System.out.println(result.outcome + " " + path);
+            if (!result.unsupportedFeatures.isEmpty() && configuration.skipFilesWithUnsupportedFeatures()) {
+                resultBuilder.outcome(ConversionOutcome.Skipped);
+                resultBuilder.details("configuration says to skip files with unsupported features");
+                result = resultBuilder.build();
+            }
 
             if (result.outcome == ConversionOutcome.Converted && (result.unsupportedFeatures.isEmpty() || !configuration.skipFilesWithUnsupportedFeatures())) {
                 configuration.changeWriter().write(path, result.code);
             }
+            System.out.println(result.outcome + " " + path);
             return result;
         } catch (IOException | RuntimeException e) {
             System.out.println("Failed " + path.toAbsolutePath());
