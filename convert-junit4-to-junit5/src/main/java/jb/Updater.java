@@ -74,6 +74,7 @@ public class Updater {
 
     private ConversionResult updateSingleFile(Path path) {
         try {
+            System.out.println("__________" + path);
             String originalText = new String(Files.readAllBytes(path));
             ConversionResultBuilder resultBuilder = new JunitConversionLogic(configuration).convert(originalText).path(path);
             ConversionResult result = resultBuilder.build();
@@ -86,7 +87,7 @@ public class Updater {
             if (result.outcome == ConversionOutcome.Converted && (result.unsupportedFeatures.isEmpty() || !configuration.skipFilesWithUnsupportedFeatures())) {
                 configuration.changeWriter().write(path, result.code);
             }
-            System.out.println(result.outcome + " " + path);
+            System.out.println(result.outcome);
             return result;
         } catch (IOException | RuntimeException e) {
             System.out.println("Failed " + path.toAbsolutePath());
