@@ -10,14 +10,14 @@ import jb.model.*;
 
 public class Class {
 
-	@Before
-	public void setUp() {
+    @Before
+    public void setUp() {
 
-	}
+    }
 
-	@Test
-	public void dummy() {
+    @Test
+    public void dummy() {
 
-	}
+    }
 
 }

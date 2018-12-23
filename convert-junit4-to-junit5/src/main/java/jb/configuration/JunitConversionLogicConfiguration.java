@@ -17,7 +17,7 @@ public class JunitConversionLogicConfiguration {
         this.exclude = exclude;
     }
 
-    public JavaParserAdapter javaParser(){
+    public JavaParserAdapter javaParser() {
         return javaParserAdapter;
     }
 
@@ -25,11 +25,11 @@ public class JunitConversionLogicConfiguration {
         return changeWriter;
     }
 
-    public boolean skipFilesWithUnsupportedFeatures(){
+    public boolean skipFilesWithUnsupportedFeatures() {
         return skipFilesWithUnsupportedFeatures;
     }
 
-    public Predicate<Path> exclude(){
+    public Predicate<Path> exclude() {
         return exclude;
     }
 

@@ -17,7 +17,7 @@ public class Configuration {
             return this;
         }
 
-        public ConfigurationBuilder preserverFormatting(){
+        public ConfigurationBuilder preserverFormatting() {
             this.javaParserAdapter = new PreserveFormatting();
             return this;
         }
@@ -32,7 +32,7 @@ public class Configuration {
             return this;
         }
 
-        public JunitConversionLogicConfiguration build(){
+        public JunitConversionLogicConfiguration build() {
             return new JunitConversionLogicConfiguration(javaParserAdapter, changeWriter, skipFilesWithUnsupportedFeatures, exclude);
         }
     }
