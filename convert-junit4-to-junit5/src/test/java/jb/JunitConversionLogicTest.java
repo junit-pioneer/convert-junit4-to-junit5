@@ -115,6 +115,20 @@ class JunitConversionLogicTest {
 	}
 
 	@Test
+	void assertJImportForAssertThatPresent() {
+		String originalImport = "import static org.assertj.core.api.Assertions.assertThat;\n";
+		String originalMethod = "assertThat(xxx);";
+		assertUnchangedAfterWrappingInMethod(originalImport, originalMethod);
+	}
+
+	@Test
+	void assertJStarImportForAssertThatPresent() {
+		String originalImport = "import static org.assertj.core.api.Assertions.*;\n";
+		String originalMethod = "assertThat(xxx);";
+		assertUnchangedAfterWrappingInMethod(originalImport, originalMethod);
+	}
+
+	@Test
 	void doNotUpdateIfAlreadyJupiter() {
 		String code = "import static org.junit.jupiter.api.Assertions.*;";
 		ConversionResult result = JunitConversionLogicFixture.convert(code);

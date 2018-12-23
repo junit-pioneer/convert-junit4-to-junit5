@@ -36,8 +36,9 @@ class JunitConversionLogicFixture {
     }
 
     static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
-        String compatibleCode = originalImport + "public class A { public void m() { " + originalMethod + "}}";
-        assertPrettyPrintEqual(compatibleCode, converted(compatibleCode));
+        String compatibleCode = originalImport + importJunit4 + "public class A { public void m() { " + originalMethod + "}}";
+        String compatibleCodeFlup = originalImport + importJunit5 + "public class A { public void m() { " + originalMethod + "}}";
+        assertPrettyPrintEqual(compatibleCodeFlup, converted(compatibleCode));
     }
 
     static void assertAfterWrappingInMethod(String code, String expected) {

@@ -53,7 +53,11 @@ public class SearchAndReplace {
     // Assert that moved from junit core to hamcrest matchers
     private String addAssertThatImport(String originalText) {
         String result = originalText;
-        if (originalText.contains("assertThat") && !originalText.contains("org.hamcrest.MatcherAssert")) {
+        if (originalText.contains("assertThat")
+                && !originalText.contains("org.hamcrest.MatcherAssert")
+                && !originalText.contains("org.assertj.core.api.Assertions.assertThat")
+                && !originalText.contains("org.assertj.core.api.Assertions.*")
+        ) {
             result = result.replaceFirst("import", "import static org.hamcrest.MatcherAssert.assertThat;\nimport");
         }
         return result;
