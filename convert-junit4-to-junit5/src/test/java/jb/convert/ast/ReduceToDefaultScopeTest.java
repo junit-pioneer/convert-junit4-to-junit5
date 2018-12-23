@@ -46,5 +46,4 @@ class ReduceToDefaultScopeTest {
         assertThat(convertedWithPreservedFormatting(junit4), equalTo(junit5));
     }
 
-
 }
