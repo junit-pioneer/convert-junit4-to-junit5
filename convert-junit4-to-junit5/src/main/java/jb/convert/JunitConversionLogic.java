@@ -3,6 +3,7 @@ package jb.convert;
 import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ast.CategoryMigration;
+import jb.convert.ast.ConvertCategoryToTag;
 import jb.convert.ast.MoveMessageParameterVisitor;
 import jb.convert.ast.ReduceToDefaultScope;
 import jb.convert.ast.TestMethodMigration;
