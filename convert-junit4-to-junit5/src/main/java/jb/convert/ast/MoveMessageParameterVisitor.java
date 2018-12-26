@@ -33,7 +33,7 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
     @Override
     public void visit(final MethodCallExpr methodCall, final Object arg) {
         String methodName = methodCall.getNameAsString();
-        if (needsUpdating(methodCall, methodName)) {
+        if (failMessageNeedsUpdating(methodCall, methodName)) {
             if (assertEquals.equals(methodName)) {
                 migrateAssertEquals(methodCall);
             } else {
@@ -69,7 +69,7 @@ public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
         updated = true;
     }
 
-    private boolean needsUpdating(MethodCallExpr methodCall, String methodName) {
+    private boolean failMessageNeedsUpdating(MethodCallExpr methodCall, String methodName) {
         int numParams = methodCall.getArguments().size();
         return (numParams == 2 && ONE_PARAM_METHODS.contains(methodName))
                 || (numParams == 3 && TWO_PARAM_METHODS.contains(methodName))
