@@ -20,6 +20,7 @@ import com.github.javaparser.ast.visitor.Visitable;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
+import java.time.Duration;
 import java.util.Optional;
 
 public class TestMethodMigration extends ModifierVisitor<Void> {
@@ -58,11 +59,11 @@ public class TestMethodMigration extends ModifierVisitor<Void> {
             }
             String junit4TestMethodBody = body.toString();
 
-            ImportDeclaration durationImport = JavaParser.parseImport("import java.time.Duration;");
-            ImportDeclaration assertTimeoutImport = JavaParser.parseImport("import static " + Assertions.class.getCanonicalName() + ".assertTimeout;");
+            String importable = Assertions.class.getCanonicalName() + ".assertTimeout";
 
-            methodDeclaration.findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(durationImport));
-            methodDeclaration.findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(assertTimeoutImport));
+
+            ImportDeclarations.addImportTo(methodDeclaration, Duration.class);
+            ImportDeclarations.addStaticImportTo(methodDeclaration, importable);
 
             Statement statement = JavaParser.parseStatement("assertTimeout(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
                     "" + junit4TestMethodBody +
