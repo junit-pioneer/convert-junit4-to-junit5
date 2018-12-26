@@ -80,13 +80,9 @@ public class TestMethodMigration extends ModifierVisitor<Void> {
             if (body.getStatements().isEmpty()) {
                 return;
             }
-            String s = body.toString();
-
-            ImportDeclaration importDeclaration = JavaParser.parseImport("import static " + Assertions.class.getCanonicalName() + ".assertThrows;");
-            methodDeclaration.findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(importDeclaration));
-
+            ImportDeclarations.addStaticImportTo(methodDeclaration, Assertions.class.getCanonicalName() + ".assertThrows");
             Statement statement = JavaParser.parseStatement("assertThrows(" + exceptionClassAsString + ",()->" +
-                    "" + s +
+                    "" + body.toString() +
                     ");\n");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
