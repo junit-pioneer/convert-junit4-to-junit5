@@ -32,6 +32,8 @@ class ImportDeclarations {
     }
 
     private static void addImport(HasParentNode<?> n, ImportDeclaration importDeclaration) {
-        n.findAncestor(CompilationUnit.class).ifPresent(cu -> cu.addImport(importDeclaration));
+        n.findAncestor(CompilationUnit.class).ifPresent(cu -> {
+            cu.addImport(importDeclaration.getNameAsString(), importDeclaration.isStatic(), importDeclaration.isAsterisk());
+        });
     }
 }
