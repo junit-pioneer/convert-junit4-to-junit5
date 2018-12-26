@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MoveMessageParameterVisitor extends VoidVisitorAdapter<Object> {
+public class AssertAndAssumptionMigration extends VoidVisitorAdapter<Object> {
 
     private static final String assertEquals = "assertEquals";
 
