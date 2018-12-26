@@ -1,11 +1,14 @@
 package jb;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ConversionOutcome;
 import jb.convert.ConversionResult;
 import jb.convert.ConversionResultBuilder;
 import jb.convert.JunitConversionLogic;
+import jb.convert.ast.ConvertCategoryToTag;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,11 +42,12 @@ public class Updater {
         new Updater(Configuration.prettyPrintAndPersistChanges()).update(path);
     }
 
+    private final Project project = new Project();
+    private final JunitConversionLogicConfiguration configuration;
+
     Updater(JunitConversionLogicConfiguration configuration) {
         this.configuration = configuration;
     }
-
-    private final JunitConversionLogicConfiguration configuration;
 
     /**
      * Update to use JUnit 5 syntax where possible
@@ -60,6 +64,7 @@ public class Updater {
                 .filter(configuration.exclude().negate())
                 .map(this::updateSingleFile)
                 .collect(toList());
+        migrateCategories();
         return new ConversionReport(result);
     }
 
@@ -72,11 +77,28 @@ public class Updater {
         }
     }
 
+    private void migrateCategories() {
+        project.categoriesToMigrate().forEach(path -> {
+            try {
+                configuration.javaParser().parse(readSourceFile(path));
+                CompilationUnit cu = JavaParser.parse(path);
+                new ConvertCategoryToTag().visit(cu, null);
+                String source = configuration.javaParser().print(cu);
+                configuration.changeWriter().write(path, source);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     private ConversionResult updateSingleFile(Path path) {
         try {
-            System.out.println("__________" + path);
-            String originalText = new String(Files.readAllBytes(path));
-            ConversionResultBuilder resultBuilder = new JunitConversionLogic(configuration).convert(originalText).path(path);
+            System.out.println("__________ " + path);
+            String originalText = readSourceFile(path);
+            InMemoryProjectRecorder recorder = new InMemoryProjectRecorder();
+            ConversionResultBuilder resultBuilder = new JunitConversionLogic(configuration, recorder).convert(originalText).path(path);
+            this.project.trackClasses(recorder.foundClassNames, path);
+            this.project.trackCategories(recorder.referencedCategories);
             ConversionResult result = resultBuilder.build();
             if (!result.unsupportedFeatures.isEmpty() && configuration.skipFilesWithUnsupportedFeatures()) {
                 resultBuilder.outcome(ConversionOutcome.Skipped);
@@ -94,6 +116,10 @@ public class Updater {
             // convert to runtime exception so can use inside stream operation
             throw new RuntimeException(e);
         }
+    }
+
+    private String readSourceFile(Path path) throws IOException {
+        return new String(Files.readAllBytes(path));
     }
 
 }

@@ -78,7 +78,7 @@ public class JunitConversionLogicFixture {
     }
 
     static ConversionResult convert(String code) {
-        JunitConversionLogic junitConversionLogic = new JunitConversionLogic(prettyPrintAndPersistChanges());
+        JunitConversionLogic junitConversionLogic = new JunitConversionLogic(prettyPrintAndPersistChanges(), new InMemoryProjectRecorder());
         return junitConversionLogic.convert(code).build();
     }
 
@@ -89,6 +89,6 @@ public class JunitConversionLogicFixture {
 
     public static String convertedWithPreservedFormatting(String junit4) {
         JunitConversionLogicConfiguration configuration = new Configuration.ConfigurationBuilder().preserverFormatting().build();
-        return new JunitConversionLogic(configuration).convert(junit4).build().code;
+        return new JunitConversionLogic(configuration, new InMemoryProjectRecorder()).convert(junit4).build().code;
     }
 }

@@ -1,10 +1,11 @@
 package jb.convert;
 
 import com.github.javaparser.ast.CompilationUnit;
+import jb.ProjectRecorder;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ast.CategoryMigration;
-import jb.convert.ast.ConvertCategoryToTag;
 import jb.convert.ast.MoveMessageParameterVisitor;
+import jb.convert.ast.ProjectProbe;
 import jb.convert.ast.ReduceToDefaultScope;
 import jb.convert.ast.TestMethodMigration;
 import jb.convert.regex.SearchAndReplace;
@@ -13,13 +14,18 @@ import org.junit.jupiter.api.Assertions;
 public class JunitConversionLogic {
 
     private final JunitConversionLogicConfiguration configuration;
+    private final ProjectRecorder projectRecorder;
     private final SearchAndReplace searchAndReplace = new SearchAndReplace();
 
-    public JunitConversionLogic(JunitConversionLogicConfiguration configuration) {
+    public JunitConversionLogic(JunitConversionLogicConfiguration configuration, ProjectRecorder projectRecorder) {
         this.configuration = configuration;
+        this.projectRecorder = projectRecorder;
     }
 
     public ConversionResultBuilder convert(String originalCode) {
+        ProjectProbe projectProbe = new ProjectProbe(projectRecorder);
+        projectProbe.visit(configuration.javaParser().parse(originalCode), null);
+
         // don't update file if already on JUnit 5
         if (originalCode.contains("org.junit.jupiter")) {
             return ConversionResult.skipped("already using junit 5");
@@ -31,9 +37,6 @@ public class JunitConversionLogic {
         ConversionResultBuilder result = new ConversionResultBuilder();
         if (originalCode.contains("@Rule")) {
             result.unsupportedFeature("rules");
-        }
-        if (originalCode.contains("@Category")) {
-            result.unsupportedFeature("categories");
         }
         if (originalCode.contains("@RunWith")) {
             result.unsupportedFeature("runner");
@@ -75,7 +78,7 @@ public class JunitConversionLogic {
         ReduceToDefaultScope reduceToDefaultScope = new ReduceToDefaultScope();
         reduceToDefaultScope.visit(cu, new ReduceToDefaultScope.Accumulator());
 
-        CategoryMigration categoryMigration = new CategoryMigration();
+        CategoryMigration categoryMigration = new CategoryMigration(projectRecorder);
         categoryMigration.visit(cu, null);
         return messageParameterLocation.performedUpdate()
                 || testMethodMigration.performedUpdate()
