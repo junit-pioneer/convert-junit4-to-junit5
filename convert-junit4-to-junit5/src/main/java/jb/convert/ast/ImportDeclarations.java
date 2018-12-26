@@ -26,14 +26,12 @@ class ImportDeclarations {
         addImport(node, parseImport("import " + clazz.getCanonicalName() + ";"));
     }
 
-    private static void addImport(HasParentNode<?> n, ImportDeclaration importDeclaration) {
-        n.findAncestor(CompilationUnit.class).ifPresent(cu -> {
-            cu.addImport(importDeclaration);
-        });
-    }
-
     static void addStaticImportTo(HasParentNode<?> target, String importable) {
         ImportDeclaration staticImport = parseImport("import static " + importable + ";");
         addImport(target, staticImport);
+    }
+
+    private static void addImport(HasParentNode<?> n, ImportDeclaration importDeclaration) {
+        n.findAncestor(CompilationUnit.class).ifPresent(cu -> cu.addImport(importDeclaration));
     }
 }
