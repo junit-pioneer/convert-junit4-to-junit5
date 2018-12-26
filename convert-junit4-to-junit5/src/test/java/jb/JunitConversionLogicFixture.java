@@ -37,13 +37,13 @@ public class JunitConversionLogicFixture {
         assertPrettyPrintEqual(junit5, converted(junit4));
     }
 
-    static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
+    public static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
         String compatibleCode = originalImport + importJunit4 + "public class A { public void m() { " + originalMethod + "}}";
         String compatibleCodeFlup = originalImport + importJunit5 + "public class A { public void m() { " + originalMethod + "}}";
         assertPrettyPrintEqual(compatibleCodeFlup, converted(compatibleCode));
     }
 
-    static void assertAfterWrappingInMethod(String code, String expected) {
+    public static void assertAfterWrappingInMethod(String code, String expected) {
         String prefix = "public class A { public void m() { ";
         String postfix = " }}";
         String junit4 = importJunit4 + prefix + code + postfix;
@@ -51,14 +51,14 @@ public class JunitConversionLogicFixture {
         assertPrettyPrintEqual(junit5, converted(junit4));
     }
 
-    static void assertUnchangedAfterWrappingInMethod(String code) {
+    public static void assertUnchangedAfterWrappingInMethod(String code) {
         String prefix = "public class A { public void m() { ";
         String postfix = " }}";
         String compatibleCode = prefix + code + postfix;
         assertPrettyPrintEqual(compatibleCode, converted(compatibleCode));
     }
 
-    static void assertAfterWrappingInMethod(String originalImport, String originalMethod, String expectedImport, String expectedMethod) {
+    public static void assertAfterWrappingInMethod(String originalImport, String originalMethod, String expectedImport, String expectedMethod) {
         String junit4 = originalImport + "public class A { public void m() { " + originalMethod + "}}";
         String junit5 = expectedImport + "public class A { public void m() { " + expectedMethod + "}}";
         assertPrettyPrintEqual(junit5, converted(junit4));

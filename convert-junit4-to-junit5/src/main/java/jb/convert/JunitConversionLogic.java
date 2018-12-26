@@ -3,6 +3,7 @@ package jb.convert;
 import com.github.javaparser.ast.CompilationUnit;
 import jb.ProjectRecorder;
 import jb.configuration.JunitConversionLogicConfiguration;
+import jb.convert.ast.AssertThatMigration;
 import jb.convert.ast.CategoryMigration;
 import jb.convert.ast.MoveMessageParameterVisitor;
 import jb.convert.ast.ProjectProbe;
@@ -69,6 +70,9 @@ public class JunitConversionLogic {
     }
 
     private boolean performAstBasedConversions(CompilationUnit cu) {
+        AssertThatMigration assertThatMigration = new AssertThatMigration();
+        assertThatMigration.visit(cu, null);
+
         MoveMessageParameterVisitor messageParameterLocation = new MoveMessageParameterVisitor();
         messageParameterLocation.visit(cu, null);
 
@@ -80,7 +84,8 @@ public class JunitConversionLogic {
 
         CategoryMigration categoryMigration = new CategoryMigration(projectRecorder);
         categoryMigration.visit(cu, null);
-        return messageParameterLocation.performedUpdate()
+        return assertThatMigration.performedUpdate()
+                || messageParameterLocation.performedUpdate()
                 || testMethodMigration.performedUpdate()
                 || reduceToDefaultScope.performedUpdate()
                 || categoryMigration.performedUpdate();

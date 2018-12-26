@@ -12,7 +12,6 @@ public class SearchAndReplace {
         currentCode = convertPackage(currentCode);
         currentCode = convertAnnotations(currentCode);
         currentCode = convertClassNames(currentCode);
-        currentCode = addAssertThatImport(currentCode);
         return currentCode;
     }
 
@@ -48,19 +47,6 @@ public class SearchAndReplace {
         result = replaceUnlessPreceededBy(result, "Assert.assert", "Matcher", "Assertions.assert");
         result = result.replace("Assert.fail", "Assertions.fail");
         result = result.replace("Assume.assume", "Assumptions.assume");
-        return result;
-    }
-
-    // Assert that moved from junit core to hamcrest matchers
-    private String addAssertThatImport(String originalText) {
-        String result = originalText;
-        if (originalText.contains("assertThat")
-                && !originalText.contains("org.hamcrest.MatcherAssert")
-                && !originalText.contains("org.assertj.core.api.Assertions.assertThat")
-                && !originalText.contains("org.assertj.core.api.Assertions.*")
-        ) {
-            result = result.replaceFirst("import", "import static org.hamcrest.MatcherAssert.assertThat;\nimport");
-        }
         return result;
     }
 
