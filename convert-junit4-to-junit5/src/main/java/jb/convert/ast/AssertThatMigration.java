@@ -32,7 +32,7 @@ public class AssertThatMigration extends ModifierVisitor<Void> {
     @Override
     public Visitable visit(MethodCallExpr methodCall, Void arg) {
         Visitable visit = super.visit(methodCall, arg);
-        if ("assertThat".equals(methodCall.getNameAsString())) { //todo check that method has two or three arguments
+        if ("assertThat".equals(methodCall.getNameAsString()) && hasTwoOrThreeArguments(methodCall)) {
             methodCall.getScope().ifPresent( scope -> {
                 scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(JavaParser.parseExpression("org.hamcrest.MatcherAssert")));
             });
@@ -43,6 +43,11 @@ public class AssertThatMigration extends ModifierVisitor<Void> {
             }
         }
         return visit;
+    }
+
+    private boolean hasTwoOrThreeArguments(MethodCallExpr methodCall) {
+        int argumentCount = methodCall.getArguments().size();
+        return argumentCount == 2 || argumentCount == 3;
     }
 
     private void updated() {
