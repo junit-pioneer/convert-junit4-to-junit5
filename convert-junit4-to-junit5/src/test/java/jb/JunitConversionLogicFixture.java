@@ -29,7 +29,7 @@ public class JunitConversionLogicFixture {
         assertPrettyPrintEqual(compatibleCode, converted(compatibleCode));
     }
 
-    static void assertWrappingInClass(String code, String expected) {
+    public static void assertWrappingInClass(String code, String expected) {
         String prefix = "public class A { ";
         String postfix = " }";
         String junit4 = importJunit4 + prefix + code + postfix;
@@ -64,11 +64,11 @@ public class JunitConversionLogicFixture {
         assertPrettyPrintEqual(junit5, converted(junit4));
     }
 
-    static void assertPrettyPrintEqual(String expected, String actual) {
+    public static void assertPrettyPrintEqual(String expected, String actual) {
         assertEquals(prettyPrint(expected), prettyPrint(actual));
     }
 
-    static String converted(String code) {
+    public static String converted(String code) {
         ConversionResult result = convert(code);
         String convertedCode = code;
         if (result.outcome == ConversionOutcome.Converted) {
