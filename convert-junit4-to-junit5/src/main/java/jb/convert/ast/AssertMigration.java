@@ -18,9 +18,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.github.javaparser.JavaParser.parseExpression;
 import static jb.convert.ast.tools.ImportDeclarations.importDeclarationFor;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
+//todo look into what can be migrated
 public class AssertMigration extends VoidVisitorAdapter<Object> {
 
     private static final String assertEquals = "assertEquals";
@@ -55,7 +57,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
         if (scopeMatchesAssert(methodCall) && Stream.of("assert", "fail").anyMatch(methodName::startsWith)){
             methodCall.getScope().ifPresent(scope -> {
                 scope.ifNameExpr(name -> name.setName("Assertions"));
-                scope.ifFieldAccessExpr( fieldAccessExpr -> fieldAccessExpr.setName("Assertions"));
+                scope.ifFieldAccessExpr( fieldAccessExpr -> fieldAccessExpr.replace(parseExpression("org.junit.jupiter.api.Assertions")));
             });
             updated = true;
         }

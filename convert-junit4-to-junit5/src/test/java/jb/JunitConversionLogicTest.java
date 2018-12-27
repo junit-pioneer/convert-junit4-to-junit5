@@ -1,5 +1,7 @@
 package jb;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.expr.Expression;
 import jb.convert.ConversionOutcome;
 import jb.convert.ConversionResult;
 import org.junit.jupiter.api.Test;

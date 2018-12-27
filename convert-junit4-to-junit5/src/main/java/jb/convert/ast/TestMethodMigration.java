@@ -32,7 +32,7 @@ public class TestMethodMigration extends ModifierVisitor<Void> {
 
     @Override
     public Node visit(ImportDeclaration n, Void arg) {
-        ImportDeclarations.replace(n, Test.class, org.junit.jupiter.api.Test.class);
+        ImportDeclarations.replace(n, Test.class, org.junit.jupiter.api.Test.class, this::updated);
         return n;
     }
 
@@ -50,6 +50,10 @@ public class TestMethodMigration extends ModifierVisitor<Void> {
             }
         });
         return methodDeclaration;
+    }
+
+    private void updated(){
+        updated = true;
     }
 
     private void wrapBodyInAssertTimeout(MethodDeclaration methodDeclaration, Long timeoutInMillis) {
@@ -71,7 +75,7 @@ public class TestMethodMigration extends ModifierVisitor<Void> {
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);
-            updated = true;
+            updated();
         });
     }
 
@@ -87,7 +91,7 @@ public class TestMethodMigration extends ModifierVisitor<Void> {
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);
-            updated = true;
+            updated();
         });
     }
 

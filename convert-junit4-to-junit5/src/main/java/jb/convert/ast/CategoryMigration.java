@@ -1,6 +1,8 @@
 package jb.convert.ast;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
@@ -19,6 +21,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class CategoryMigration extends ModifierVisitor<Void> {
+    private static final ImportDeclaration categoryImport = JavaParser.parseImport("import org.junit.experimental.categories.Category;");
     private final ProjectRecorder projectRecorder;
     private boolean updated = false;
 
@@ -28,6 +31,15 @@ public class CategoryMigration extends ModifierVisitor<Void> {
 
     public CategoryMigration(ProjectRecorder projectRecorder) {
         this.projectRecorder = projectRecorder;
+    }
+
+    @Override
+    public Node visit(ImportDeclaration importDeclaration, Void arg) {
+        if (importDeclaration.equals(categoryImport)) {
+            updated = true;
+            return null;
+        }
+        return importDeclaration;
     }
 
     @Override

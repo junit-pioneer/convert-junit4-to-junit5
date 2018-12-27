@@ -7,17 +7,17 @@ import jb.convert.ast.AssertThatMigration;
 import jb.convert.ast.AssumeMigration;
 import jb.convert.ast.CategoryMigration;
 import jb.convert.ast.AssertMigration;
+import jb.convert.ast.GeneralMigration;
 import jb.convert.ast.ProjectProbe;
 import jb.convert.ast.ReduceToDefaultScope;
+import jb.convert.ast.SetupMethodMigration;
 import jb.convert.ast.TestMethodMigration;
-import jb.convert.regex.SearchAndReplace;
 import org.junit.jupiter.api.Assertions;
 
 public class JunitConversionLogic {
 
     private final JunitConversionLogicConfiguration configuration;
     private final ProjectRecorder projectRecorder;
-    private final SearchAndReplace searchAndReplace = new SearchAndReplace();
 
     public JunitConversionLogic(JunitConversionLogicConfiguration configuration, ProjectRecorder projectRecorder) {
         this.configuration = configuration;
@@ -26,7 +26,8 @@ public class JunitConversionLogic {
 
     public ConversionResultBuilder convert(String originalCode) {
         ProjectProbe projectProbe = new ProjectProbe(projectRecorder);
-        projectProbe.visit(configuration.javaParser().parse(originalCode), null);
+        CompilationUnit compilationUnit = configuration.javaParser().parse(originalCode);
+        projectProbe.visit(compilationUnit, null);
 
         // don't update file if already on JUnit 5
         if (originalCode.contains("org.junit.jupiter")) {
@@ -43,31 +44,15 @@ public class JunitConversionLogic {
         if (originalCode.contains("@RunWith")) {
             result.unsupportedFeature("runner");
         }
-
-        String currentCode = searchAndReplace.convert(originalCode);
-
-        CompilationUnit cu = parseAst(currentCode, originalCode);
-        boolean updated = performAstBasedConversions(cu);
-        if (updated) {
-            // only update result if there were changes
-            currentCode = configuration.javaParser().print(cu);
-        }
-        if (originalCode.equals(currentCode)) {
+        boolean updated = performAstBasedConversions(compilationUnit);
+        if (!updated) {
             return result.outcome(ConversionOutcome.Unchanged);
         }
-        return result.outcome(ConversionOutcome.Converted).code(currentCode);
-    }
-
-    private CompilationUnit parseAst(String currentCode, String originalCode) {
-        CompilationUnit cu = null;
-        try {
-            cu = configuration.javaParser().parse(currentCode);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assertions.assertEquals(originalCode, currentCode);
-            Assertions.fail("the original source is not parsable");
+        String updatedCode = configuration.javaParser().print(compilationUnit);
+        if (originalCode.equals(updatedCode)) {
+            return result.outcome(ConversionOutcome.Unchanged);
         }
-        return cu;
+        return result.outcome(ConversionOutcome.Converted).code(updatedCode);
     }
 
     private boolean performAstBasedConversions(CompilationUnit cu) {
@@ -80,6 +65,9 @@ public class JunitConversionLogic {
         AssumeMigration assumeMigration = new AssumeMigration();
         assumeMigration.visit(cu, null);
 
+        SetupMethodMigration setupMethodMigration = new SetupMethodMigration();
+        setupMethodMigration.visit(cu, null);
+
         TestMethodMigration testMethodMigration = new TestMethodMigration();
         testMethodMigration.visit(cu, null);
 
@@ -88,12 +76,19 @@ public class JunitConversionLogic {
 
         CategoryMigration categoryMigration = new CategoryMigration(projectRecorder);
         categoryMigration.visit(cu, null);
+
+        GeneralMigration generalMigration = new GeneralMigration();
+        generalMigration.visit(cu, null);
+
         return assertThatMigration.performedUpdate()
                 || assertMigration.performedUpdate()
                 || assumeMigration.performedUpdate()
+                || setupMethodMigration.performedUpdate()
                 || testMethodMigration.performedUpdate()
                 || reduceToDefaultScope.performedUpdate()
-                || categoryMigration.performedUpdate();
+                || categoryMigration.performedUpdate()
+                || generalMigration.performedUpdate()
+                ;
     }
 
 }

@@ -14,12 +14,6 @@ public class ImportDeclarations {
         return n.findAncestor(CompilationUnit.class).map(CompilationUnit::getImports).orElseGet(NodeList::new);
     }
 
-    public static void replace(ImportDeclaration importDeclaration, Class<?> junit4Import, Class<?> replacementInJunit5) {
-        if (importDeclaration.getName().toString().equals(junit4Import.getCanonicalName())) {
-            importDeclaration.setName(importDeclarationFor(replacementInJunit5).getName());
-        }
-    }
-
     public static void replace(ImportDeclaration toUpdate, StaticImportBuilder bluePrint, StaticImportBuilder replacement, Callback callback) {
         replace(toUpdate, importDeclarationFor(bluePrint), importDeclarationFor(replacement), callback);
     }
