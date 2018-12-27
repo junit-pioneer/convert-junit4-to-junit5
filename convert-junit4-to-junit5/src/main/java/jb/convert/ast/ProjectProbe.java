@@ -4,6 +4,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import jb.ClassName;
 import jb.ProjectRecorder;
+import jb.convert.ast.tools.PackageDeclarations;
 
 public class ProjectProbe extends VoidVisitorAdapter<Void> {
 

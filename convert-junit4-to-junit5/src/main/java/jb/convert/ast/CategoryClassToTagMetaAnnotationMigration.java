@@ -18,9 +18,9 @@ import java.lang.annotation.Target;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static jb.convert.ast.ImportDeclarations.addImportTo;
+import static jb.convert.ast.tools.ImportDeclarations.addImportTo;
 
-public class ConvertCategoryToTag extends ModifierVisitor<Void> {
+public class CategoryClassToTagMetaAnnotationMigration extends ModifierVisitor<Void> {
 
     @Override
     public Visitable visit(ClassOrInterfaceDeclaration n, Void arg) {

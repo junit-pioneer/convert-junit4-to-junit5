@@ -12,6 +12,7 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import jb.ClassName;
 import jb.ProjectRecorder;
+import jb.convert.ast.tools.ImportDeclarations;
 
 import java.util.List;
 

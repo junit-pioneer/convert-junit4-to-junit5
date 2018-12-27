@@ -1,7 +1,6 @@
 package jb.convert.ast;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -17,6 +16,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import jb.convert.ast.tools.ImportDeclarations;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 

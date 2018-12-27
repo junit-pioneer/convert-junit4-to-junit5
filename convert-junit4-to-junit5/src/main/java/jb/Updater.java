@@ -8,7 +8,7 @@ import jb.convert.ConversionOutcome;
 import jb.convert.ConversionResult;
 import jb.convert.ConversionResultBuilder;
 import jb.convert.JunitConversionLogic;
-import jb.convert.ast.ConvertCategoryToTag;
+import jb.convert.ast.CategoryClassToTagMetaAnnotationMigration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -82,7 +82,7 @@ public class Updater {
             try {
                 configuration.javaParser().parse(readSourceFile(path));
                 CompilationUnit cu = JavaParser.parse(path);
-                new ConvertCategoryToTag().visit(cu, null);
+                new CategoryClassToTagMetaAnnotationMigration().visit(cu, null);
                 String source = configuration.javaParser().print(cu);
                 configuration.changeWriter().write(path, source);
             } catch (IOException e) {

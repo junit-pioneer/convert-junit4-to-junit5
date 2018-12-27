@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class ConvertCategoryToTagTest {
+class CategoryClassToTagMetaAnnotationMigrationTest {
 
     @Test
     void convertACategoryClassIntoAMetaAnnotationWithAMatchingTag() {
@@ -31,7 +31,7 @@ class ConvertCategoryToTagTest {
                 "}\n";
 
         CompilationUnit cu = JavaParser.parse(categoryClassSource);
-        new ConvertCategoryToTag().visit(cu, null);
+        new CategoryClassToTagMetaAnnotationMigration().visit(cu, null);
 
         assertThat(cu.toString(), equalTo(expectedTagMetaAnnotation));
     }

@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.DoubleLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import jb.convert.ast.tools.ImportDeclarations;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 
@@ -17,8 +18,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static jb.convert.ast.ImportDeclarations.importDeclarationFor;
-import static jb.convert.ast.StaticImportBuilder.staticImportFrom;
+import static jb.convert.ast.tools.ImportDeclarations.importDeclarationFor;
+import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 public class AssertMigration extends VoidVisitorAdapter<Object> {
 

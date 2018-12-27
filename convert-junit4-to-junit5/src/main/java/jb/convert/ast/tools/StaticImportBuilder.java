@@ -1,4 +1,4 @@
-package jb.convert.ast;
+package jb.convert.ast.tools;
 
 import jb.ClassName;
 
@@ -29,7 +29,7 @@ public class StaticImportBuilder {
         return this;
     }
 
-    StaticImport build(){
+    public StaticImport build(){
         return new StaticImport(ClassName.createClassName(className), method);
     }
 }

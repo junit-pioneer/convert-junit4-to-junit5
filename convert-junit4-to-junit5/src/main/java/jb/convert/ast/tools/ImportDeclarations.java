@@ -1,4 +1,4 @@
-package jb.convert.ast;
+package jb.convert.ast.tools;
 
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.CompilationUnit;
@@ -8,13 +8,13 @@ import com.github.javaparser.ast.NodeList;
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.JavaParser.parseImport;
 
-class ImportDeclarations {
+public class ImportDeclarations {
 
-    static NodeList<ImportDeclaration> imports(HasParentNode<?> n) {
+    public static NodeList<ImportDeclaration> imports(HasParentNode<?> n) {
         return n.findAncestor(CompilationUnit.class).map(CompilationUnit::getImports).orElseGet(NodeList::new);
     }
 
-    static void replace(ImportDeclaration importDeclaration, Class<?> junit4Import, Class<?> replacementInJunit5) {
+    public static void replace(ImportDeclaration importDeclaration, Class<?> junit4Import, Class<?> replacementInJunit5) {
         if (importDeclaration.getName().toString().equals(junit4Import.getCanonicalName())) {
             importDeclaration.setName(importDeclarationFor(replacementInJunit5).getName());
         }
@@ -24,22 +24,22 @@ class ImportDeclarations {
         replace(toUpdate, importDeclarationFor(bluePrint), importDeclarationFor(replacement), callback);
     }
 
-    static void replace(ImportDeclaration toUpdate, Class<?> bluePrint, Class<?> replacement, Callback callback) {
+    public static void replace(ImportDeclaration toUpdate, Class<?> bluePrint, Class<?> replacement, Callback callback) {
         replace(toUpdate, importDeclarationFor(bluePrint), importDeclarationFor(replacement), callback);
     }
 
-    static void replace(ImportDeclaration toUpdate, ImportDeclaration bluePrint, ImportDeclaration replacement, Callback callback) {
+    public static void replace(ImportDeclaration toUpdate, ImportDeclaration bluePrint, ImportDeclaration replacement, Callback callback) {
         if (toUpdate.equals(bluePrint)) {
             toUpdate.setName(replacement.getName());
             callback.call();
         }
     }
 
-    static void addImportTo(HasParentNode<?> node, Class<?> clazz) {
+    public static void addImportTo(HasParentNode<?> node, Class<?> clazz) {
         addImport(node, importDeclarationFor(clazz));
     }
 
-    static void addStaticImportTo(HasParentNode<?> target, String importable) {
+    public static void addStaticImportTo(HasParentNode<?> target, String importable) {
         ImportDeclaration staticImport = parseImport("import static " + importable + ";");
         addImport(target, staticImport);
     }

@@ -5,6 +5,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import jb.convert.ast.tools.ImportDeclarations;
 
 import static com.github.javaparser.JavaParser.parseImport;
 
