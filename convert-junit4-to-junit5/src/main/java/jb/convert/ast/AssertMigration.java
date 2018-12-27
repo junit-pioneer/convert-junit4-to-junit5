@@ -54,7 +54,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
                 scope.ifNameExpr(name -> name.setName("Assertions"));
                 scope.ifFieldAccessExpr( fieldAccessExpr -> fieldAccessExpr.replace(parseExpression("org.junit.jupiter.api.Assertions")));
             });
-            updated = true;
+            updated();
         }
         if (failMessageNeedsUpdating(methodCall, methodName)) {
             if (assertEquals.equals(methodName)) {
