@@ -5,7 +5,7 @@ import jb.ProjectRecorder;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ast.AssertThatMigration;
 import jb.convert.ast.CategoryMigration;
-import jb.convert.ast.AssertAndAssumptionMigration;
+import jb.convert.ast.AssertMigration;
 import jb.convert.ast.ProjectProbe;
 import jb.convert.ast.ReduceToDefaultScope;
 import jb.convert.ast.TestMethodMigration;
@@ -73,7 +73,7 @@ public class JunitConversionLogic {
         AssertThatMigration assertThatMigration = new AssertThatMigration();
         assertThatMigration.visit(cu, null);
 
-        AssertAndAssumptionMigration messageParameterLocation = new AssertAndAssumptionMigration();
+        AssertMigration messageParameterLocation = new AssertMigration();
         messageParameterLocation.visit(cu, null);
 
         TestMethodMigration testMethodMigration = new TestMethodMigration();

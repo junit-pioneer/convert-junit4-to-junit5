@@ -3,6 +3,10 @@ package jb;
 import java.util.Objects;
 
 public class ClassName {
+    public static ClassName createClassName(String className) {
+        return new ClassName(className);
+    }
+
     public final String string;
 
     public ClassName(String className) {

@@ -11,7 +11,7 @@ public class SearchAndReplace {
         String currentCode = originalCode;
         currentCode = convertPackage(currentCode);
         currentCode = convertAnnotations(currentCode);
-        currentCode = convertClassNames(currentCode);
+        // currentCode = convertClassNames(currentCode);
         return currentCode;
     }
 
