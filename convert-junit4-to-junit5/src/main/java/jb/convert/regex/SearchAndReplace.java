@@ -11,7 +11,6 @@ public class SearchAndReplace {
         String currentCode = originalCode;
         currentCode = convertPackage(currentCode);
         currentCode = convertAnnotations(currentCode);
-        // currentCode = convertClassNames(currentCode);
         return currentCode;
     }
 
@@ -37,17 +36,6 @@ public class SearchAndReplace {
         result = result.replace("@AfterClass", "@AfterAll");
         result = replaceUnlessFollowedByEscapingPackageName(result, "@After", "All", "@AfterEach");
         return result.replace("@Ignore", "@Disabled");
-    }
-
-    private String convertClassNames(String originalText) {
-        String result = originalText;
-        result = result.replace("org.junit.jupiter.api.Assert", "org.junit.jupiter.api.Assertions");
-        result = result.replace("org.junit.jupiter.api.Assume", "org.junit.jupiter.api.Assumptions");
-        // don't update for hamcrest "MatcherAssert"
-        result = replaceUnlessPreceededBy(result, "Assert.assert", "Matcher", "Assertions.assert");
-        result = result.replace("Assert.fail", "Assertions.fail");
-        result = result.replace("Assume.assume", "Assumptions.assume");
-        return result;
     }
 
 }
