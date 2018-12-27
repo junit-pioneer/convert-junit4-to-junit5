@@ -37,10 +37,7 @@ public class AssertThatMigration extends ModifierVisitor<Void> {
                 scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(JavaParser.parseExpression("org.hamcrest.MatcherAssert")));
             });
             NodeList<ImportDeclaration> imports = ImportDeclarations.imports(methodCall);
-            if (imports.contains(parseImport("import static org.junit.Assert.*;"))
-                    || imports.contains(parseImport("import static org.junit.jupiter.api.Assert.*;")) // todo this should be removed once we move away from search and replace
-                    || imports.contains(parseImport("import static org.junit.jupiter.api.Assertions.*;")) // todo this should be removed once we move away from search and replace
-            ) {
+            if (imports.contains(parseImport("import static org.junit.Assert.*;"))) {
                 updated();
                 imports.add(0, assertThatFromMatcherAssert());
             }

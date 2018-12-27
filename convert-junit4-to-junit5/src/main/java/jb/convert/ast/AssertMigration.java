@@ -1,6 +1,5 @@
 package jb.convert.ast;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -19,7 +18,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.github.javaparser.JavaParser.parseExpression;
-import static jb.convert.ast.tools.ImportDeclarations.importDeclarationFor;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 //todo look into what can be migrated
@@ -46,9 +44,6 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
         ImportDeclarations.replace(n, Assert.class, Assertions.class, this::updated);
         ImportDeclarations.replace(n, staticImportFrom(Assert.class).star(), staticImportFrom(Assertions.class).star(), this::updated);
-        // TODO remove the next one once search and replace is gone
-        ImportDeclarations.replace(n, JavaParser.parseImport("import org.junit.jupiter.api.Assert;"), importDeclarationFor(Assertions.class), this::updated);
-        ImportDeclarations.replace(n, JavaParser.parseImport("import static org.junit.jupiter.api.Assert.*;"), importDeclarationFor(staticImportFrom(Assertions.class).star()), this::updated);
     }
 
     @Override
@@ -73,8 +68,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
 
     private boolean scopeMatchesAssert(MethodCallExpr methodCall) {
         String scopeAsString = methodCall.getScope().map(Node::toString).orElse("");
-        // todo remove the org.junit.jupiter once search and replace is gone
-        return Arrays.asList("Assert", "org.junit.Assert", "org.junit.jupiter.api.Assert").contains(scopeAsString);
+        return Arrays.asList("Assert", "org.junit.Assert").contains(scopeAsString);
     }
 
     private void migrateAssertEquals(MethodCallExpr methodCall) {

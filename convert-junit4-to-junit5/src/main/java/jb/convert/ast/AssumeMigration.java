@@ -33,12 +33,6 @@ public class AssumeMigration extends VoidVisitorAdapter<Object> {
         migratableAssumeMethods.forEach(methodName -> {
             ImportDeclarations.replace(n, staticImportFrom(Assume.class).method(methodName), staticImportFrom(Assumptions.class).method(methodName), this::updated);
         });
-        // TODO remove the next one once search and replace is gone
-        ImportDeclarations.replace(n, JavaParser.parseImport("import org.junit.jupiter.api.Assume;"), importDeclarationFor(Assumptions.class), this::updated);
-        ImportDeclarations.replace(n, JavaParser.parseImport("import static org.junit.jupiter.api.Assume.*;"), importDeclarationFor(staticImportFrom(Assumptions.class).star()), this::updated);
-        migratableAssumeMethods.forEach(methodName -> {
-            ImportDeclarations.replace(n, JavaParser.parseImport("import static org.junit.jupiter.api.Assume." + methodName + ";"), importDeclarationFor(staticImportFrom(Assumptions.class).method(methodName)), this::updated);
-        });
     }
 
     @Override
@@ -64,8 +58,7 @@ public class AssumeMigration extends VoidVisitorAdapter<Object> {
 
     private boolean scopeMatchesAssert(MethodCallExpr methodCall) {
         String scopeAsString = methodCall.getScope().map(Node::toString).orElse("");
-        // todo remove the org.junit.jupiter once search and replace is gone
-        return Arrays.asList("Assume", "org.junit.Assume", "org.junit.jupiter.api.Assume").contains(scopeAsString);
+        return Arrays.asList("Assume", "org.junit.Assume").contains(scopeAsString);
     }
 
     private void moveMessageArgumentToTheEnd(MethodCallExpr methodCall) {
