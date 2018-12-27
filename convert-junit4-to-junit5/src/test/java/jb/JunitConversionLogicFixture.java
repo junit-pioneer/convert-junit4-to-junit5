@@ -15,7 +15,7 @@ public class JunitConversionLogicFixture {
     private static final String importJunit4 = "import org.junit.Assert;";
     private static final String importJunit5 = "import org.junit.jupiter.api.Assertions;";
 
-    static void assertAfterAddingClassAfter(String code, String expected) {
+    public static void assertAfterAddingClassAfter(String code, String expected) {
         String postfix = "public class A {}";
         String junit4 = code + postfix;
         String junit5 = expected + postfix;

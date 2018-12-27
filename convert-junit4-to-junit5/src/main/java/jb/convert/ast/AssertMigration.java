@@ -26,11 +26,10 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
     private static final String assertEquals = "assertEquals";
 
     private static final Set<String> ONE_PARAM_METHODS = new HashSet<>(
-            Arrays.asList("assertFalse", "assertTrue", "assertNull", "assertNotNull", "assumeTrue", "assumeFalse",
-                    "assumeNoException", "assumeNull", "assumeNotNull"));
+            Arrays.asList("assertFalse", "assertTrue", "assertNull", "assertNotNull"));
 
     private static final Set<String> TWO_PARAM_METHODS = new HashSet<>(
-            Arrays.asList(assertEquals, "assertArrayEquals", "assertNotEquals", "assertNotSame", "assertSame"));
+            Arrays.asList(assertEquals, "assertArrayEquals", "assertNotEquals"));
 
     private static final Set<String> THREE_PARAM_METHODS = new HashSet<>(Collections.singletonList(assertEquals));
 

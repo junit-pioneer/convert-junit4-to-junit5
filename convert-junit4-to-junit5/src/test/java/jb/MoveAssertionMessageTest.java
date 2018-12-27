@@ -74,7 +74,7 @@ class MoveAssertionMessageTest {
     // ------------------------------------------------------
 
     @ParameterizedTest
-    @ValueSource(strings = {"assertArrayEquals", "assertEquals", "assertNotEquals", "assertNotSame", "assertSame"})
+    @ValueSource(strings = {"assertArrayEquals", "assertEquals", "assertNotEquals"})
     void allJunit4MethodNamesReorderExpectedActual(String methodName) {
         String code = methodName + "(message, expected, actual);";
         String expected = methodName + "(expected, actual, message);";
@@ -82,8 +82,7 @@ class MoveAssertionMessageTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"assertFalse", "assertNotNull", "assertNull", "assertTrue", "assumeFalse",
-            "assumeNoException", "assumeNotNull", "assumeTrue"})
+    @ValueSource(strings = {"assertFalse", "assertNotNull", "assertNull", "assertTrue"})
     void allJunit4MethodNamesReorderSingleParam(String methodName) {
         String code = methodName + "(message, actual);";
         String expected = methodName + "(actual, message);";

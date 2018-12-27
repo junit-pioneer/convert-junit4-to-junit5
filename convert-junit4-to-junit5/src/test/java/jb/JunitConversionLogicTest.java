@@ -55,29 +55,6 @@ class JunitConversionLogicTest {
     }
 
     @Test
-    void importWildcardStaticAssumptions() {
-        String originalImport = "import static org.junit.Assume.*;";
-        String expectedImport = "import static org.junit.jupiter.api.Assumptions.*;";
-        assertAfterAddingClassAfter(originalImport, expectedImport);
-    }
-
-    @Test
-    void specificStaticAssumptions() {
-        String originalImport = "import org.junit.Assume;";
-        String originalMethod = "Assume.assumeTrue(a,b);";
-        String expectedImport = "import org.junit.jupiter.api.Assumptions;";
-        String expectedMethod = "Assumptions.assumeTrue(b,a);";
-        assertAfterWrappingInMethod(originalImport, originalMethod, expectedImport, expectedMethod);
-    }
-
-    @Test
-    void specificFullyQualifiedStaticAssumptions() {
-        String originalImport = "import static org.junit.Assume.assumeFalse;";
-        String expectedImport = "import static org.junit.jupiter.api.Assumptions.assumeFalse;";
-        assertAfterAddingClassAfter(originalImport, expectedImport);
-    }
-
-    @Test
     void importWildcardMainPackage() {
         String originalImport = "import org.junit.*;";
         String expectedImport = "import org.junit.jupiter.api.*;";

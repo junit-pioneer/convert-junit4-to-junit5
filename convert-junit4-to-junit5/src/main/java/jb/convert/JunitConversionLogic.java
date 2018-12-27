@@ -4,6 +4,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import jb.ProjectRecorder;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ast.AssertThatMigration;
+import jb.convert.ast.AssumeMigration;
 import jb.convert.ast.CategoryMigration;
 import jb.convert.ast.AssertMigration;
 import jb.convert.ast.ProjectProbe;
@@ -73,8 +74,11 @@ public class JunitConversionLogic {
         AssertThatMigration assertThatMigration = new AssertThatMigration();
         assertThatMigration.visit(cu, null);
 
-        AssertMigration messageParameterLocation = new AssertMigration();
-        messageParameterLocation.visit(cu, null);
+        AssertMigration assertMigration = new AssertMigration();
+        assertMigration.visit(cu, null);
+
+        AssumeMigration assumeMigration = new AssumeMigration();
+        assumeMigration.visit(cu, null);
 
         TestMethodMigration testMethodMigration = new TestMethodMigration();
         testMethodMigration.visit(cu, null);
@@ -85,7 +89,8 @@ public class JunitConversionLogic {
         CategoryMigration categoryMigration = new CategoryMigration(projectRecorder);
         categoryMigration.visit(cu, null);
         return assertThatMigration.performedUpdate()
-                || messageParameterLocation.performedUpdate()
+                || assertMigration.performedUpdate()
+                || assumeMigration.performedUpdate()
                 || testMethodMigration.performedUpdate()
                 || reduceToDefaultScope.performedUpdate()
                 || categoryMigration.performedUpdate();
