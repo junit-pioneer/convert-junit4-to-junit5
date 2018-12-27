@@ -44,20 +44,6 @@ class AssertMigrationTest {
     }
 
     @Test
-    void importWildcardMainPackage() {
-        String originalImport = "import org.junit.*;";
-        String expectedImport = "import org.junit.jupiter.api.*;";
-        assertAfterAddingClassAfter(originalImport, expectedImport);
-    }
-
-    @Test
-    void specificTestAnnotation() {
-        String annotation = "import org.junit.Test;";
-        String expected = "import org.junit.jupiter.api.Test;";
-        assertAfterAddingClassAfter(annotation, expected);
-    }
-
-    @Test
     void singleAssertion() {
         String code = "assertTrue(message, actual);";
         String expected = "assertTrue(actual, message);";
@@ -76,8 +62,6 @@ class AssertMigrationTest {
         String code = "doWork(message, actual);";
         assertUnchangedAfterWrappingInMethod(code);
     }
-
-    // -------------------------------------------------------
 
     @Test
     void assertInFirstLineOfMethod() {

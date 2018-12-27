@@ -1,7 +1,8 @@
-package jb;
+package jb.convert.ast;
 
 import org.junit.jupiter.api.Test;
 
+import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
 import static jb.JunitConversionLogicFixture.convertedWithPreservedFormatting;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -57,6 +58,13 @@ class TestMethodMigrationTest {
                 "    }\n" +
                 "}";
         assertThat(convertedWithPreservedFormatting(junit4), equalTo(junit5));
+    }
+
+    @Test
+    void specificTestAnnotation() {
+        String annotation = "import org.junit.Test;";
+        String expected = "import org.junit.jupiter.api.Test;";
+        assertAfterAddingClassAfter(annotation, expected);
     }
 
 }
