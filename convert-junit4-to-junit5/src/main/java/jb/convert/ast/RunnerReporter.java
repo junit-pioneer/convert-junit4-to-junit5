@@ -13,7 +13,7 @@ public class RunnerReporter extends RuleReporter {
             annotation.ifSingleMemberAnnotationExpr(runWith -> {
                 runWith.getMemberValue().ifClassExpr(classExpr -> {
                     String typeAsString = classExpr.getTypeAsString();
-                    resultBuilder.usedFeature(new UsedFeature(false, "Rules", typeAsString));
+                    resultBuilder.usedFeature(new UsedFeature(false, "Runner", typeAsString));
                 });
             });
         });
