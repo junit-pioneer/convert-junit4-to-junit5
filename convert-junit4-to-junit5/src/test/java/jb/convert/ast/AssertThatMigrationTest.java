@@ -39,8 +39,8 @@ class AssertThatMigrationTest {
     void newImportForAssertThat() {
         String originalImport = "import static org.junit.Assert.*;\n";
         String originalMethod = "assertThat(\"message\", xxx, yyy);";
-        String expectedImport = "import static org.hamcrest.MatcherAssert.assertThat;\n"
-                + "import static org.junit.jupiter.api.Assertions.*;\n";
+        String expectedImport = "import static org.junit.jupiter.api.Assertions.*;\n"
+                + "import static org.hamcrest.MatcherAssert.assertThat;\n";
         assertAfterWrappingInMethod(originalImport, originalMethod, expectedImport, originalMethod);
     }
 

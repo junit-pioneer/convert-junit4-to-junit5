@@ -10,6 +10,7 @@ import com.github.javaparser.ast.visitor.Visitable;
 import jb.convert.ast.tools.ImportDeclarations;
 
 import static com.github.javaparser.JavaParser.parseImport;
+import static jb.convert.ast.tools.ImportDeclarations.addImportTo;
 
 public class AssertThatMigration extends ModifierVisitor<Void> {
 
@@ -39,7 +40,7 @@ public class AssertThatMigration extends ModifierVisitor<Void> {
             NodeList<ImportDeclaration> imports = ImportDeclarations.imports(methodCall);
             if (imports.contains(parseImport("import static org.junit.Assert.*;"))) {
                 updated();
-                imports.add(0, assertThatFromMatcherAssert());
+                addImportTo(methodCall, assertThatFromMatcherAssert());
             }
         }
         return visit;

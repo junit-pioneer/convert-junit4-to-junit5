@@ -5,7 +5,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
 
-import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.JavaParser.parseImport;
 
 public class ImportDeclarations {
@@ -30,12 +29,18 @@ public class ImportDeclarations {
     }
 
     public static void addImportTo(HasParentNode<?> node, Class<?> clazz) {
-        addImport(node, importDeclarationFor(clazz));
+        addImportTo(node, importDeclarationFor(clazz));
     }
 
     public static void addStaticImportTo(HasParentNode<?> target, String importable) {
         ImportDeclaration staticImport = parseImport("import static " + importable + ";");
-        addImport(target, staticImport);
+        addImportTo(target, staticImport);
+    }
+
+    public static void addImportTo(HasParentNode<?> n, ImportDeclaration importDeclaration) {
+        n.findAncestor(CompilationUnit.class).ifPresent(cu -> {
+            cu.addImport(importDeclaration.getNameAsString(), importDeclaration.isStatic(), importDeclaration.isAsterisk());
+        });
     }
 
     public static ImportDeclaration importDeclarationFor(Class<?> replacementInJunit5) {
@@ -45,11 +50,5 @@ public class ImportDeclarations {
     public static ImportDeclaration importDeclarationFor(StaticImportBuilder bluePrint) {
         StaticImport build = bluePrint.build();
         return parseImport("import static " + build.className + "." + build.method+";");
-    }
-
-    private static void addImport(HasParentNode<?> n, ImportDeclaration importDeclaration) {
-        n.findAncestor(CompilationUnit.class).ifPresent(cu -> {
-            cu.addImport(importDeclaration.getNameAsString(), importDeclaration.isStatic(), importDeclaration.isAsterisk());
-        });
     }
 }
