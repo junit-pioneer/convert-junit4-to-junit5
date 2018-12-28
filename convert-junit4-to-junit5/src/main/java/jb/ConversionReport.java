@@ -5,16 +5,14 @@ import jb.convert.ConversionResult;
 import jb.convert.UsedFeature;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 class ConversionReport {
 
@@ -42,7 +40,7 @@ class ConversionReport {
     private void appendUnsupportedFeatureUsage(List<String> reportLines) {
         List<UsedFeature> unsupportedFeatures = results.stream().flatMap(result -> result.unsupportedFeatures().stream()).collect(toList());
         if (unsupportedFeatures.isEmpty()) {
-            System.out.println("   "+ "no unsupported features detected");
+            System.out.println("   " + "no unsupported features detected");
             return;
         }
         Map<String, List<UsedFeature>> collect = unsupportedFeatures.stream().collect(groupingBy(it -> it.name));
@@ -58,15 +56,21 @@ class ConversionReport {
 
     private void appendNumbersByOutcome(List<String> reportLines) {
         Map<ConversionOutcome, List<ConversionResult>> byOutcome = this.results.stream().collect(Collectors.groupingBy(it -> it.outcome));
-        List<ConversionResult> unchanged = byOutcome.getOrDefault(ConversionOutcome.Unchanged, Collections.emptyList());
-        List<ConversionResult> converted = byOutcome.getOrDefault(ConversionOutcome.Converted, Collections.emptyList());
-        List<ConversionResult> skipped = byOutcome.getOrDefault(ConversionOutcome.Skipped, Collections.emptyList());
 
-        Map<String, List<ConversionResult>> skippedByDetails = skipped.stream().collect(Collectors.groupingBy(it -> it.details));
-        reportLines.add(format("%4d unchanged", unchanged.size()));
-        reportLines.add(format("%4d converted", converted.size()));
-        reportLines.add(format("%4d skipped", skipped.size()));
-        skippedByDetails.forEach((key, value) -> reportLines.add("   " + value.size() + " " + key));
+        List<ConversionResult> unchanged = byOutcome.getOrDefault(ConversionOutcome.Unchanged, emptyList());
+        addOutcomeLines(reportLines, unchanged, "unchanged");
+
+        List<ConversionResult> converted = byOutcome.getOrDefault(ConversionOutcome.Converted, emptyList());
+        addOutcomeLines(reportLines, converted, "converted");
+
+        List<ConversionResult> skipped = byOutcome.getOrDefault(ConversionOutcome.Skipped, emptyList());
+        addOutcomeLines(reportLines, skipped, "skipped");
+    }
+
+    private void addOutcomeLines(List<String> reportLines, List<ConversionResult> results, String name) {
+        reportLines.add(format("%4d " + name, results.size()));
+        Map<String, List<ConversionResult>> skippedByDetails = results.stream().collect(Collectors.groupingBy(it -> it.details.orElse("no details")));
+        skippedByDetails.forEach((key, value) -> reportLines.add("     " + value.size() + " " + key));
     }
 
 }

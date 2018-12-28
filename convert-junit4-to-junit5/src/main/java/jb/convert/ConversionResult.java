@@ -2,6 +2,7 @@ package jb.convert;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ConversionResult {
@@ -10,14 +11,14 @@ public class ConversionResult {
     }
 
     public final ConversionOutcome outcome;
-    public final String details;
+    public final Optional<String> details;
     public final String code;
     public final Path path;
     public final List<UsedFeature> usedFeatures;
 
     public ConversionResult(ConversionOutcome outcome, String details, String code, Path path, List<UsedFeature> usedFeatures) {
         this.outcome = outcome;
-        this.details = details;
+        this.details = Optional.ofNullable(details);
         this.code = code;
         this.path = path;
         this.usedFeatures = usedFeatures;
