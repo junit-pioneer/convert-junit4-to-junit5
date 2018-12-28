@@ -1,7 +1,15 @@
 package jb.convert.ast;
 
+import jb.convert.MatchDetector;
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static java.lang.String.format;
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
@@ -43,11 +51,16 @@ class AssertMigrationTest {
         assertAfterWrappingInMethod(originalImport, originalMethod, expectedImport, expectedMethod);
     }
 
-    @Test
-    void fullyQualifiedStaticImportOfTheAssertionMethod() {
-        String originalImport = "import static org.junit.Assert.assertTrue;";
-        String expectedImport = "import static org.junit.jupiter.api.Assertions.assertTrue;";
+    @ParameterizedTest
+    @MethodSource("junit4AssertMethodsWithMatchesInJunit5")
+    void fullyQualifiedStaticImportOfTheAssertionMethod(String assertionName) {
+        String originalImport = format("import static org.junit.Assert.%s;", assertionName);
+        String expectedImport = format("import static org.junit.jupiter.api.Assertions.%s;", assertionName);
         assertAfterAddingClassAfter(originalImport, expectedImport);
+    }
+
+    private static Stream<String> junit4AssertMethodsWithMatchesInJunit5() {
+        return new MatchDetector().publicStaticMethodsWithMatchingNames(Assert.class, Assertions.class).stream();
     }
 
     @Test

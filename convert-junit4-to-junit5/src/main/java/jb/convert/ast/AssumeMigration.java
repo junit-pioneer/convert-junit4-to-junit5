@@ -1,6 +1,5 @@
 package jb.convert.ast;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Assumptions;
 import java.util.Arrays;
 import java.util.List;
 
-import static jb.convert.ast.tools.ImportDeclarations.importDeclarationFor;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 public class AssumeMigration extends VoidVisitorAdapter<Object> {

@@ -7,6 +7,7 @@ import com.github.javaparser.ast.expr.DoubleLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import jb.convert.MatchDetector;
 import jb.convert.ast.tools.ImportDeclarations;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -23,6 +24,8 @@ import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 //todo look into what can be migrated
 public class AssertMigration extends VoidVisitorAdapter<Object> {
 
+    private static final MatchDetector matchDetector = new MatchDetector();
+    public static final Set<String> migratableAssertMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assert.class, Assertions.class);
     private static final String assertEquals = "assertEquals";
 
     private static final Set<String> ONE_PARAM_METHODS = new HashSet<>(
@@ -44,7 +47,9 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
         ImportDeclarations.replace(n, Assert.class, Assertions.class, this::updated);
         ImportDeclarations.replace(n, staticImportFrom(Assert.class).star(), staticImportFrom(Assertions.class).star(), this::updated);
-        ImportDeclarations.replace(n, staticImportFrom(Assert.class).method("assertTrue"), staticImportFrom(Assertions.class).method("assertTrue"), this::updated);
+        migratableAssertMethods.forEach(methodName -> {
+            ImportDeclarations.replace(n, staticImportFrom(Assert.class).method(methodName), staticImportFrom(Assertions.class).method(methodName), this::updated);
+        });
     }
 
     @Override
