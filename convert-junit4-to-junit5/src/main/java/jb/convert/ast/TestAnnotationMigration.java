@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Assertions;
 import java.time.Duration;
 import java.util.Optional;
 
-public class TestMethodMigration extends ModifierVisitor<Void> {
+public class TestAnnotationMigration extends ModifierVisitor<Void> {
     private boolean updated = false;
 
     public boolean performedUpdate() {
@@ -40,8 +40,8 @@ public class TestMethodMigration extends ModifierVisitor<Void> {
     public Visitable visit(MethodDeclaration methodDeclaration, Void arg) {
         Optional<AnnotationExpr> annotationByClass = methodDeclaration.getAnnotationByClass(Test.class);
         annotationByClass.ifPresent(it -> {
-            TestAnnotationMigration.Aggregator aggregator = new TestAnnotationMigration.Aggregator();
-            new TestAnnotationMigration().visit(methodDeclaration.getAnnotations(), aggregator);
+            TestAnnotationDetails.Aggregator aggregator = new TestAnnotationDetails.Aggregator();
+            new TestAnnotationDetails().visit(methodDeclaration.getAnnotations(), aggregator);
             if (null != aggregator.exceptionClass) {
                 wrapBodyInAssertThrows(methodDeclaration, aggregator.exceptionClass.toString());
             }
@@ -95,7 +95,7 @@ public class TestMethodMigration extends ModifierVisitor<Void> {
         });
     }
 
-    public static class TestAnnotationMigration extends ModifierVisitor<TestAnnotationMigration.Aggregator> {
+    public static class TestAnnotationDetails extends ModifierVisitor<TestAnnotationDetails.Aggregator> {
         static class Aggregator {
             Long timeout;
             ClassExpr exceptionClass;

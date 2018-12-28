@@ -11,8 +11,7 @@ import jb.convert.ast.GeneralMigration;
 import jb.convert.ast.ProjectProbe;
 import jb.convert.ast.ReduceToDefaultScope;
 import jb.convert.ast.SetupMethodMigration;
-import jb.convert.ast.TestMethodMigration;
-import org.junit.jupiter.api.Assertions;
+import jb.convert.ast.TestAnnotationMigration;
 
 public class JunitConversionLogic {
 
@@ -68,8 +67,8 @@ public class JunitConversionLogic {
         SetupMethodMigration setupMethodMigration = new SetupMethodMigration();
         setupMethodMigration.visit(cu, null);
 
-        TestMethodMigration testMethodMigration = new TestMethodMigration();
-        testMethodMigration.visit(cu, null);
+        TestAnnotationMigration testAnnotationMigration = new TestAnnotationMigration();
+        testAnnotationMigration.visit(cu, null);
 
         ReduceToDefaultScope reduceToDefaultScope = new ReduceToDefaultScope();
         reduceToDefaultScope.visit(cu, new ReduceToDefaultScope.Accumulator());
@@ -84,7 +83,7 @@ public class JunitConversionLogic {
                 || assertMigration.performedUpdate()
                 || assumeMigration.performedUpdate()
                 || setupMethodMigration.performedUpdate()
-                || testMethodMigration.performedUpdate()
+                || testAnnotationMigration.performedUpdate()
                 || reduceToDefaultScope.performedUpdate()
                 || categoryMigration.performedUpdate()
                 || generalMigration.performedUpdate()
