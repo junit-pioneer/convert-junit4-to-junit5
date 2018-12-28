@@ -1,5 +1,6 @@
 package jb.convert.ast;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
@@ -36,6 +37,7 @@ class TestAnnotationConversionTest {
     }
 
     @Test
+    @org.junit.Test
     void convertTimeoutPropertyFromTestAnnotation() {
         String junit4 = "import org.junit.Test;\n" +
                 "\n" +
@@ -47,12 +49,12 @@ class TestAnnotationConversionTest {
                 "}";
         String junit5 = "import org.junit.jupiter.api.Test;\n" +
                 "import java.time.Duration;\n" +
-                "import static org.junit.jupiter.api.Assertions.assertTimeout;\n" +
+                "import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;\n" +
                 "\n" +
                 "class A {\n" +
                 "    @Test\n" +
                 "    void m() {\n" +
-                "        assertTimeout(Duration.ofMillis(42L), () -> {\n" +
+                "        assertTimeoutPreemptively(Duration.ofMillis(42L), () -> {\n" +
                 "            System.out.println(\"I'm fast\");\n" +
                 "    });\n" +
                 "    }\n" +

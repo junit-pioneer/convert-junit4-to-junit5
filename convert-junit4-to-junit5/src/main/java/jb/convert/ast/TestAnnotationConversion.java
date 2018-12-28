@@ -24,6 +24,7 @@ import java.time.Duration;
 import java.util.Optional;
 
 public class TestAnnotationConversion extends ModifierVisitor<Void> {
+    private final String assertTimeoutReplacementMethodName = "assertTimeoutPreemptively";
     private boolean updated = false;
 
     public boolean performedUpdate() {
@@ -63,13 +64,13 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> {
             }
             String junit4TestMethodBody = body.toString();
 
-            String importable = Assertions.class.getCanonicalName() + ".assertTimeout";
+            String importable = Assertions.class.getCanonicalName() + "."+ assertTimeoutReplacementMethodName;
 
 
             ImportDeclarations.addImportTo(methodDeclaration, Duration.class);
             ImportDeclarations.addStaticImportTo(methodDeclaration, importable);
 
-            Statement statement = JavaParser.parseStatement("assertTimeout(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
+            Statement statement = JavaParser.parseStatement(assertTimeoutReplacementMethodName +"(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
                     "" + junit4TestMethodBody +
                     ");\n");
             NodeList<Statement> statements = new NodeList<>();
