@@ -2,7 +2,7 @@ package jb.convert.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import jb.ClassName;
+import jb.convert.ast.tools.ClassName;
 import jb.ProjectRecorder;
 import jb.convert.ast.tools.PackageDeclarations;
 

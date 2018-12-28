@@ -1,5 +1,7 @@
 package jb;
 
+import jb.convert.ast.tools.ClassName;
+
 import java.util.HashSet;
 import java.util.Set;
 

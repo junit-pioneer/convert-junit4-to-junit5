@@ -1,5 +1,7 @@
 package jb;
 
+import jb.convert.ast.tools.ClassName;
+
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;

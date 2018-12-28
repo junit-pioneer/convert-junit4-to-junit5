@@ -1,7 +1,5 @@
 package jb.convert.ast.tools;
 
-import jb.ClassName;
-
 public class StaticImport {
 
     public final ClassName className;

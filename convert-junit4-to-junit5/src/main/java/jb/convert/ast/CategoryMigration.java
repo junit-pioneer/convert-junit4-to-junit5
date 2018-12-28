@@ -12,7 +12,7 @@ import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import jb.ClassName;
+import jb.convert.ast.tools.ClassName;
 import jb.ProjectRecorder;
 import jb.convert.ast.tools.ImportDeclarations;
 

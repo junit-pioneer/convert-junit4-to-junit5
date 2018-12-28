@@ -44,6 +44,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
         ImportDeclarations.replace(n, Assert.class, Assertions.class, this::updated);
         ImportDeclarations.replace(n, staticImportFrom(Assert.class).star(), staticImportFrom(Assertions.class).star(), this::updated);
+        ImportDeclarations.replace(n, staticImportFrom(Assert.class).method("assertTrue"), staticImportFrom(Assertions.class).method("assertTrue"), this::updated);
     }
 
     @Override
