@@ -5,18 +5,20 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import jb.convert.MatchDetector;
 import jb.convert.ast.tools.ImportDeclarations;
 import org.junit.Assume;
 import org.junit.jupiter.api.Assumptions;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 public class AssumeMigration extends VoidVisitorAdapter<Object> {
 
-    private static final List<String> migratableAssumeMethods = Arrays.asList("assumeTrue", "assumeFalse");
+    private static final MatchDetector matchDetector = new MatchDetector();
+    private static final Set<String> migratableAssumeMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assume.class, Assumptions.class);
     private boolean updated = false;
 
     public boolean performedUpdate() {

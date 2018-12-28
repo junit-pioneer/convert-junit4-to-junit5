@@ -25,7 +25,7 @@ import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 public class AssertMigration extends VoidVisitorAdapter<Object> {
 
     private static final MatchDetector matchDetector = new MatchDetector();
-    public static final Set<String> migratableAssertMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assert.class, Assertions.class);
+    private static final Set<String> migratableAssertMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assert.class, Assertions.class);
     private static final String assertEquals = "assertEquals";
 
     private static final Set<String> ONE_PARAM_METHODS = new HashSet<>(
