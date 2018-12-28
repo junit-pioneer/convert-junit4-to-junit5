@@ -14,7 +14,7 @@ class JunitConversionLogicTest {
         String code = "import static org.junit.jupiter.api.Assertions.*;";
         ConversionResult result = JunitConversionLogicFixture.convert(code);
         assertEquals(ConversionOutcome.Skipped, result.outcome);
-        assertEquals("already using junit 5", result.details);
+        assertEquals("already using junit 5", result.details.orElse("empty"));
     }
 
     @Test
