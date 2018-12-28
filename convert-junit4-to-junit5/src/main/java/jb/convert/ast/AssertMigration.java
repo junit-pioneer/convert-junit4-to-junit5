@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static com.github.javaparser.JavaParser.parseExpression;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
@@ -55,18 +54,20 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
     @Override
     public void visit(final MethodCallExpr methodCall, final Object arg) {
         String methodName = methodCall.getNameAsString();
-        if (scopeMatchesAssert(methodCall) && migratableAssertMethods.contains(methodName)){
-            methodCall.getScope().ifPresent(scope -> {
-                scope.ifNameExpr(name -> name.setName("Assertions"));
-                scope.ifFieldAccessExpr( fieldAccessExpr -> fieldAccessExpr.replace(parseExpression("org.junit.jupiter.api.Assertions")));
-            });
-            updated();
-        }
-        if (failMessageNeedsUpdating(methodCall, methodName)) {
-            if (assertEquals.equals(methodName)) {
-                migrateAssertEquals(methodCall);
-            } else {
-                moveMessageArgumentToTheEnd(methodCall);
+        if (migratableAssertMethods.contains(methodName)) {
+            if (scopeMatchesAssert(methodCall)){
+                methodCall.getScope().ifPresent(scope -> {
+                    scope.ifNameExpr(name -> name.setName("Assertions"));
+                    scope.ifFieldAccessExpr( fieldAccessExpr -> fieldAccessExpr.replace(parseExpression("org.junit.jupiter.api.Assertions")));
+                });
+                updated();
+            }
+            if (failMessageNeedsUpdating(methodCall, methodName)) {
+                if (assertEquals.equals(methodName)) {
+                    migrateAssertEquals(methodCall);
+                } else {
+                    moveMessageArgumentToTheEnd(methodCall);
+                }
             }
         }
         super.visit(methodCall, arg);
