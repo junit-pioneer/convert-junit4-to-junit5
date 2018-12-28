@@ -39,15 +39,7 @@ public class JunitConversionLogic {
             return ConversionResult.skipped("no junit 4 code to convert");
         }
         ConversionResultBuilder result = new ConversionResultBuilder();
-        new RuleReporter().visit(compilationUnit, result);
-        new RunnerReporter().visit(compilationUnit, result);
-
-        if (originalCode.contains("@Rule")) {
-            result.unsupportedFeature("rules");
-        }
-        if (originalCode.contains("@RunWith")) {
-            result.unsupportedFeature("runner");
-        }
+        reportUnsupportedFeatures(compilationUnit, result);
         boolean updated = performAstBasedConversions(compilationUnit);
         if (!updated) {
             return result.outcome(ConversionOutcome.Unchanged);
@@ -57,6 +49,11 @@ public class JunitConversionLogic {
             return result.outcome(ConversionOutcome.Unchanged);
         }
         return result.outcome(ConversionOutcome.Converted).code(updatedCode);
+    }
+
+    private void reportUnsupportedFeatures(CompilationUnit compilationUnit, ConversionResultBuilder result) {
+        new RuleReporter().visit(compilationUnit, result);
+        new RunnerReporter().visit(compilationUnit, result);
     }
 
     private boolean performAstBasedConversions(CompilationUnit cu) {

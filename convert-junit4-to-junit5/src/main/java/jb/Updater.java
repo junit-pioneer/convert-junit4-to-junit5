@@ -100,13 +100,13 @@ public class Updater {
             this.project.trackClasses(recorder.foundClassNames, path);
             this.project.trackCategories(recorder.referencedCategories);
             ConversionResult result = resultBuilder.build();
-            if (!result.unsupportedFeatures.isEmpty() && configuration.skipFilesWithUnsupportedFeatures()) {
+            if (!result.unsupportedFeatures().isEmpty() && configuration.skipFilesWithUnsupportedFeatures()) {
                 resultBuilder.outcome(ConversionOutcome.Skipped);
                 resultBuilder.details("configuration says to skip files with unsupported features");
                 result = resultBuilder.build();
             }
 
-            if (result.outcome == ConversionOutcome.Converted && (result.unsupportedFeatures.isEmpty() || !configuration.skipFilesWithUnsupportedFeatures())) {
+            if (result.outcome == ConversionOutcome.Converted && (result.unsupportedFeatures().isEmpty() || !configuration.skipFilesWithUnsupportedFeatures())) {
                 configuration.changeWriter().write(path, result.code);
             }
             System.out.println(result.outcome);
