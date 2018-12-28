@@ -23,7 +23,7 @@ class Project {
         categories.addAll(categoriesClassName);
     }
 
-    Set<Path> categoriesToMigrate() {
+    Set<Path> categoriesToConvert() {
         return categories.stream().map(classToPath::get).collect(Collectors.toSet());
     }
 }

@@ -3,15 +3,15 @@ package jb.convert;
 import com.github.javaparser.ast.CompilationUnit;
 import jb.ProjectRecorder;
 import jb.configuration.JunitConversionLogicConfiguration;
-import jb.convert.ast.AssertThatMigration;
-import jb.convert.ast.AssumeMigration;
-import jb.convert.ast.CategoryMigration;
-import jb.convert.ast.AssertMigration;
-import jb.convert.ast.GeneralMigration;
+import jb.convert.ast.AssertThatConversion;
+import jb.convert.ast.AssumeConversion;
+import jb.convert.ast.CategoryConversion;
+import jb.convert.ast.AssertConvertion;
+import jb.convert.ast.GeneralConversion;
 import jb.convert.ast.ProjectProbe;
-import jb.convert.ast.ReduceToDefaultScope;
-import jb.convert.ast.SetupMethodMigration;
-import jb.convert.ast.TestAnnotationMigration;
+import jb.convert.ast.ReduceToDefaultScopeConversion;
+import jb.convert.ast.SetupMethodConversion;
+import jb.convert.ast.TestAnnotationConversion;
 
 public class JunitConversionLogic {
 
@@ -34,7 +34,7 @@ public class JunitConversionLogic {
         }
         // only look at files that contain JUnit 4 imports
         if (!originalCode.contains("org.junit.")) {
-            return ConversionResult.skipped("no junit 4 code to migrate");
+            return ConversionResult.skipped("no junit 4 code to convert");
         }
         ConversionResultBuilder result = new ConversionResultBuilder();
         if (originalCode.contains("@Rule")) {
@@ -55,38 +55,38 @@ public class JunitConversionLogic {
     }
 
     private boolean performAstBasedConversions(CompilationUnit cu) {
-        AssertThatMigration assertThatMigration = new AssertThatMigration();
-        assertThatMigration.visit(cu, null);
+        AssertThatConversion assertThatConversion = new AssertThatConversion();
+        assertThatConversion.visit(cu, null);
 
-        AssertMigration assertMigration = new AssertMigration();
-        assertMigration.visit(cu, null);
+        AssertConvertion assertConvertion = new AssertConvertion();
+        assertConvertion.visit(cu, null);
 
-        AssumeMigration assumeMigration = new AssumeMigration();
-        assumeMigration.visit(cu, null);
+        AssumeConversion assumeConversion = new AssumeConversion();
+        assumeConversion.visit(cu, null);
 
-        SetupMethodMigration setupMethodMigration = new SetupMethodMigration();
-        setupMethodMigration.visit(cu, null);
+        SetupMethodConversion setupMethodConversion = new SetupMethodConversion();
+        setupMethodConversion.visit(cu, null);
 
-        TestAnnotationMigration testAnnotationMigration = new TestAnnotationMigration();
-        testAnnotationMigration.visit(cu, null);
+        TestAnnotationConversion testAnnotationConversion = new TestAnnotationConversion();
+        testAnnotationConversion.visit(cu, null);
 
-        ReduceToDefaultScope reduceToDefaultScope = new ReduceToDefaultScope();
-        reduceToDefaultScope.visit(cu, new ReduceToDefaultScope.Accumulator());
+        ReduceToDefaultScopeConversion reduceToDefaultScopeConversion = new ReduceToDefaultScopeConversion();
+        reduceToDefaultScopeConversion.visit(cu, new ReduceToDefaultScopeConversion.Accumulator());
 
-        CategoryMigration categoryMigration = new CategoryMigration(projectRecorder);
-        categoryMigration.visit(cu, null);
+        CategoryConversion categoryConversion = new CategoryConversion(projectRecorder);
+        categoryConversion.visit(cu, null);
 
-        GeneralMigration generalMigration = new GeneralMigration();
-        generalMigration.visit(cu, null);
+        GeneralConversion generalConversion = new GeneralConversion();
+        generalConversion.visit(cu, null);
 
-        return assertThatMigration.performedUpdate()
-                || assertMigration.performedUpdate()
-                || assumeMigration.performedUpdate()
-                || setupMethodMigration.performedUpdate()
-                || testAnnotationMigration.performedUpdate()
-                || reduceToDefaultScope.performedUpdate()
-                || categoryMigration.performedUpdate()
-                || generalMigration.performedUpdate()
+        return assertThatConversion.performedUpdate()
+                || assertConvertion.performedUpdate()
+                || assumeConversion.performedUpdate()
+                || setupMethodConversion.performedUpdate()
+                || testAnnotationConversion.performedUpdate()
+                || reduceToDefaultScopeConversion.performedUpdate()
+                || categoryConversion.performedUpdate()
+                || generalConversion.performedUpdate()
                 ;
     }
 

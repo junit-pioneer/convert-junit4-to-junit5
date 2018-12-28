@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
 
-class GeneralMigrationTest {
+class GeneralConversionTest {
 
     @Test
     void importWildcardMainPackage() {

@@ -20,11 +20,11 @@ import java.util.Set;
 import static com.github.javaparser.JavaParser.parseExpression;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
-//todo look into what can be migrated
-public class AssertMigration extends VoidVisitorAdapter<Object> {
+//todo look into what can be converted
+public class AssertConvertion extends VoidVisitorAdapter<Object> {
 
     private static final MatchDetector matchDetector = new MatchDetector();
-    private static final Set<String> migratableAssertMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assert.class, Assertions.class);
+    private static final Set<String> convertibleAssertMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assert.class, Assertions.class);
     private static final String assertEquals = "assertEquals";
 
     private static final Set<String> ONE_PARAM_METHODS = new HashSet<>(
@@ -46,7 +46,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
         ImportDeclarations.replace(n, Assert.class, Assertions.class, this::updated);
         ImportDeclarations.replace(n, staticImportFrom(Assert.class).star(), staticImportFrom(Assertions.class).star(), this::updated);
-        migratableAssertMethods.forEach(methodName -> {
+        convertibleAssertMethods.forEach(methodName -> {
             ImportDeclarations.replace(n, staticImportFrom(Assert.class).method(methodName), staticImportFrom(Assertions.class).method(methodName), this::updated);
         });
     }
@@ -54,7 +54,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
     @Override
     public void visit(final MethodCallExpr methodCall, final Object arg) {
         String methodName = methodCall.getNameAsString();
-        if (migratableAssertMethods.contains(methodName)) {
+        if (convertibleAssertMethods.contains(methodName)) {
             if (scopeMatchesAssert(methodCall)){
                 methodCall.getScope().ifPresent(scope -> {
                     scope.ifNameExpr(name -> name.setName("Assertions"));
@@ -64,7 +64,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
             }
             if (failMessageNeedsUpdating(methodCall, methodName)) {
                 if (assertEquals.equals(methodName)) {
-                    migrateAssertEquals(methodCall);
+                    convertAssertEquals(methodCall);
                 } else {
                     moveMessageArgumentToTheEnd(methodCall);
                 }
@@ -78,7 +78,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
         return Arrays.asList("Assert", "org.junit.Assert").contains(scopeAsString);
     }
 
-    private void migrateAssertEquals(MethodCallExpr methodCall) {
+    private void convertAssertEquals(MethodCallExpr methodCall) {
         NodeList<Expression> arguments = methodCall.getArguments();
         if (arguments.size() == 3) {
             Expression expression = arguments.get(2);

@@ -6,7 +6,7 @@ import static jb.JunitConversionLogicFixture.convertedWithPreservedFormatting;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class ReduceToDefaultScopeTest {
+class ReduceToDefaultScopeConversionTest {
 
     @Test
     void reduceClassScopeToDefaultIfItContainsTests() {

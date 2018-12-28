@@ -18,7 +18,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 
-public class SetupMethodMigration extends ModifierVisitor<Void> {
+public class SetupMethodConversion extends ModifierVisitor<Void> {
     private boolean updated = false;
 
     public boolean performedUpdate() {

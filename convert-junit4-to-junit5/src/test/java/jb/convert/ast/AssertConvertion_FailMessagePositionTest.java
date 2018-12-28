@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
 
-class AssertMigration_FailMessagePositionTest {
+class AssertConvertion_FailMessagePositionTest {
 
     @Test
     void notAnAssertion() {

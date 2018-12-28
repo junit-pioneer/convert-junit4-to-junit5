@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static jb.convert.ast.tools.ImportDeclarations.addImportTo;
 
-public class CategoryClassToTagMetaAnnotationMigration extends ModifierVisitor<Void> {
+public class CategoryClassToTagMetaAnnotationConversion extends ModifierVisitor<Void> {
 
     @Override
     public Visitable visit(ClassOrInterfaceDeclaration n, Void arg) {

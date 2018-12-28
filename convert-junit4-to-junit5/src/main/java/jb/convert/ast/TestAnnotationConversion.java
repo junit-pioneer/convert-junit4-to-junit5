@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Assertions;
 import java.time.Duration;
 import java.util.Optional;
 
-public class TestAnnotationMigration extends ModifierVisitor<Void> {
+public class TestAnnotationConversion extends ModifierVisitor<Void> {
     private boolean updated = false;
 
     public boolean performedUpdate() {

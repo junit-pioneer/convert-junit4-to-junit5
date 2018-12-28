@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import static jb.JunitConversionLogicFixture.assertPrettyPrintEqual;
 import static jb.JunitConversionLogicFixture.converted;
 
-class SetupMethodMigrationTest {
+class SetupMethodConversionTest {
 
     @Test
     void ignoreToDisabled() {

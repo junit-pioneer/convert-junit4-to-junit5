@@ -15,10 +15,10 @@ import java.util.Set;
 
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
-public class AssumeMigration extends VoidVisitorAdapter<Object> {
+public class AssumeConversion extends VoidVisitorAdapter<Object> {
 
     private static final MatchDetector matchDetector = new MatchDetector();
-    private static final Set<String> migratableAssumeMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assume.class, Assumptions.class);
+    private static final Set<String> convertibleAssumeMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assume.class, Assumptions.class);
     private boolean updated = false;
 
     public boolean performedUpdate() {
@@ -30,7 +30,7 @@ public class AssumeMigration extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
         ImportDeclarations.replace(n, Assume.class, Assumptions.class, this::updated);
         ImportDeclarations.replace(n, staticImportFrom(Assume.class).star(), staticImportFrom(Assumptions.class).star(), this::updated);
-        migratableAssumeMethods.forEach(methodName -> {
+        convertibleAssumeMethods.forEach(methodName -> {
             ImportDeclarations.replace(n, staticImportFrom(Assume.class).method(methodName), staticImportFrom(Assumptions.class).method(methodName), this::updated);
         });
     }
@@ -38,7 +38,7 @@ public class AssumeMigration extends VoidVisitorAdapter<Object> {
     @Override
     public void visit(final MethodCallExpr methodCall, final Object arg) {
         String methodName = methodCall.getNameAsString();
-        if (migratableAssumeMethods.contains(methodName)) {
+        if (convertibleAssumeMethods.contains(methodName)) {
             if (scopeMatchesAssert(methodCall)) {
                 methodCall.getScope().ifPresent(scope -> {
                     scope.ifNameExpr(name -> name.setName("Assumptions"));

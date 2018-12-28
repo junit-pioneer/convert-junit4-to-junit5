@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 
-class AssumeMigrationTest {
+class AssumeConversionTest {
 
     @Test
     void importWildcardStaticAssumptions() {

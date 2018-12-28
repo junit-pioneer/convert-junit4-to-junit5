@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
 
-class AssertThatMigrationTest {
+class AssertThatConversionTest {
 
     @Test
     void assertThat() {

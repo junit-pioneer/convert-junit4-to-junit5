@@ -1,18 +1,19 @@
-This is a project @boyarsky wrote to [facilitate migrating a good number of tests to JUnit 5 syntax](https://www.selikoff.net/?p=7915&preview=true). It was since donated to junit-pioneer.
+This is a project @boyarsky wrote to [facilitate convert a good number of tests to JUnit 5 syntax](https://www.selikoff.net/?p=7915&preview=true). It was since donated to junit-pioneer.
 
-Note that IntelliJ has functionality to migrate from JUnit 4 to 5. Consider trying that before this program. (This program was originally written in September 2016 when no IDEs had the functionality).
+Note that IntelliJ has functionality to convert from JUnit 4 to 5. Consider trying that before this program. (This program was originally written in September 2016 when no IDEs had the functionality).
 
 # Pre-reqs
 Before starting out, the program assumes you have:
 * Updated your Maven POM/Groovy build file/whatever to reference the new JUnit 5 jars
-* Migrated off JUnit 3.8. This program assumes you are on JUnit 4. JUnit 3.8 code will continue to work in JUnit 5. (as will JUnit 4 code.) But the goal of this program is to migrate JUnit 4 syntax to JUnit 5 syntax.
+* Conversion off JUnit 3.8. This program assumes you are on JUnit 4. JUnit 3.8 code will continue to work in JUnit 5. (as will JUnit 4 code.) But the goal of this program is to convert JUnit 4 syntax to JUnit 5 syntax.
 
 # Running the program
 Pass the absolute path of the directory containing your tests (ex /my/dir/src/test/java) when running class jb.Updater. The program outputs the name of each file as it goes through them. It runs quickly. Under a few seconds for two thousand files.
-Then make manual edits at end (or rollback those test classes and deal with them later). In particular the following will not compile after running the program and require manually migration.
+Then make manual edits at end (or rollback those test classes and deal with them later). In particular the following will not compile after running the program and require manual conversion.
 1. Parameterized tests
-1. Tests that use expected parameter
-1. Tests that use timeout parameter
+1. Runners
+1. Rules
+1. Categories (there is only basic support for categories)
 
 This program is also available as a shaded jar. To run:
 java -jar convert-junit4-to-to-junit5-0.0.1.jar /my/dir/src/test/java

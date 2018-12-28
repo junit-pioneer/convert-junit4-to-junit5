@@ -8,7 +8,7 @@ import jb.convert.ConversionOutcome;
 import jb.convert.ConversionResult;
 import jb.convert.ConversionResultBuilder;
 import jb.convert.JunitConversionLogic;
-import jb.convert.ast.CategoryClassToTagMetaAnnotationMigration;
+import jb.convert.ast.CategoryClassToTagMetaAnnotationConversion;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -59,12 +59,12 @@ public class Updater {
         System.out.println(report.print());
     }
 
-    private ConversionReport convertAll(List<Path> filesToMigrate) {
-        List<ConversionResult> result = filesToMigrate.stream()
+    private ConversionReport convertAll(List<Path> filesToConvert) {
+        List<ConversionResult> result = filesToConvert.stream()
                 .filter(configuration.exclude().negate())
                 .map(this::updateSingleFile)
                 .collect(toList());
-        migrateCategories();
+        converteCategories();
         return new ConversionReport(result);
     }
 
@@ -77,12 +77,12 @@ public class Updater {
         }
     }
 
-    private void migrateCategories() {
-        project.categoriesToMigrate().forEach(path -> {
+    private void converteCategories() {
+        project.categoriesToConvert().forEach(path -> {
             try {
                 configuration.javaParser().parse(readSourceFile(path));
                 CompilationUnit cu = JavaParser.parse(path);
-                new CategoryClassToTagMetaAnnotationMigration().visit(cu, null);
+                new CategoryClassToTagMetaAnnotationConversion().visit(cu, null);
                 String source = configuration.javaParser().print(cu);
                 configuration.changeWriter().write(path, source);
             } catch (IOException e) {

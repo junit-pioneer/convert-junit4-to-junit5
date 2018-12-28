@@ -20,7 +20,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class CategoryMigration extends ModifierVisitor<Void> {
+public class CategoryConversion extends ModifierVisitor<Void> {
     private static final ImportDeclaration categoryImport = JavaParser.parseImport("import org.junit.experimental.categories.Category;");
     private final ProjectRecorder projectRecorder;
     private boolean updated = false;
@@ -29,7 +29,7 @@ public class CategoryMigration extends ModifierVisitor<Void> {
         return updated;
     }
 
-    public CategoryMigration(ProjectRecorder projectRecorder) {
+    public CategoryConversion(ProjectRecorder projectRecorder) {
         this.projectRecorder = projectRecorder;
     }
 

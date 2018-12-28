@@ -5,7 +5,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 
-public class GeneralMigration extends ModifierVisitor<Void> {
+public class GeneralConversion extends ModifierVisitor<Void> {
     private final ImportDeclaration junitStar = JavaParser.parseImport("import org.junit.*;");
     private boolean updated;
 

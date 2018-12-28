@@ -7,10 +7,10 @@ import static jb.JunitConversionLogicFixture.convertedWithPreservedFormatting;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class TestMethodMigrationTest {
+class TestAnnotationConversionTest {
 
     @Test
-    void migrateExpectedPropertyFromTestAnnotation() {
+    void convertExpectedPropertyFromTestAnnotation() {
         String junit4 = "import java.lang.IllegalArgumentException;\n" +
                 "import org.junit.Test;\n" +
                 "\n" +
@@ -36,7 +36,7 @@ class TestMethodMigrationTest {
     }
 
     @Test
-    void migrateTimeoutPropertyFromTestAnnotation() {
+    void convertTimeoutPropertyFromTestAnnotation() {
         String junit4 = "import org.junit.Test;\n" +
                 "\n" +
                 "public class A {\n" +
