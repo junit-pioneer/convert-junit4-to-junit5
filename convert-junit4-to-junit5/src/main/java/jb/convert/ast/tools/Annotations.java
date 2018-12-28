@@ -1,7 +1,6 @@
 package jb.convert.ast.tools;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 

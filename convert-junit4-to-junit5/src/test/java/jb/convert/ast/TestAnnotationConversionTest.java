@@ -1,6 +1,5 @@
 package jb.convert.ast;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
