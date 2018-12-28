@@ -55,7 +55,7 @@ public class AssertMigration extends VoidVisitorAdapter<Object> {
     @Override
     public void visit(final MethodCallExpr methodCall, final Object arg) {
         String methodName = methodCall.getNameAsString();
-        if (scopeMatchesAssert(methodCall) && Stream.of("assert", "fail").anyMatch(methodName::startsWith)){
+        if (scopeMatchesAssert(methodCall) && migratableAssertMethods.contains(methodName)){
             methodCall.getScope().ifPresent(scope -> {
                 scope.ifNameExpr(name -> name.setName("Assertions"));
                 scope.ifFieldAccessExpr( fieldAccessExpr -> fieldAccessExpr.replace(parseExpression("org.junit.jupiter.api.Assertions")));
