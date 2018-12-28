@@ -6,6 +6,7 @@ import java.util.List;
 
 public class ConversionResultBuilder {
     private List<String> unsupportedFeatures = new ArrayList<>();
+    private List<UsedFeature> usedFeatures = new ArrayList<>();
     private ConversionOutcome outcome;
     private String details;
     private String code;
@@ -36,7 +37,12 @@ public class ConversionResultBuilder {
         return this;
     }
 
+    public ConversionResultBuilder usedFeature(UsedFeature usedFeature) {
+        this.usedFeatures.add(usedFeature);
+        return this;
+    }
+
     public ConversionResult build() {
-        return new ConversionResult(outcome, details, code, path, unsupportedFeatures);
+        return new ConversionResult(outcome, details, code, path, unsupportedFeatures, usedFeatures);
     }
 }

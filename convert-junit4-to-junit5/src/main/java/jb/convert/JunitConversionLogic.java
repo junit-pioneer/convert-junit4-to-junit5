@@ -10,6 +10,8 @@ import jb.convert.ast.AssertConversion;
 import jb.convert.ast.GeneralConversion;
 import jb.convert.ast.ProjectProbe;
 import jb.convert.ast.ReduceToDefaultScopeConversion;
+import jb.convert.ast.RuleReporter;
+import jb.convert.ast.RunnerReporter;
 import jb.convert.ast.SetupMethodConversion;
 import jb.convert.ast.TestAnnotationConversion;
 
@@ -37,6 +39,9 @@ public class JunitConversionLogic {
             return ConversionResult.skipped("no junit 4 code to convert");
         }
         ConversionResultBuilder result = new ConversionResultBuilder();
+        new RuleReporter().visit(compilationUnit, result);
+        new RunnerReporter().visit(compilationUnit, result);
+
         if (originalCode.contains("@Rule")) {
             result.unsupportedFeature("rules");
         }

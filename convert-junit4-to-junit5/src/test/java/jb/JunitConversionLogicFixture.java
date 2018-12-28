@@ -88,7 +88,11 @@ public class JunitConversionLogicFixture {
     }
 
     public static String convertedWithPreservedFormatting(String junit4) {
+        return conversionResultWithPreservedFormatting(junit4).code;
+    }
+
+    public static ConversionResult conversionResultWithPreservedFormatting(String junit4) {
         JunitConversionLogicConfiguration configuration = new Configuration.ConfigurationBuilder().preserverFormatting().build();
-        return new JunitConversionLogic(configuration, new InMemoryProjectRecorder()).convert(junit4).build().code;
+        return new JunitConversionLogic(configuration, new InMemoryProjectRecorder()).convert(junit4).build();
     }
 }
