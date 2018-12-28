@@ -44,12 +44,10 @@ class AssertMigrationTest {
     }
 
     @Test
-    void fullyQualifiedStaticStaticImportOfTheAssertionMethod() {
+    void fullyQualifiedStaticImportOfTheAssertionMethod() {
         String originalImport = "import static org.junit.Assert.assertTrue;";
-        String originalMethod = "assertTrue(a,b);";
         String expectedImport = "import static org.junit.jupiter.api.Assertions.assertTrue;";
-        String expectedMethod = "assertTrue(b,a);";
-        assertAfterWrappingInMethod(originalImport, originalMethod, expectedImport, expectedMethod);
+        assertAfterAddingClassAfter(originalImport, expectedImport);
     }
 
     @Test
