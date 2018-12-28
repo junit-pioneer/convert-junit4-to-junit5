@@ -15,7 +15,7 @@ import static jb.JunitConversionLogicFixture.assertAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertUnchangedAfterWrappingInMethod;
 import static jb.JunitConversionLogicFixture.assertWrappingInClass;
 
-class AssertConvertionTest {
+class AssertConversionTest {
 
     @Test
     void importWildcardStaticAssertions() {

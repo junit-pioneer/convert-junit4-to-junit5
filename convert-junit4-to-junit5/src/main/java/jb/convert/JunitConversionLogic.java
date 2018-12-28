@@ -6,7 +6,7 @@ import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ast.AssertThatConversion;
 import jb.convert.ast.AssumeConversion;
 import jb.convert.ast.CategoryConversion;
-import jb.convert.ast.AssertConvertion;
+import jb.convert.ast.AssertConversion;
 import jb.convert.ast.GeneralConversion;
 import jb.convert.ast.ProjectProbe;
 import jb.convert.ast.ReduceToDefaultScopeConversion;
@@ -58,8 +58,8 @@ public class JunitConversionLogic {
         AssertThatConversion assertThatConversion = new AssertThatConversion();
         assertThatConversion.visit(cu, null);
 
-        AssertConvertion assertConvertion = new AssertConvertion();
-        assertConvertion.visit(cu, null);
+        AssertConversion assertConversion = new AssertConversion();
+        assertConversion.visit(cu, null);
 
         AssumeConversion assumeConversion = new AssumeConversion();
         assumeConversion.visit(cu, null);
@@ -80,7 +80,7 @@ public class JunitConversionLogic {
         generalConversion.visit(cu, null);
 
         return assertThatConversion.performedUpdate()
-                || assertConvertion.performedUpdate()
+                || assertConversion.performedUpdate()
                 || assumeConversion.performedUpdate()
                 || setupMethodConversion.performedUpdate()
                 || testAnnotationConversion.performedUpdate()
