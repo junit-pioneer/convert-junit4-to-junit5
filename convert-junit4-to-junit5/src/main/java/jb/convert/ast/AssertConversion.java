@@ -20,7 +20,6 @@ import java.util.Set;
 import static com.github.javaparser.JavaParser.parseExpression;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
-//todo look into what can be converted
 public class AssertConversion extends VoidVisitorAdapter<Object> {
 
     private static final MatchDetector matchDetector = new MatchDetector();
