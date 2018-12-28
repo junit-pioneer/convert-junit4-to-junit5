@@ -67,7 +67,7 @@ public class JunitConversionLogic {
         SetupMethodConversion setupMethodConversion = new SetupMethodConversion();
         setupMethodConversion.visit(cu, null);
 
-        TestAnnotationConversion testAnnotationConversion = new TestAnnotationConversion();
+        TestAnnotationConversion testAnnotationConversion = new TestAnnotationConversion(configuration);
         testAnnotationConversion.visit(cu, null);
 
         ReduceToDefaultScopeConversion reduceToDefaultScopeConversion = new ReduceToDefaultScopeConversion();

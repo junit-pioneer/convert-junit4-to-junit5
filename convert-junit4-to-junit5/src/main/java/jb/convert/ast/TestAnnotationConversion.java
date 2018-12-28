@@ -16,6 +16,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ast.tools.ImportDeclarations;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -25,7 +26,12 @@ import java.util.Optional;
 
 public class TestAnnotationConversion extends ModifierVisitor<Void> {
     private final String assertTimeoutReplacementMethodName = "assertTimeoutPreemptively";
+    private final JunitConversionLogicConfiguration configuration;
     private boolean updated = false;
+
+    public TestAnnotationConversion(JunitConversionLogicConfiguration configuration){
+        this.configuration = configuration;
+    }
 
     public boolean performedUpdate() {
         return updated;
@@ -62,7 +68,6 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> {
             if (body.getStatements().isEmpty()) {
                 return;
             }
-            String junit4TestMethodBody = body.toString();
 
             String importable = Assertions.class.getCanonicalName() + "."+ assertTimeoutReplacementMethodName;
 
@@ -71,7 +76,7 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> {
             ImportDeclarations.addStaticImportTo(methodDeclaration, importable);
 
             Statement statement = JavaParser.parseStatement(assertTimeoutReplacementMethodName +"(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
-                    "" + junit4TestMethodBody +
+                    "" + configuration.javaParser().print(body) +
                     ");\n");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
@@ -87,7 +92,7 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> {
             }
             ImportDeclarations.addStaticImportTo(methodDeclaration, Assertions.class.getCanonicalName() + ".assertThrows");
             Statement statement = JavaParser.parseStatement("assertThrows(" + exceptionClassAsString + ",()->" +
-                    "" + body.toString() +
+                    "" + configuration.javaParser().print(body) +
                     ");\n");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
