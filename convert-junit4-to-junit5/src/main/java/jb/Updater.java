@@ -92,8 +92,14 @@ public class Updater {
     }
 
     private ConversionResult updateSingleFile(Path path) {
+        System.out.println("__________ " + path);
+        ConversionResult result = convert(path);
+        System.out.println(result.outcome);
+        return result;
+    }
+
+    private ConversionResult convert(Path path) {
         try {
-            System.out.println("__________ " + path);
             String originalText = readSourceFile(path);
             InMemoryProjectRecorder recorder = new InMemoryProjectRecorder();
             ConversionResultBuilder resultBuilder = new JunitConversionLogic(configuration, recorder).convert(originalText).path(path);
@@ -109,12 +115,9 @@ public class Updater {
             if (result.outcome == ConversionOutcome.Converted && (result.unsupportedFeatures().isEmpty() || !configuration.skipFilesWithUnsupportedFeatures())) {
                 configuration.changeWriter().write(path, result.code);
             }
-            System.out.println(result.outcome);
             return result;
         } catch (IOException | RuntimeException e) {
-            System.out.println("Failed " + path.toAbsolutePath());
-            // convert to runtime exception so can use inside stream operation
-            throw new RuntimeException(e);
+            return new ConversionResultBuilder().path(path).failedWith(e).build();
         }
     }
 

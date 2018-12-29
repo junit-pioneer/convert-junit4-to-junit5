@@ -10,6 +10,7 @@ public class ConversionResultBuilder {
     private String details;
     private String code;
     private Path path;
+    private Exception exception;
 
     public ConversionResultBuilder outcome(ConversionOutcome outcome) {
         this.outcome = outcome;
@@ -36,7 +37,12 @@ public class ConversionResultBuilder {
         return this;
     }
 
+    public ConversionResultBuilder failedWith(Exception exception) {
+        this.exception = exception;
+        return outcome(ConversionOutcome.Failed).details(exception.getClass().getName());
+    }
+
     public ConversionResult build() {
-        return new ConversionResult(outcome, details, code, path, usedFeatures);
+        return new ConversionResult(outcome, details, code, path, usedFeatures, exception);
     }
 }

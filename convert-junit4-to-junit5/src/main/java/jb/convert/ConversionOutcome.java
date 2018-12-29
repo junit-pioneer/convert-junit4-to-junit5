@@ -4,4 +4,5 @@ public enum ConversionOutcome {
     Skipped,
     Unchanged,
     Converted,
+    Failed
 }

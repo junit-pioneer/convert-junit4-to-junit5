@@ -7,6 +7,7 @@ import jb.convert.UsedFeature;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -40,7 +41,7 @@ class ConversionReport {
     private void appendUnsupportedFeatureUsage(List<String> reportLines) {
         List<UsedFeature> unsupportedFeatures = results.stream().flatMap(result -> result.unsupportedFeatures().stream()).collect(toList());
         if (unsupportedFeatures.isEmpty()) {
-            System.out.println("   " + "no unsupported features detected");
+            reportLines.add("   " + "no unsupported features detected");
             return;
         }
         Map<String, List<UsedFeature>> collect = unsupportedFeatures.stream().collect(groupingBy(it -> it.name));
@@ -58,19 +59,34 @@ class ConversionReport {
         Map<ConversionOutcome, List<ConversionResult>> byOutcome = this.results.stream().collect(Collectors.groupingBy(it -> it.outcome));
 
         List<ConversionResult> unchanged = byOutcome.getOrDefault(ConversionOutcome.Unchanged, emptyList());
-        addOutcomeLines(reportLines, unchanged, "unchanged");
+        addOutcomeLines(reportLines, unchanged, "unchanged", nothing());
 
         List<ConversionResult> converted = byOutcome.getOrDefault(ConversionOutcome.Converted, emptyList());
-        addOutcomeLines(reportLines, converted, "converted");
+        addOutcomeLines(reportLines, converted, "converted", nothing());
 
         List<ConversionResult> skipped = byOutcome.getOrDefault(ConversionOutcome.Skipped, emptyList());
-        addOutcomeLines(reportLines, skipped, "skipped");
+        addOutcomeLines(reportLines, skipped, "skipped", nothing());
+
+        List<ConversionResult> failed = byOutcome.getOrDefault(ConversionOutcome.Failed, emptyList());
+        addOutcomeLines(reportLines, failed, "failed", printPath(reportLines));
     }
 
-    private void addOutcomeLines(List<String> reportLines, List<ConversionResult> results, String name) {
+    private void addOutcomeLines(List<String> reportLines, List<ConversionResult> results, String name, Consumer<List<ConversionResult>> details) {
         reportLines.add(format("%4d " + name, results.size()));
-        Map<String, List<ConversionResult>> skippedByDetails = results.stream().collect(Collectors.groupingBy(it -> it.details.orElse("no details")));
-        skippedByDetails.forEach((key, value) -> reportLines.add("     " + value.size() + " " + key));
+        Map<String, List<ConversionResult>> byDetails = results.stream().collect(Collectors.groupingBy(it -> it.details.orElse("no details")));
+        byDetails.forEach((key, value) -> {
+            reportLines.add(String.format("     %4d %s", value.size(), key));
+            details.accept(value);
+        });
+    }
+
+    private static Consumer<List<ConversionResult>> nothing() {
+        return (ignore) -> {
+        };
+    }
+
+    private static Consumer<List<ConversionResult>> printPath(List<String> reportLines) {
+        return conversionResults -> conversionResults.forEach(result -> reportLines.add("          " + result.path));
     }
 
 }
