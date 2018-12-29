@@ -36,7 +36,6 @@ class TestAnnotationConversionTest {
     }
 
     @Test
-    @org.junit.Test
     void convertTimeoutPropertyFromTestAnnotation() {
         String junit4 = "import org.junit.Test;\n" +
                 "\n" +
