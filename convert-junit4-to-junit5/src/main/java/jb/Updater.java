@@ -95,6 +95,7 @@ public class Updater {
         System.out.println("__________ " + path);
         ConversionResult result = convert(path);
         System.out.println(result.outcome);
+        result.exception.ifPresent(Throwable::printStackTrace);
         return result;
     }
 
