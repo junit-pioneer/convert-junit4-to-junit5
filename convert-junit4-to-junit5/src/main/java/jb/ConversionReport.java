@@ -49,10 +49,18 @@ class ConversionReport {
             reportLines.add("  " + featureName + ":");
             Map<String, List<UsedFeature>> details = use.stream().collect(groupingBy(it -> it.details));
             details.forEach((detail, list) -> {
-                String blub = format("   " + "%4d %s", list.size(), detail);
-                reportLines.add(blub);
+                reportLines.add(format("   " + "%4d %s", list.size(), detail));
+                resultsWithUsedFeatureMatching(featureName, detail).forEach(result -> reportLines.add("        " + result.path));
             });
         });
+    }
+
+    private List<ConversionResult> resultsWithUsedFeatureMatching(String featureName, String detail) {
+        return results.stream().filter(result -> {
+                        return result.unsupportedFeatures().stream().anyMatch(usedFeature -> {
+                            return detail.equals(usedFeature.details) && featureName.equals(usedFeature.name);
+                        });
+                    }).collect(toList());
     }
 
     private void appendNumbersByOutcome(List<String> reportLines) {
