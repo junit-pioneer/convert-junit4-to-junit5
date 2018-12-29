@@ -14,6 +14,7 @@ import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
+import static jb.convert.UsedFeature.usedFeatureMatching;
 
 class ConversionReport {
 
@@ -45,22 +46,22 @@ class ConversionReport {
             return;
         }
         Map<String, List<UsedFeature>> collect = unsupportedFeatures.stream().collect(groupingBy(it -> it.name));
-        collect.forEach((featureName, use) -> {
+        collect.forEach((featureName, uses) -> {
             reportLines.add("  " + featureName + ":");
-            Map<String, List<UsedFeature>> details = use.stream().collect(groupingBy(it -> it.details));
+            Map<String, List<UsedFeature>> details = uses.stream().collect(groupingBy(it -> it.details));
             details.forEach((detail, list) -> {
                 reportLines.add(format("   " + "%4d %s", list.size(), detail));
-                resultsWithUsedFeatureMatching(featureName, detail).forEach(result -> reportLines.add("        " + result.path));
+                resultsWithUsedFeatureMatching(featureName, detail).forEach(result -> {
+                    result.usedFeatures.stream().filter(UsedFeature.usedFeatureMatching(featureName, detail)).findFirst().ifPresent(use ->{
+                        reportLines.add("        " + result.path + ":" + use.position.line);
+                    });
+                });
             });
         });
     }
 
     private List<ConversionResult> resultsWithUsedFeatureMatching(String featureName, String detail) {
-        return results.stream().filter(result -> {
-                        return result.unsupportedFeatures().stream().anyMatch(usedFeature -> {
-                            return detail.equals(usedFeature.details) && featureName.equals(usedFeature.name);
-                        });
-                    }).collect(toList());
+        return results.stream().filter(result -> result.unsupportedFeatures().stream().anyMatch(usedFeatureMatching(featureName, detail))).collect(toList());
     }
 
     private void appendNumbersByOutcome(List<String> reportLines) {
