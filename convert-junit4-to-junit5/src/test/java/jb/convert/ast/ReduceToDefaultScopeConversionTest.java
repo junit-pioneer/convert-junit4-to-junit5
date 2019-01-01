@@ -46,4 +46,30 @@ class ReduceToDefaultScopeConversionTest {
         assertThat(convertedWithPreservedFormatting(junit4), equalTo(junit5));
     }
 
+    @Test
+    void onlyReduceScopeIfClassContainsTests() {
+        String junit4 = "import org.junit.Test;\n" +
+                "\n" +
+                "public class A {\n" +
+                "    @Test\n" +
+                "    void m() {\n" +
+                "    }\n" +
+                "    \n" +
+                "    public static class Foo{\n" +
+                "        \n" +
+                "    }\n" +
+                "}";
+        String junit5 = "import org.junit.jupiter.api.Test;\n" +
+                "\n" +
+                "class A {\n" +
+                "    @Test\n" +
+                "    void m() {\n" +
+                "    }\n" +
+                "    \n" +
+                "    public static class Foo{\n" +
+                "        \n" +
+                "    }\n" +
+                "}";
+        assertThat(convertedWithPreservedFormatting(junit4), equalTo(junit5));
+    }
 }

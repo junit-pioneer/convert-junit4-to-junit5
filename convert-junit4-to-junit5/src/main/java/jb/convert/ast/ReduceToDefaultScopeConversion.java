@@ -26,7 +26,7 @@ public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, 
     @Override
     public Void visit(ClassOrInterfaceDeclaration n, Accumulator arg) {
         Void visit = super.visit(n, arg);
-        if (arg.containsTests) {
+        if (arg.containsTests && !n.isNestedType()) {
             n.removeModifier(Modifier.PUBLIC);
             updated = true;
         }
