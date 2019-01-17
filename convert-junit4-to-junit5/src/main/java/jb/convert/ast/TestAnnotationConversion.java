@@ -136,4 +136,10 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> {
             throw new RuntimeException("you should handle this one");
         }
     }
+
+    @Override
+    public String toString() {
+        return "updated: " + updated;
+    }
+
 }

@@ -49,4 +49,10 @@ public class SetupMethodConversion extends ModifierVisitor<Void> {
     private void updated() {
         this.updated = true;
     }
+
+    @Override
+    public String toString() {
+        return "updated: " + updated;
+    }
+
 }

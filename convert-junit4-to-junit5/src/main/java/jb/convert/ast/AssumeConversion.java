@@ -72,4 +72,9 @@ public class AssumeConversion extends VoidVisitorAdapter<Object> {
         this.updated = true;
     }
 
+    @Override
+    public String toString() {
+        return "updated: " + updated;
+    }
+
 }

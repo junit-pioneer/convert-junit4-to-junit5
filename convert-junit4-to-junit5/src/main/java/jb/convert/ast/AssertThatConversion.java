@@ -58,4 +58,9 @@ public class AssertThatConversion extends ModifierVisitor<Void> {
     private ImportDeclaration assertThatFromMatcherAssert() {
         return parseImport("import static org.hamcrest.MatcherAssert.assertThat;");
     }
+
+    @Override
+    public String toString() {
+        return "updated: " + updated;
+    }
 }

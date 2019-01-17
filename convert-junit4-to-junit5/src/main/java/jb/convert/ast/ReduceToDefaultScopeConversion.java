@@ -51,4 +51,10 @@ public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, 
             updated = true;
         });
     }
+
+    @Override
+    public String toString() {
+        return "updated: " + updated;
+    }
+
 }

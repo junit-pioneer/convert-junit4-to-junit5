@@ -67,4 +67,9 @@ public class CategoryConversion extends ModifierVisitor<Void> {
         return new ClassName(category.toString());
     }
 
+    @Override
+    public String toString() {
+        return "updated: " + updated;
+    }
+
 }
