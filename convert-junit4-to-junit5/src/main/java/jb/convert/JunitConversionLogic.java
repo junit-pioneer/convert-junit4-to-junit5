@@ -45,9 +45,6 @@ public class JunitConversionLogic {
             return result.outcome(ConversionOutcome.Unchanged);
         }
         String updatedCode = configuration.javaParser().print(compilationUnit);
-        if (originalCode.equals(updatedCode)) {
-            return result.outcome(ConversionOutcome.Unchanged);
-        }
         return result.outcome(ConversionOutcome.Converted).code(updatedCode);
     }
 
