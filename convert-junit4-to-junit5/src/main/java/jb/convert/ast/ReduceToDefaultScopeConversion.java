@@ -28,7 +28,7 @@ public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, 
         Void visit = super.visit(n, arg);
         if (arg.containsTests && !n.isNestedType()) {
             n.removeModifier(Modifier.PUBLIC);
-            updated = true;
+            updated();
         }
         return visit;
     }
@@ -48,8 +48,12 @@ public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, 
     private void reduceToDefaultScopeIfAnnotationIsPresent(Class<? extends Annotation> annotationClass, MethodDeclaration n) {
         n.getAnnotationByClass(annotationClass).ifPresent(doNotCare -> {
             n.removeModifier(Modifier.PUBLIC);
-            updated = true;
+            updated();
         });
+    }
+
+    private void updated() {
+        updated = true;
     }
 
     @Override
