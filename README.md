@@ -19,7 +19,13 @@ This program is also available as a shaded jar. To run:
 java -jar convert-junit4-to-to-junit5-0.0.1.jar /my/dir/src/test/java
 
 # Side effects
-This program updates every class and reformats your code. This is a side effect of using [Java Parser](https://github.com/javaparser/javaparser). If you have a standard coding format, you can always reapply it after running. Regardless, make sure to commit your code before running the program so this commit only has the refactoring to JUnit 5.
+This program updates every class and reformats your code.
+This is a side effect of using [Java Parser](https://github.com/javaparser/javaparser).
+If you have a standard coding format, you can always reapply it after running. Regardless, make sure to commit your code before running the program so this commit only has the refactoring to JUnit 5.
+
+# Running the update from code
+There are configuration options like `preserve formatting`  and `dry run` that are not exposed as command line flags.
+Have a look at [ConvertProgrammatically](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java) to see how to enable those options from the code. 
 
 # Other notes
 * The program can be run multiple times. That way you can rollback the classes that require manual intervention and commit the others. Then later when you re-run, it will only update the remaining classes.
