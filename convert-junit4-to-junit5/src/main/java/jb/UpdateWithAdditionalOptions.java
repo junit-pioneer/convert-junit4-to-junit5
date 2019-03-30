@@ -11,7 +11,7 @@ public class UpdateWithAdditionalOptions {
                 .dryRun()
                 .excludeMatching(path -> false)
                 .skipFilesWithUnsupportedFeatures()
-                .preserverFormatting();
+                .preserveFormatting();
         new Updater(configuration.build()).update(Paths.get("/path/to/your/test/directory"));
     }
 }
