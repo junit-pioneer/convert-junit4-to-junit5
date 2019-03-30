@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.lang.annotation.Annotation;
 
-public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, ReduceToDefaultScopeConversion.Accumulator> {
+public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, ReduceToDefaultScopeConversion.Accumulator> implements Conversion {
 
     public static class Accumulator {
         boolean containsTests = false;
@@ -19,6 +19,7 @@ public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, 
 
     private boolean updated = false;
 
+    @Override
     public boolean performedUpdate() {
         return updated;
     }

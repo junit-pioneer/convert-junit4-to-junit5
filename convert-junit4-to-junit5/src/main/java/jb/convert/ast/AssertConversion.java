@@ -20,7 +20,7 @@ import java.util.Set;
 import static com.github.javaparser.JavaParser.parseExpression;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
-public class AssertConversion extends VoidVisitorAdapter<Object> {
+public class AssertConversion extends VoidVisitorAdapter<Object> implements Conversion {
 
     private static final MatchDetector matchDetector = new MatchDetector();
     private static final Set<String> convertibleAssertMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assert.class, Assertions.class);
@@ -36,6 +36,7 @@ public class AssertConversion extends VoidVisitorAdapter<Object> {
 
     private boolean updated = false;
 
+    @Override
     public boolean performedUpdate() {
         return updated;
     }

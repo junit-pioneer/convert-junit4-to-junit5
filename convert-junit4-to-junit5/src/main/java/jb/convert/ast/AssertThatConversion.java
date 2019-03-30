@@ -12,11 +12,12 @@ import jb.convert.ast.tools.ImportDeclarations;
 import static com.github.javaparser.JavaParser.parseImport;
 import static jb.convert.ast.tools.ImportDeclarations.addImportTo;
 
-public class AssertThatConversion extends ModifierVisitor<Void> {
+public class AssertThatConversion extends ModifierVisitor<Void> implements Conversion {
 
     private static final ImportDeclaration junitAssertThat = JavaParser.parseImport("import static org.junit.Assert.assertThat;");
     private boolean updated = false;
 
+    @Override
     public boolean performedUpdate() {
         return updated;
     }

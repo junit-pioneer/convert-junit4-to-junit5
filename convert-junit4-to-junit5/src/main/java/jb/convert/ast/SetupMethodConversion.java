@@ -18,9 +18,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 
-public class SetupMethodConversion extends ModifierVisitor<Void> {
+public class SetupMethodConversion extends ModifierVisitor<Void> implements Conversion {
     private boolean updated = false;
 
+    @Override
     public boolean performedUpdate() {
         return updated;
     }

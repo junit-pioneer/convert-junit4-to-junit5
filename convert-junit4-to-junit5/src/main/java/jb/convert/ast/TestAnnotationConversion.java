@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Assertions;
 import java.time.Duration;
 import java.util.Optional;
 
-public class TestAnnotationConversion extends ModifierVisitor<Void> {
+public class TestAnnotationConversion extends ModifierVisitor<Void> implements Conversion {
     private final String assertTimeoutReplacementMethodName = "assertTimeoutPreemptively";
     private final JunitConversionLogicConfiguration configuration;
     private boolean updated = false;
@@ -33,6 +33,7 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> {
         this.configuration = configuration;
     }
 
+    @Override
     public boolean performedUpdate() {
         return updated;
     }

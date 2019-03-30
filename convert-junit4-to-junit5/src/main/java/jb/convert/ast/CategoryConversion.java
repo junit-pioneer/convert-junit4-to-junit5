@@ -20,11 +20,12 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class CategoryConversion extends ModifierVisitor<Void> {
+public class CategoryConversion extends ModifierVisitor<Void> implements Conversion {
     private static final ImportDeclaration categoryImport = JavaParser.parseImport("import org.junit.experimental.categories.Category;");
     private final ProjectRecorder projectRecorder;
     private boolean updated = false;
 
+    @Override
     public boolean performedUpdate() {
         return updated;
     }

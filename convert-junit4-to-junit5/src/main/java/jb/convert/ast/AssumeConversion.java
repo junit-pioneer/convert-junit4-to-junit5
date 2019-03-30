@@ -15,12 +15,13 @@ import java.util.Set;
 
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
-public class AssumeConversion extends VoidVisitorAdapter<Object> {
+public class AssumeConversion extends VoidVisitorAdapter<Object> implements Conversion {
 
     private static final MatchDetector matchDetector = new MatchDetector();
     private static final Set<String> convertibleAssumeMethods = matchDetector.publicStaticMethodsWithMatchingNames(Assume.class, Assumptions.class);
     private boolean updated = false;
 
+    @Override
     public boolean performedUpdate() {
         return updated;
     }
