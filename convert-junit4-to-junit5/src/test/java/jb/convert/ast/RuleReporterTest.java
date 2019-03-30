@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class RuleReporterTest {
 
     @Test
-    void name() {
+    void reportRulesAsUnsupported() {
         String junit4Rule = "import org.junit.Rule;\n" +
                 "import org.junit.rules.TemporaryFolder;\n" +
                 "import org.junit.rules.TestName;\n" +
