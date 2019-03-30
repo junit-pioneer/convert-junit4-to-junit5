@@ -1,7 +1,6 @@
 package jb;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ConversionOutcome;
@@ -38,9 +37,9 @@ public class JunitConversionLogicFixture {
     }
 
     public static void assertUnchangedAfterWrappingInMethod(String originalImport, String originalMethod) {
-        String compatibleCode = originalImport + importJunit4 + "public class A { public void m() { " + originalMethod + "}}";
-        String compatibleCodeFlup = originalImport + importJunit5 + "public class A { public void m() { " + originalMethod + "}}";
-        assertPrettyPrintEqual(compatibleCodeFlup, converted(compatibleCode));
+        String junit4 = originalImport + importJunit4 + "public class A { public void m() { " + originalMethod + "}}";
+        String junit5 = originalImport + importJunit5 + "public class A { public void m() { " + originalMethod + "}}";
+        assertPrettyPrintEqual(junit5, converted(junit4));
     }
 
     public static void assertAfterWrappingInMethod(String code, String expected) {
@@ -83,8 +82,7 @@ public class JunitConversionLogicFixture {
     }
 
     private static String prettyPrint(String string) {
-        CompilationUnit cu = JavaParser.parse(string);
-        return cu.toString();
+        return JavaParser.parse(string).toString();
     }
 
     public static String convertedWithPreservedFormatting(String junit4) {
