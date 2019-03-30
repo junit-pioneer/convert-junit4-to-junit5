@@ -7,6 +7,7 @@ import jb.convert.ast.AssertConversion;
 import jb.convert.ast.AssertThatConversion;
 import jb.convert.ast.AssumeConversion;
 import jb.convert.ast.CategoryConversion;
+import jb.convert.ast.Conversion;
 import jb.convert.ast.GeneralConversion;
 import jb.convert.ast.ProjectProbe;
 import jb.convert.ast.ReduceToDefaultScopeConversion;
@@ -14,6 +15,9 @@ import jb.convert.ast.RuleReporter;
 import jb.convert.ast.RunnerReporter;
 import jb.convert.ast.SetupMethodConversion;
 import jb.convert.ast.TestAnnotationConversion;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class JunitConversionLogic {
 
@@ -54,39 +58,39 @@ public class JunitConversionLogic {
     }
 
     private boolean performAstBasedConversions(CompilationUnit cu) {
+        List<Conversion> conversions = new LinkedList<>();
         AssertThatConversion assertThatConversion = new AssertThatConversion();
+        conversions.add(assertThatConversion);
         assertThatConversion.visit(cu, null);
 
         AssertConversion assertConversion = new AssertConversion();
+        conversions.add(assertConversion);
         assertConversion.visit(cu, null);
 
         AssumeConversion assumeConversion = new AssumeConversion();
+        conversions.add(assumeConversion);
         assumeConversion.visit(cu, null);
 
         SetupMethodConversion setupMethodConversion = new SetupMethodConversion();
+        conversions.add(setupMethodConversion);
         setupMethodConversion.visit(cu, null);
 
         TestAnnotationConversion testAnnotationConversion = new TestAnnotationConversion(configuration);
+        conversions.add(testAnnotationConversion);
         testAnnotationConversion.visit(cu, null);
 
         ReduceToDefaultScopeConversion reduceToDefaultScopeConversion = new ReduceToDefaultScopeConversion();
+        conversions.add(reduceToDefaultScopeConversion);
         reduceToDefaultScopeConversion.visit(cu, new ReduceToDefaultScopeConversion.Accumulator());
 
         CategoryConversion categoryConversion = new CategoryConversion(projectRecorder);
+        conversions.add(categoryConversion);
         categoryConversion.visit(cu, null);
 
         GeneralConversion generalConversion = new GeneralConversion();
+        conversions.add(generalConversion);
         generalConversion.visit(cu, null);
-
-        return assertThatConversion.performedUpdate()
-                || assertConversion.performedUpdate()
-                || assumeConversion.performedUpdate()
-                || setupMethodConversion.performedUpdate()
-                || testAnnotationConversion.performedUpdate()
-                || reduceToDefaultScopeConversion.performedUpdate()
-                || categoryConversion.performedUpdate()
-                || generalConversion.performedUpdate()
-                ;
+        return conversions.stream().map(Conversion::performedUpdate).reduce(false, (updated, next) -> updated || next);
     }
 
 }
