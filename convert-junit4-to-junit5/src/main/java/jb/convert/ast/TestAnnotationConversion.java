@@ -1,6 +1,7 @@
 package jb.convert.ast;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -29,12 +30,13 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
     private final JunitConversionLogicConfiguration configuration;
     private boolean updated = false;
 
-    public TestAnnotationConversion(JunitConversionLogicConfiguration configuration){
+    public TestAnnotationConversion(JunitConversionLogicConfiguration configuration) {
         this.configuration = configuration;
     }
 
     @Override
-    public boolean performedUpdate() {
+    public boolean convert(CompilationUnit cu) {
+        visit(cu, null);
         return updated;
     }
 
@@ -60,7 +62,7 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
         return methodDeclaration;
     }
 
-    private void updated(){
+    private void updated() {
         updated = true;
     }
 
@@ -70,13 +72,13 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
                 return;
             }
 
-            String importable = Assertions.class.getCanonicalName() + "."+ assertTimeoutReplacementMethodName;
+            String importable = Assertions.class.getCanonicalName() + "." + assertTimeoutReplacementMethodName;
 
 
             ImportDeclarations.addImportTo(methodDeclaration, Duration.class);
             ImportDeclarations.addStaticImportTo(methodDeclaration, importable);
 
-            Statement statement = JavaParser.parseStatement(assertTimeoutReplacementMethodName +"(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
+            Statement statement = JavaParser.parseStatement(assertTimeoutReplacementMethodName + "(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
                     "" + configuration.javaParser().print(body) +
                     ");\n");
             NodeList<Statement> statements = new NodeList<>();

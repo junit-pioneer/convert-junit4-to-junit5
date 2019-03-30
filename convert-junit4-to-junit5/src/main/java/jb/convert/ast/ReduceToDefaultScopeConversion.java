@@ -1,5 +1,6 @@
 package jb.convert.ast;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -13,14 +14,15 @@ import java.lang.annotation.Annotation;
 
 public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, ReduceToDefaultScopeConversion.Accumulator> implements Conversion {
 
-    public static class Accumulator {
+    static class Accumulator {
         boolean containsTests = false;
     }
 
     private boolean updated = false;
 
     @Override
-    public boolean performedUpdate() {
+    public boolean convert(CompilationUnit cu) {
+        visit(cu, new ReduceToDefaultScopeConversion.Accumulator());
         return updated;
     }
 

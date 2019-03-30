@@ -49,6 +49,6 @@ public class ImportDeclarations {
 
     public static ImportDeclaration importDeclarationFor(StaticImportBuilder bluePrint) {
         StaticImport build = bluePrint.build();
-        return parseImport("import static " + build.className + "." + build.method+";");
+        return parseImport("import static " + build.className + "." + build.method + ";");
     }
 }

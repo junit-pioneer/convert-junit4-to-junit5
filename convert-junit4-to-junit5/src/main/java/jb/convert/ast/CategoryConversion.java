@@ -1,6 +1,7 @@
 package jb.convert.ast;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -26,7 +27,8 @@ public class CategoryConversion extends ModifierVisitor<Void> implements Convers
     private boolean updated = false;
 
     @Override
-    public boolean performedUpdate() {
+    public boolean convert(CompilationUnit cu) {
+        visit(cu, null);
         return updated;
     }
 

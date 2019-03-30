@@ -59,38 +59,17 @@ public class JunitConversionLogic {
 
     private boolean performAstBasedConversions(CompilationUnit cu) {
         List<Conversion> conversions = new LinkedList<>();
-        AssertThatConversion assertThatConversion = new AssertThatConversion();
-        conversions.add(assertThatConversion);
-        assertThatConversion.visit(cu, null);
-
-        AssertConversion assertConversion = new AssertConversion();
-        conversions.add(assertConversion);
-        assertConversion.visit(cu, null);
-
-        AssumeConversion assumeConversion = new AssumeConversion();
-        conversions.add(assumeConversion);
-        assumeConversion.visit(cu, null);
-
-        SetupMethodConversion setupMethodConversion = new SetupMethodConversion();
-        conversions.add(setupMethodConversion);
-        setupMethodConversion.visit(cu, null);
-
-        TestAnnotationConversion testAnnotationConversion = new TestAnnotationConversion(configuration);
-        conversions.add(testAnnotationConversion);
-        testAnnotationConversion.visit(cu, null);
-
-        ReduceToDefaultScopeConversion reduceToDefaultScopeConversion = new ReduceToDefaultScopeConversion();
-        conversions.add(reduceToDefaultScopeConversion);
-        reduceToDefaultScopeConversion.visit(cu, new ReduceToDefaultScopeConversion.Accumulator());
-
-        CategoryConversion categoryConversion = new CategoryConversion(projectRecorder);
-        conversions.add(categoryConversion);
-        categoryConversion.visit(cu, null);
-
-        GeneralConversion generalConversion = new GeneralConversion();
-        conversions.add(generalConversion);
-        generalConversion.visit(cu, null);
-        return conversions.stream().map(Conversion::performedUpdate).reduce(false, (updated, next) -> updated || next);
+        conversions.add(new AssertThatConversion());
+        conversions.add(new AssertConversion());
+        conversions.add(new AssumeConversion());
+        conversions.add(new SetupMethodConversion());
+        conversions.add(new TestAnnotationConversion(configuration));
+        conversions.add(new ReduceToDefaultScopeConversion());
+        conversions.add(new CategoryConversion(projectRecorder));
+        conversions.add(new GeneralConversion());
+        return conversions.stream()
+                .map(conversion -> conversion.convert(cu))
+                .reduce(false, (updated, next) -> updated || next);
     }
 
 }

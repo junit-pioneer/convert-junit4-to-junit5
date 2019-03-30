@@ -1,6 +1,7 @@
 package jb.convert.ast;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
@@ -10,7 +11,8 @@ public class GeneralConversion extends ModifierVisitor<Void> implements Conversi
     private boolean updated;
 
     @Override
-    public boolean performedUpdate() {
+    public boolean convert(CompilationUnit cu) {
+        visit(cu, null);
         return updated;
     }
 

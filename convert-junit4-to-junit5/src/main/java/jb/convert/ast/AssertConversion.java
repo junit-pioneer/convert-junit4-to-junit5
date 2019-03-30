@@ -1,5 +1,6 @@
 package jb.convert.ast;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -37,7 +38,8 @@ public class AssertConversion extends VoidVisitorAdapter<Object> implements Conv
     private boolean updated = false;
 
     @Override
-    public boolean performedUpdate() {
+    public boolean convert(CompilationUnit cu) {
+        visit(cu, null);
         return updated;
     }
 
@@ -55,10 +57,10 @@ public class AssertConversion extends VoidVisitorAdapter<Object> implements Conv
     public void visit(final MethodCallExpr methodCall, final Object arg) {
         String methodName = methodCall.getNameAsString();
         if (convertibleAssertMethods.contains(methodName)) {
-            if (scopeMatchesAssert(methodCall)){
+            if (scopeMatchesAssert(methodCall)) {
                 methodCall.getScope().ifPresent(scope -> {
                     scope.ifNameExpr(name -> name.setName("Assertions"));
-                    scope.ifFieldAccessExpr( fieldAccessExpr -> fieldAccessExpr.replace(parseExpression("org.junit.jupiter.api.Assertions")));
+                    scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(parseExpression("org.junit.jupiter.api.Assertions")));
                 });
                 updated();
             }
@@ -111,7 +113,7 @@ public class AssertConversion extends VoidVisitorAdapter<Object> implements Conv
                 || (numParams == 4 && THREE_PARAM_METHODS.contains(methodName));
     }
 
-    private void updated(){
+    private void updated() {
         this.updated = true;
     }
 

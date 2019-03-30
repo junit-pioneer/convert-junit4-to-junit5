@@ -26,7 +26,7 @@ public class ConversionResult {
         this.exception = Optional.ofNullable(exception);
     }
 
-    public List<UsedFeature> unsupportedFeatures(){
+    public List<UsedFeature> unsupportedFeatures() {
         return usedFeatures.stream().filter(usedFeature -> !usedFeature.convertible).collect(Collectors.toList());
     }
 }

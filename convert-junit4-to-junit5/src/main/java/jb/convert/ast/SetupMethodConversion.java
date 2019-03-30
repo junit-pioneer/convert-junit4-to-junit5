@@ -1,5 +1,6 @@
 package jb.convert.ast;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -22,7 +23,8 @@ public class SetupMethodConversion extends ModifierVisitor<Void> implements Conv
     private boolean updated = false;
 
     @Override
-    public boolean performedUpdate() {
+    public boolean convert(CompilationUnit cu) {
+        visit(cu, null);
         return updated;
     }
 

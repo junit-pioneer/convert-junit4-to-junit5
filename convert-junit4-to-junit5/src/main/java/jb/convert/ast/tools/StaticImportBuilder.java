@@ -22,12 +22,12 @@ public class StaticImportBuilder {
         return method("*");
     }
 
-    public StaticImportBuilder method(String method){
+    public StaticImportBuilder method(String method) {
         this.method = method;
         return this;
     }
 
-    public StaticImport build(){
+    public StaticImport build() {
         return new StaticImport(ClassName.createClassName(className), method);
     }
 }

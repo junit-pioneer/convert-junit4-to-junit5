@@ -1,6 +1,7 @@
 package jb.convert.ast;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -17,8 +18,10 @@ public class AssertThatConversion extends ModifierVisitor<Void> implements Conve
     private static final ImportDeclaration junitAssertThat = JavaParser.parseImport("import static org.junit.Assert.assertThat;");
     private boolean updated = false;
 
+
     @Override
-    public boolean performedUpdate() {
+    public boolean convert(CompilationUnit cu) {
+        visit(cu, null);
         return updated;
     }
 
@@ -35,7 +38,7 @@ public class AssertThatConversion extends ModifierVisitor<Void> implements Conve
     public Visitable visit(MethodCallExpr methodCall, Void arg) {
         Visitable visit = super.visit(methodCall, arg);
         if ("assertThat".equals(methodCall.getNameAsString()) && hasTwoOrThreeArguments(methodCall)) {
-            methodCall.getScope().ifPresent( scope -> {
+            methodCall.getScope().ifPresent(scope -> {
                 scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(JavaParser.parseExpression("org.hamcrest.MatcherAssert")));
             });
             NodeList<ImportDeclaration> imports = ImportDeclarations.imports(methodCall);
