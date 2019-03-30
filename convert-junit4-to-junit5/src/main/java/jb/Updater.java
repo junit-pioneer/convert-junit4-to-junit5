@@ -64,7 +64,7 @@ public class Updater {
                 .filter(configuration.exclude().negate())
                 .map(this::updateSingleFile)
                 .collect(toList());
-        converteCategories();
+        convertCategories();
         return new ConversionReport(result);
     }
 
@@ -77,7 +77,7 @@ public class Updater {
         }
     }
 
-    private void converteCategories() {
+    private void convertCategories() {
         project.categoriesToConvert().forEach(path -> {
             try {
                 configuration.javaParser().parse(readSourceFile(path));
