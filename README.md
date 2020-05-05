@@ -25,7 +25,16 @@ If you have a standard coding format, you can always reapply it after running. R
 
 # Running the update from code
 There are [configuration options](convert-junit4-to-junit5/src/main/java/jb/configuration/Configuration.java) like `preserve formatting` and `dry run` that are not exposed as command line flags.
-Have a look at [ConvertProgrammatically](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java) to see how to enable those options from the code. 
+Have a look at [ConvertProgrammatically](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java) to see how to enable those options from the code.
+This tool Is build around the idea of list of conversions that are executed in sequence one after the other.
+Have a look at the [available conversions](convert-junit4-to-junit5/src/main/java/jb/convert/ast).
+Conversion you do not need can be excluded by commenting it out in [JunitConversionLogic](convert-junit4-to-junit5/src/main/java/jb/convert/JunitConversionLogic.java).
+In case your project has custom junit 4 code e.g. Rules, you can implement your own [Conversion](convert-junit4-to-junit5/src/main/java/jb/convert/ast/Conversion.java) and add it to the [JunitConversionLogic](convert-junit4-to-junit5/src/main/java/jb/convert/JunitConversionLogic.java). 
+You will need to have a look at how to work with the AST produced by [Java Parser](https://github.com/javaparser/javaparser).
+Looking at the existing conversions for inspiration can help too.
+If you write a new conversion that might be helpful to others, feel free to open a [pull request](https://github.com/junit-pioneer/convert-junit4-to-junit5/pulls).
 
 # Other notes
-* The program can be run multiple times. That way you can rollback the classes that require manual intervention and commit the others. Then later when you re-run, it will only update the remaining classes.
+* The program can be run multiple times.
+  That way you can rollback the classes that require manual intervention and commit the others.
+  Then later when you re-run, it will only update the remaining classes.
