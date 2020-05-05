@@ -24,7 +24,7 @@ This is a side effect of using [Java Parser](https://github.com/javaparser/javap
 If you have a standard coding format, you can always reapply it after running. Regardless, make sure to commit your code before running the program so this commit only has the refactoring to JUnit 5.
 
 # Running the update from code
-There are [configuration options] (convert-junit4-to-junit5/src/main/java/jb/configuration/Configuration.java) like `preserve formatting` and `dry run` that are not exposed as command line flags.
+There are [configuration options](convert-junit4-to-junit5/src/main/java/jb/configuration/Configuration.java) like `preserve formatting` and `dry run` that are not exposed as command line flags.
 Have a look at [ConvertProgrammatically](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java) to see how to enable those options from the code. 
 
 # Other notes
