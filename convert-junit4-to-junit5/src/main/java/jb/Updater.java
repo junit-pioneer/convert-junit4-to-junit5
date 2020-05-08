@@ -23,8 +23,6 @@ import static java.util.stream.Collectors.toList;
  * Converts a file or nested directories to use JUnit 5 syntax where possible.
  * The resulting code may not compile, but it will be closer than the original
  * code so less to convert manually.
- *
- * @author jeanne
  */
 public class Updater {
 
