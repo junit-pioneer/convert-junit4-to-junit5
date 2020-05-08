@@ -31,7 +31,7 @@ Have a look at the [available conversions](convert-junit4-to-junit5/src/main/jav
 Conversion you do not need can be excluded by commenting it out in [JunitConversionLogic](convert-junit4-to-junit5/src/main/java/jb/convert/JunitConversionLogic.java).
 In case your project has custom junit 4 code e.g. Rules, you can implement your own [Conversion](convert-junit4-to-junit5/src/main/java/jb/convert/ast/Conversion.java) and add it to the [JunitConversionLogic](convert-junit4-to-junit5/src/main/java/jb/convert/JunitConversionLogic.java). 
 You will need to have a look at how to work with the AST produced by [Java Parser](https://github.com/javaparser/javaparser).
-Looking at the existing conversions for inspiration can help too.
+Looking at the existing conversions for inspiration may help too.
 If you write a new conversion that might be helpful to others, feel free to open a [pull request](https://github.com/junit-pioneer/convert-junit4-to-junit5/pulls).
 
 # Other notes
