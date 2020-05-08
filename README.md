@@ -15,7 +15,7 @@ Then make manual edits at end (or rollback those test classes and deal with them
 1. Rules
 1. Categories (there is only basic support for categories)
 
-This program is also available as a shaded jar. To run:
+This program is also available as a shaded jar. To use it, run the following command (be aware of correct version depending of the JAR you use!)
 java -jar convert-junit4-to-to-junit5-0.0.1.jar /my/dir/src/test/java
 
 # Side effects
