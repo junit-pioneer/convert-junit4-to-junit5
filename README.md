@@ -26,7 +26,7 @@ If you have a standard coding format, you can always reapply it after running. R
 # Running the update from code
 There are [configuration options](convert-junit4-to-junit5/src/main/java/jb/configuration/Configuration.java) like `preserve formatting` and `dry run` that are not exposed as command line flags.
 Have a look at [ConvertProgrammatically](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java) to see how to enable those options from the code.
-This tool Is build around the idea of list of conversions that are executed in sequence one after the other.
+This tool is build around the idea to have a list of conversions that are executed in sequence one after the other.
 Have a look at the [available conversions](convert-junit4-to-junit5/src/main/java/jb/convert/ast).
 Conversion you do not need can be excluded by commenting it out in [JunitConversionLogic](convert-junit4-to-junit5/src/main/java/jb/convert/JunitConversionLogic.java).
 In case your project has custom junit 4 code e.g. Rules, you can implement your own [Conversion](convert-junit4-to-junit5/src/main/java/jb/convert/ast/Conversion.java) and add it to the [JunitConversionLogic](convert-junit4-to-junit5/src/main/java/jb/convert/JunitConversionLogic.java). 
