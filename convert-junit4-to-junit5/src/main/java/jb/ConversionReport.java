@@ -36,7 +36,7 @@ class ConversionReport {
         reportLines.add("numbers by outcome");
         appendNumbersByOutcome(reportLines);
 
-        return String.join("\n", reportLines);
+        return String.join(System.lineSeparator(), reportLines);
     }
 
     private void appendUnsupportedFeatureUsage(List<String> reportLines) {
