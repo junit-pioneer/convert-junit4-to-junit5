@@ -27,6 +27,7 @@ Before starting out, the program assumes you have:
 * Conversion off JUnit 3.8. This program assumes you are on JUnit 4.
   JUnit 3.8 code will continue to work in JUnit 5. (as will JUnit 4 code.)
   The goal of this program is to convert JUnit 4 syntax to JUnit 5 syntax.
+* Java 8 (or later) and [maven](https://maven.apache.org/download.cgi)
 ## Running the update from code
 1. clone this repository
 1. open [UpdateWithAdditionalOptions](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java)
