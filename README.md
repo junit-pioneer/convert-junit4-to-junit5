@@ -1,6 +1,6 @@
 # JUnit 4 to JUnit 5
 
-As the name indicates this tool can assist to convert tests written in JUnit 5 to JUnit 5 (Jupiter, to be precise).
+As the name indicates this tool can assist to convert tests written in [JUnit 4](https://github.com/junit-team/junit4/wiki/Getting-started) to [JUnit 5](https://junit.org/junit5/docs/current/user-guide/#writing-tests) (Jupiter, to be precise).
 This programm was always driven by individual needs and is by no means a fully working and supported migration tool.   
 
 # Some History
