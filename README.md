@@ -31,10 +31,15 @@ Before starting out, the program assumes you have:
 * This program assumes you are on JUnit 4.
   JUnit 3.8 code will continue to work in JUnit 5 (as will JUnit 4 code, by the way).
   The goal of this program is to convert JUnit 4 syntax to JUnit 5 syntax.
-* Java 8 (or later) and [Maven](https://maven.apache.org/download.cgi)
+* Java 8 (or later)
 * Updated your Maven POM/Groovy build file/whatever to reference the new JUnit 5 JAR
 
 ## Running the update from code
+
+Every project is slightly different in the way its structured the tests are written.
+We do not plan to provide command line arguments for all those nuances.
+Therefore, the preferred way to use this tool is from source.
+You need [Maven](https://maven.apache.org/download.cgi) for to build.  
 
 1. clone this repository
 2. open [`UpdateWithAdditionalOptions`](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java)
