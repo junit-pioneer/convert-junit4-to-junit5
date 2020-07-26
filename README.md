@@ -8,7 +8,7 @@ This programm was always driven by individual needs and is by no means a fully w
 [Jeanne Boayrsky](https://github.com/boyarsky) originally wrote this program in September 2016 to [facilitate converting a good number of tests to JUnit 5 syntax](https://www.selikoff.net/2017/09/02/converting-2k-tests-to-junit-5-in-one-day/).
 It was since donated to JUnit Pioneer.
 It used a mixture of regex search and replace and AST transformations.
-Nowadays, IntelliJ covers some aspects to convert from JUnit 4 to 5 but backe then this feature was not available.
+Nowadays, IntelliJ covers some aspects to convert from JUnit 4 to 5, back then this feature was not available.
 Even with this feature available this tool can still be useful if you have to convert custom JUnit 4 logic to JUnit 5.
 
 At the start of 2019 [signed](https://github.com/signed/) extended the programm to convert the tests in [javaparser](https://github.com/javaparser/javaparser/pull/2002).
