@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConversionResultBuilder {
-    private List<UsedFeature> usedFeatures = new ArrayList<>();
+    private final List<UsedFeature> usedFeatures = new ArrayList<>();
     private ConversionOutcome outcome;
     private String details;
     private String code;
