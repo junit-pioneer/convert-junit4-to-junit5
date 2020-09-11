@@ -42,7 +42,7 @@ Therefore, the preferred way to use this tool is from source.
 You need [Maven](https://maven.apache.org/download.cgi) for to build.  
 
 1. clone this repository
-2. open [`UpdateWithAdditionalOptions`](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java)
+2. open [`UpdateWithAdditionalOptions`](src/main/java/jb/UpdateWithAdditionalOptions.java)
 3. replace `/path/to/your/test/directory` with the path to the directory containing your tests.
 4. run `UpdateWithAdditionalOptions`
 
@@ -59,14 +59,14 @@ In particular the following will not compile after running the program and requi
 
 ## Configure and Extend
 
-There are [configuration options](convert-junit4-to-junit5/src/main/java/jb/configuration/Configuration.java) like `preserve formatting` and `dry run` that are not exposed as command line flags.
-Have a look at [`UpdateWithAdditionalOptions`](convert-junit4-to-junit5/src/main/java/jb/UpdateWithAdditionalOptions.java) to see how to enable those options from the code.
+There are [configuration options](src/main/java/jb/configuration/Configuration.java) like `preserve formatting` and `dry run` that are not exposed as command line flags.
+Have a look at [`UpdateWithAdditionalOptions`](src/main/java/jb/UpdateWithAdditionalOptions.java) to see how to enable those options from the code.
 
 This tool is build around the idea to have a list of conversions that are executed in sequence one after the other.
-Have a look at the [available conversions](convert-junit4-to-junit5/src/main/java/jb/convert/ast).
-Conversion you do not need can be excluded by commenting them out in [`JunitConversionLogic`](convert-junit4-to-junit5/src/main/java/jb/convert/JunitConversionLogic.java).
+Have a look at the [available conversions](src/main/java/jb/convert/ast).
+Conversion you do not need can be excluded by commenting them out in [`JunitConversionLogic`](src/main/java/jb/convert/JunitConversionLogic.java).
 
-In case your project has custom JUnit 4 code e.g. Rules, you can implement your own [`Conversion`](convert-junit4-to-junit5/src/main/java/jb/convert /ast/Conversion.java) and add it to the [JunitConversionLogic](convert-junit4-to-junit5/src/main/java/jb/convert/JunitConversionLogic.java). 
+In case your project has custom JUnit 4 code e.g. Rules, you can implement your own [`Conversion`](src/main/java/jb/convert /ast/Conversion.java) and add it to the [JunitConversionLogic](src/main/java/jb/convert/JunitConversionLogic.java). 
 You will need to have a look at how to work with the AST produced by [Java Parser](https://github.com/javaparser/javaparser).
 Looking at the existing conversions for inspiration may help too.
 If you write a new conversion that might be helpful to others, feel free to open a [pull request](https://github.com/junit-pioneer/convert-junit4-to-junit5/pulls).
