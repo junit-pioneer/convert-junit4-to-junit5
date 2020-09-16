@@ -27,14 +27,6 @@ dependencies {
     implementation(group = "commons-io", name = "commons-io", version = "2.5")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = "5.$junitMinorVersion")
-    testImplementation(group = "org.junit.platform", name = "junit-platform-launcher", version = "1.$junitMinorVersion")
-    testImplementation(group = "org.junit.platform", name = "junit-platform-testkit", version = "1.$junitMinorVersion")
-
-    testImplementation(group = "org.assertj", name = "assertj-core", version = "3.15.0")
-    testImplementation(group = "org.mockito", name = "mockito-core", version = "3.3.3")
-
-    testRuntimeOnly(group = "org.apache.logging.log4j", name = "log4j-core", version = "2.12.1")
-    testRuntimeOnly(group = "org.apache.logging.log4j", name = "log4j-jul", version = "2.12.1")
 }
 
 tasks {
