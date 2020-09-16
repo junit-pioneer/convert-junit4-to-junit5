@@ -12,6 +12,7 @@ import java.nio.file.attribute.FileTime;
 import java.util.Random;
 
 import static jb.AssertionsHelper.assertJunit5StyleImports;
+import static jb.UpdaterTestHelper.writeExampleTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -56,7 +57,7 @@ class UpdatesOnChangeTest {
         String contents = "import static org.junit.Assert.*;\n" +
                 "import java.util.*;\n" +
                 "import org.junit.*;\n";
-        Files.write(path, contents.getBytes());
+        writeExampleTo(path, contents);
         Updater.main(path.toAbsolutePath().toString());
         assertJunit5StyleImports(path);
     }
@@ -66,7 +67,7 @@ class UpdatesOnChangeTest {
         String contents = "import static org.junit.jupiter.api.Assertions.*;\n" +
                 "import java.util.*;\n" +
                 "import org.junit.jupiter.api.*;\n";
-        Files.write(path, contents.getBytes());
+        writeExampleTo(path, contents);
         FileTime lastModified = Files.getLastModifiedTime(path);
         Updater.main(path.toAbsolutePath().toString());
         assertFileTimestampNotUpdated(lastModified);
