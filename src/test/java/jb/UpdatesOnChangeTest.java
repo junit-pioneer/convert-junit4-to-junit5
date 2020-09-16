@@ -21,14 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author jeanne
  */
-class UpdatesOnChangeIT {
+class UpdatesOnChangeTest {
 
     private Path path;
 
     @BeforeEach
     void createTestFile() {
         Random random = new Random();
-        path = Paths.get("target/junit-test-" + random.nextInt() + ".java");
+        path = Paths.get("build/it/junit-test-" + random.nextInt() + ".java");
     }
 
     @AfterEach
