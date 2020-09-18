@@ -22,7 +22,7 @@ import static jb.AssertionsHelper.assertJunit5StyleImports;
  *
  * @author jeanne
  */
-class ScanAndUpdateDirIT {
+class ScanAndUpdateDirTest {
 
     private Updater updater;
     private Path path;
@@ -35,7 +35,7 @@ class ScanAndUpdateDirIT {
     @BeforeEach
     void createTestFile() {
         Random random = new Random();
-        path = Paths.get("target/junit-test-" + random.nextInt() + ".java");
+        path = Paths.get("build/it/junit-test-" + random.nextInt() + ".java");
     }
 
     @AfterEach

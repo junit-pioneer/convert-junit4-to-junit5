@@ -36,10 +36,10 @@ Before starting out, the program assumes you have:
 
 ## Running the update from code
 
-Every project is slightly different in the way its structured the tests are written.
+Every project is slightly different in the way its structured and how the tests are written.
 We do not plan to provide command line arguments for all those nuances.
 Therefore, the preferred way to use this tool is from source.
-You need [Maven](https://maven.apache.org/download.cgi) for to build.  
+You need [gradle](https://docs.gradle.org/current/userguide/installation.html) to build.  
 
 1. clone this repository
 2. open [`UpdateWithAdditionalOptions`](src/main/java/jb/UpdateWithAdditionalOptions.java)
