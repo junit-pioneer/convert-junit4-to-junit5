@@ -11,7 +11,6 @@ import com.github.javaparser.ast.visitor.Visitable;
 import jb.convert.ast.tools.Expressions;
 import jb.convert.ast.tools.ImportDeclarations;
 
-import static com.github.javaparser.JavaParser.parseImport;
 import static jb.convert.ast.tools.ImportDeclarations.addImportTo;
 
 public class AssertThatConversion extends ModifierVisitor<Void> implements Conversion {
@@ -43,7 +42,8 @@ public class AssertThatConversion extends ModifierVisitor<Void> implements Conve
                 scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(Expressions.fieldAccessExpressionFor("org.hamcrest.MatcherAssert")));
             });
             NodeList<ImportDeclaration> imports = ImportDeclarations.imports(methodCall);
-            if (imports.contains(parseImport("import static org.junit.Assert.*;"))) {
+            ImportDeclaration search = new ImportDeclaration("org.junit.Assert", true, true);
+            if (imports.contains(search)) {
                 updated();
                 addImportTo(methodCall, assertThatFromMatcherAssert());
             }
@@ -61,7 +61,7 @@ public class AssertThatConversion extends ModifierVisitor<Void> implements Conve
     }
 
     private ImportDeclaration assertThatFromMatcherAssert() {
-        return parseImport("import static org.hamcrest.MatcherAssert.assertThat;");
+        return new ImportDeclaration("org.hamcrest.MatcherAssert.assertThat", true, false);
     }
 
     @Override

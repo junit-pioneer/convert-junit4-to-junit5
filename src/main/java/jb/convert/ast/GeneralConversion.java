@@ -5,8 +5,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
-import jb.convert.ast.tools.ImportDeclarations;
-import jb.convert.ast.tools.Names;
 
 import static jb.convert.ast.tools.Names.createNameFor;
 
