@@ -1,12 +1,16 @@
 package jb.convert.ast;
 
 import com.github.javaparser.HasParentNode;
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.ArrayInitializerExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import org.junit.jupiter.api.Tag;
@@ -16,6 +20,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static jb.convert.ast.tools.ImportDeclarations.addImportTo;
@@ -26,7 +32,7 @@ public class CategoryClassToTagMetaAnnotationConversion extends ModifierVisitor<
     public Visitable visit(ClassOrInterfaceDeclaration n, Void arg) {
         super.visit(n, arg);
 
-        TypeDeclaration<?> replacement = JavaParser.parseTypeDeclaration("@interface " + n.getNameAsString() + "{}");
+        TypeDeclaration<?> replacement = new AnnotationDeclaration(EnumSet.noneOf(Modifier.class), n.getNameAsString());
         n.replace(replacement);
         replacement.setModifiers(n.getModifiers());
 
@@ -43,9 +49,12 @@ public class CategoryClassToTagMetaAnnotationConversion extends ModifierVisitor<
     }
 
     private ArrayInitializerExpr arrayOf(ElementType... types) {
-        String typesAsString = Arrays.stream(types).map(type -> "ElementType." + type.name()).collect(Collectors.joining(","));
-        Expression expression = JavaParser.parseExpression("new ElementType[]{" + typesAsString + "}");
-        return expression.findAll(ArrayInitializerExpr.class).get(0);
+        List<FieldAccessExpr> elements = Arrays.stream(types)
+                .map(type -> new FieldAccessExpr(new NameExpr("ElementType"), type.name()))
+                .collect(Collectors.toList());
+        NodeList<Expression> expressions = new NodeList<>();
+        expressions.addAll(elements);
+        return new ArrayInitializerExpr(expressions);
     }
 
     private String packageNameOf(HasParentNode<?> n) {
