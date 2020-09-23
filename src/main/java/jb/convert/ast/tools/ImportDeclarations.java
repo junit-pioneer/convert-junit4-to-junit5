@@ -4,6 +4,7 @@ import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Name;
 
 import static com.github.javaparser.JavaParser.parseImport;
 
@@ -44,7 +45,8 @@ public class ImportDeclarations {
     }
 
     public static ImportDeclaration importDeclarationFor(Class<?> replacementInJunit5) {
-        return parseImport("import " + replacementInJunit5.getCanonicalName() + ";");
+        Name name = Names.createNameFor(replacementInJunit5);
+        return new ImportDeclaration(name, false, false);
     }
 
     public static ImportDeclaration importDeclarationFor(StaticImportBuilder bluePrint) {
