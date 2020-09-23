@@ -19,11 +19,15 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ast.tools.ImportDeclarations;
+import jb.convert.ast.tools.StaticImportBuilder;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 import java.time.Duration;
 import java.util.Optional;
+
+import static jb.convert.ast.tools.ImportDeclarations.addStaticImportTo;
+import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 public class TestAnnotationConversion extends ModifierVisitor<Void> implements Conversion {
     private final String assertTimeoutReplacementMethodName = "assertTimeoutPreemptively";
@@ -72,11 +76,10 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
                 return;
             }
 
-            String importable = Assertions.class.getCanonicalName() + "." + assertTimeoutReplacementMethodName;
-
+            StaticImportBuilder importable = staticImportFrom(Assertions.class).method(assertTimeoutReplacementMethodName);
 
             ImportDeclarations.addImportTo(methodDeclaration, Duration.class);
-            ImportDeclarations.addStaticImportTo(methodDeclaration, importable);
+            addStaticImportTo(methodDeclaration, importable);
 
             Statement statement = JavaParser.parseStatement(assertTimeoutReplacementMethodName + "(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
                     "" + configuration.javaParser().print(body) +
@@ -93,7 +96,7 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
             if (body.getStatements().isEmpty()) {
                 return;
             }
-            ImportDeclarations.addStaticImportTo(methodDeclaration, Assertions.class.getCanonicalName() + ".assertThrows");
+            addStaticImportTo(methodDeclaration, staticImportFrom(Assertions.class).method("assertThrows"));
             Statement statement = JavaParser.parseStatement("assertThrows(" + exceptionClassAsString + ",()->" +
                     "" + configuration.javaParser().print(body) +
                     ");\n");

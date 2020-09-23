@@ -6,8 +6,6 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Name;
 
-import static com.github.javaparser.JavaParser.parseImport;
-
 public class ImportDeclarations {
 
     public static NodeList<ImportDeclaration> imports(HasParentNode<?> n) {
@@ -33,9 +31,8 @@ public class ImportDeclarations {
         addImportTo(node, importDeclarationFor(clazz));
     }
 
-    public static void addStaticImportTo(HasParentNode<?> target, String importable) {
-        ImportDeclaration staticImport = parseImport("import static " + importable + ";");
-        addImportTo(target, staticImport);
+    public static void addStaticImportTo(HasParentNode<?> target, StaticImportBuilder toAdd) {
+        addImportTo(target, importDeclarationFor(toAdd));
     }
 
     public static void addImportTo(HasParentNode<?> n, ImportDeclaration importDeclaration) {
