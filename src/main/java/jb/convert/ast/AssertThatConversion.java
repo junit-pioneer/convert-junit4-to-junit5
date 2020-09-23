@@ -8,6 +8,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import jb.convert.ast.tools.Expressions;
 import jb.convert.ast.tools.ImportDeclarations;
 
 import static com.github.javaparser.JavaParser.parseImport;
@@ -39,7 +40,7 @@ public class AssertThatConversion extends ModifierVisitor<Void> implements Conve
         Visitable visit = super.visit(methodCall, arg);
         if ("assertThat".equals(methodCall.getNameAsString()) && hasTwoOrThreeArguments(methodCall)) {
             methodCall.getScope().ifPresent(scope -> {
-                scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(JavaParser.parseExpression("org.hamcrest.MatcherAssert")));
+                scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(Expressions.fieldAccessExpressionFor("org.hamcrest.MatcherAssert")));
             });
             NodeList<ImportDeclaration> imports = ImportDeclarations.imports(methodCall);
             if (imports.contains(parseImport("import static org.junit.Assert.*;"))) {
