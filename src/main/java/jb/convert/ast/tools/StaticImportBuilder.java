@@ -19,7 +19,7 @@ public class StaticImportBuilder {
     }
 
     public StaticImportBuilder star() {
-        return method("*");
+        return method(StaticImport.SymbolForStarImport);
     }
 
     public StaticImportBuilder method(String method) {

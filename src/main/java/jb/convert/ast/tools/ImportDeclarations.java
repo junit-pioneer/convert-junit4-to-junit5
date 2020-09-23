@@ -51,6 +51,10 @@ public class ImportDeclarations {
 
     public static ImportDeclaration importDeclarationFor(StaticImportBuilder bluePrint) {
         StaticImport build = bluePrint.build();
-        return parseImport("import static " + build.className + "." + build.method + ";");
+        // in case it is a star import this information is passed in a flag and not in the name
+        String method = build.isStarImport() ? "" : "." + build.method;
+        Name name = Names.createNameFor(build.className.string + method);
+        return new ImportDeclaration(name, true, build.isStarImport());
     }
+
 }
