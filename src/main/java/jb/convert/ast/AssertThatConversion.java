@@ -10,12 +10,15 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import jb.convert.ast.tools.Expressions;
 import jb.convert.ast.tools.ImportDeclarations;
+import jb.convert.ast.tools.StaticImportBuilder;
 
 import static jb.convert.ast.tools.ImportDeclarations.addImportTo;
+import static jb.convert.ast.tools.ImportDeclarations.importDeclarationFor;
+import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 public class AssertThatConversion extends ModifierVisitor<Void> implements Conversion {
 
-    private static final ImportDeclaration junitAssertThat = JavaParser.parseImport("import static org.junit.Assert.assertThat;");
+    private static final ImportDeclaration junitAssertThat = importDeclarationFor(staticImportFrom(org.junit.Assert.class).method("assertThat"));
     private boolean updated = false;
 
 

@@ -9,7 +9,7 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import static jb.convert.ast.tools.Names.createNameFor;
 
 public class GeneralConversion extends ModifierVisitor<Void> implements Conversion {
-    private final ImportDeclaration junitStar = JavaParser.parseImport("import org.junit.*;");
+    private final ImportDeclaration junitStar = new ImportDeclaration("org.junit", false, true);
     private boolean updated;
 
     @Override

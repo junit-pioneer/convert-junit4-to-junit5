@@ -22,7 +22,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class CategoryConversion extends ModifierVisitor<Void> implements Conversion {
-    private static final ImportDeclaration categoryImport = JavaParser.parseImport("import org.junit.experimental.categories.Category;");
+    private static final ImportDeclaration categoryImport = new ImportDeclaration("org.junit.experimental.categories.Category", false, false);
     private final ProjectRecorder projectRecorder;
     private boolean updated = false;
 
@@ -63,7 +63,7 @@ public class CategoryConversion extends ModifierVisitor<Void> implements Convers
         List<ImportDeclaration> collect = imports.stream()
                 .filter(it -> it.getName().getIdentifier().equals(simpleName.getIdentifier()))
                 .collect(toList());
-        if (collect.isEmpty() || collect.size() > 1) {
+        if (collect.size() != 1) {
             throw new IllegalStateException("unable to resolve category class to single import, instead found " + collect.size());
         }
         Name category = collect.get(0).getName();
