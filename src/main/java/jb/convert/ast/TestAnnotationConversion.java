@@ -82,7 +82,7 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
 
             Statement statement = StaticJavaParser.parseStatement(assertTimeoutReplacementMethodName + "(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
                     "" + configuration.javaParser().print(body) +
-                    ");\n");
+                    ");");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);
@@ -98,7 +98,7 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
             ImportDeclarations.addStaticImportTo(methodDeclaration, staticImportFrom(Assertions.class).method("assertThrows"));
             Statement statement = StaticJavaParser.parseStatement("assertThrows(" + exceptionClassAsString + ",()->" +
                     "" + configuration.javaParser().print(body) +
-                    ");\n");
+                    ");");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);
