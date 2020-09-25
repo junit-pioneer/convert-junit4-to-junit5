@@ -1,7 +1,6 @@
 package jb;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.StaticJavaParser;
 import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ConversionOutcome;
@@ -83,7 +82,7 @@ public class JunitConversionLogicFixture {
     }
 
     private static String prettyPrint(String string) {
-        return StaticJavaParser.parse(string).toString();
+        return new JavaParser().parse(string).toString();
     }
 
     public static String convertedWithPreservedFormatting(String junit4) {
