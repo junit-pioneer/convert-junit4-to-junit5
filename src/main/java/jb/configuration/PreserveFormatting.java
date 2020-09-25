@@ -10,9 +10,7 @@ public class PreserveFormatting implements JavaParserAdapter {
     @Override
     public CompilationUnit parse(String source) {
         StaticJavaParser.setConfiguration(new ParserConfiguration().setLexicalPreservationEnabled(true));
-        CompilationUnit compilationUnit = StaticJavaParser.parse(source);
-        LexicalPreservingPrinter.setup(compilationUnit);
-        return compilationUnit;
+        return StaticJavaParser.parse(source);
     }
 
     @Override
