@@ -1,6 +1,6 @@
 package jb;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.Configuration;
 import jb.configuration.JunitConversionLogicConfiguration;
@@ -79,7 +79,7 @@ public class Updater {
         project.categoriesToConvert().forEach(path -> {
             try {
                 configuration.javaParser().parse(readSourceFile(path));
-                CompilationUnit cu = JavaParser.parse(path);
+                CompilationUnit cu = StaticJavaParser.parse(path);
                 new CategoryClassToTagMetaAnnotationConversion().visit(cu, null);
                 String source = configuration.javaParser().print(cu);
                 configuration.changeWriter().write(path, source);

@@ -32,7 +32,7 @@ public class CategoryClassToTagMetaAnnotationConversion extends ModifierVisitor<
     public Visitable visit(ClassOrInterfaceDeclaration n, Void arg) {
         super.visit(n, arg);
 
-        TypeDeclaration<?> replacement = new AnnotationDeclaration(EnumSet.noneOf(Modifier.class), n.getNameAsString());
+        TypeDeclaration<?> replacement = new AnnotationDeclaration(new NodeList<>(), n.getNameAsString());
         n.replace(replacement);
         replacement.setModifiers(n.getModifiers());
 

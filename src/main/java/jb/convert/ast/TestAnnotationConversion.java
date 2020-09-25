@@ -1,6 +1,6 @@
 package jb.convert.ast;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Assertions;
 import java.time.Duration;
 import java.util.Optional;
 
-import static jb.convert.ast.tools.ImportDeclarations.addStaticImportTo;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 public class TestAnnotationConversion extends ModifierVisitor<Void> implements Conversion {
@@ -79,9 +78,9 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
             StaticImportBuilder importable = staticImportFrom(Assertions.class).method(assertTimeoutReplacementMethodName);
 
             ImportDeclarations.addImportTo(methodDeclaration, Duration.class);
-            addStaticImportTo(methodDeclaration, importable);
+            ImportDeclarations.addStaticImportTo(methodDeclaration, importable);
 
-            Statement statement = JavaParser.parseStatement(assertTimeoutReplacementMethodName + "(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
+            Statement statement = StaticJavaParser.parseStatement(assertTimeoutReplacementMethodName + "(Duration.ofMillis(" + timeoutInMillis + "L) ,()->" +
                     "" + configuration.javaParser().print(body) +
                     ");\n");
             NodeList<Statement> statements = new NodeList<>();
@@ -96,8 +95,8 @@ public class TestAnnotationConversion extends ModifierVisitor<Void> implements C
             if (body.getStatements().isEmpty()) {
                 return;
             }
-            addStaticImportTo(methodDeclaration, staticImportFrom(Assertions.class).method("assertThrows"));
-            Statement statement = JavaParser.parseStatement("assertThrows(" + exceptionClassAsString + ",()->" +
+            ImportDeclarations.addStaticImportTo(methodDeclaration, staticImportFrom(Assertions.class).method("assertThrows"));
+            Statement statement = StaticJavaParser.parseStatement("assertThrows(" + exceptionClassAsString + ",()->" +
                     "" + configuration.javaParser().print(body) +
                     ");\n");
             NodeList<Statement> statements = new NodeList<>();

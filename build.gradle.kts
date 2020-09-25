@@ -22,7 +22,7 @@ dependencies {
     In versions after 3.8.3 has a bug if you try to preserve formatting
     https://github.com/javaparser/javaparser/pull/2027
     */
-    implementation(group = "com.github.javaparser", name = "javaparser-core", version = "3.8.3")
+    implementation(group = "com.github.javaparser", name = "javaparser-core", version = "3.16.1")
     implementation(group = "org.hamcrest", name = "hamcrest-all", version = "1.3")
     implementation(group = "commons-io", name = "commons-io", version = "2.5")
 
