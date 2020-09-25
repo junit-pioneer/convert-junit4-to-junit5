@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.github.javaparser.JavaParser.parseExpression;
+import static jb.convert.ast.tools.Expressions.fieldAccessExpressionFor;
 import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 public class AssertConversion extends VoidVisitorAdapter<Object> implements Conversion {
@@ -60,7 +60,7 @@ public class AssertConversion extends VoidVisitorAdapter<Object> implements Conv
             if (scopeMatchesAssert(methodCall)) {
                 methodCall.getScope().ifPresent(scope -> {
                     scope.ifNameExpr(name -> name.setName("Assertions"));
-                    scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(parseExpression("org.junit.jupiter.api.Assertions")));
+                    scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(fieldAccessExpressionFor("org.junit.jupiter.api.Assertions")));
                 });
                 updated();
             }

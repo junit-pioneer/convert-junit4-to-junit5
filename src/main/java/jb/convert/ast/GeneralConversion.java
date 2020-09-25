@@ -6,8 +6,10 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 
+import static jb.convert.ast.tools.Names.createNameFor;
+
 public class GeneralConversion extends ModifierVisitor<Void> implements Conversion {
-    private final ImportDeclaration junitStar = JavaParser.parseImport("import org.junit.*;");
+    private final ImportDeclaration junitStar = new ImportDeclaration("org.junit", false, true);
     private boolean updated;
 
     @Override
@@ -20,7 +22,7 @@ public class GeneralConversion extends ModifierVisitor<Void> implements Conversi
     public Node visit(ImportDeclaration importDeclaration, Void arg) {
         if (importDeclaration.equals(junitStar)) {
             updated();
-            return JavaParser.parseImport("import org.junit.jupiter.api.*;");
+            return new ImportDeclaration(createNameFor("org.junit.jupiter.api"), false, true);
         }
         return importDeclaration;
     }

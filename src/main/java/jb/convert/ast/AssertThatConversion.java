@@ -8,14 +8,17 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import jb.convert.ast.tools.Expressions;
 import jb.convert.ast.tools.ImportDeclarations;
+import jb.convert.ast.tools.StaticImportBuilder;
 
-import static com.github.javaparser.JavaParser.parseImport;
 import static jb.convert.ast.tools.ImportDeclarations.addImportTo;
+import static jb.convert.ast.tools.ImportDeclarations.importDeclarationFor;
+import static jb.convert.ast.tools.StaticImportBuilder.staticImportFrom;
 
 public class AssertThatConversion extends ModifierVisitor<Void> implements Conversion {
 
-    private static final ImportDeclaration junitAssertThat = JavaParser.parseImport("import static org.junit.Assert.assertThat;");
+    private static final ImportDeclaration junitAssertThat = importDeclarationFor(staticImportFrom(org.junit.Assert.class).method("assertThat"));
     private boolean updated = false;
 
 
@@ -39,10 +42,11 @@ public class AssertThatConversion extends ModifierVisitor<Void> implements Conve
         Visitable visit = super.visit(methodCall, arg);
         if ("assertThat".equals(methodCall.getNameAsString()) && hasTwoOrThreeArguments(methodCall)) {
             methodCall.getScope().ifPresent(scope -> {
-                scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(JavaParser.parseExpression("org.hamcrest.MatcherAssert")));
+                scope.ifFieldAccessExpr(fieldAccessExpr -> fieldAccessExpr.replace(Expressions.fieldAccessExpressionFor("org.hamcrest.MatcherAssert")));
             });
             NodeList<ImportDeclaration> imports = ImportDeclarations.imports(methodCall);
-            if (imports.contains(parseImport("import static org.junit.Assert.*;"))) {
+            ImportDeclaration search = new ImportDeclaration("org.junit.Assert", true, true);
+            if (imports.contains(search)) {
                 updated();
                 addImportTo(methodCall, assertThatFromMatcherAssert());
             }
@@ -60,7 +64,7 @@ public class AssertThatConversion extends ModifierVisitor<Void> implements Conve
     }
 
     private ImportDeclaration assertThatFromMatcherAssert() {
-        return parseImport("import static org.hamcrest.MatcherAssert.assertThat;");
+        return new ImportDeclaration("org.hamcrest.MatcherAssert.assertThat", true, false);
     }
 
     @Override

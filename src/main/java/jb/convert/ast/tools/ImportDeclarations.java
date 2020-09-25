@@ -4,8 +4,7 @@ import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
-
-import static com.github.javaparser.JavaParser.parseImport;
+import com.github.javaparser.ast.expr.Name;
 
 public class ImportDeclarations {
 
@@ -32,9 +31,8 @@ public class ImportDeclarations {
         addImportTo(node, importDeclarationFor(clazz));
     }
 
-    public static void addStaticImportTo(HasParentNode<?> target, String importable) {
-        ImportDeclaration staticImport = parseImport("import static " + importable + ";");
-        addImportTo(target, staticImport);
+    public static void addStaticImportTo(HasParentNode<?> target, StaticImportBuilder toAdd) {
+        addImportTo(target, importDeclarationFor(toAdd));
     }
 
     public static void addImportTo(HasParentNode<?> n, ImportDeclaration importDeclaration) {
@@ -44,11 +42,16 @@ public class ImportDeclarations {
     }
 
     public static ImportDeclaration importDeclarationFor(Class<?> replacementInJunit5) {
-        return parseImport("import " + replacementInJunit5.getCanonicalName() + ";");
+        Name name = Names.createNameFor(replacementInJunit5);
+        return new ImportDeclaration(name, false, false);
     }
 
     public static ImportDeclaration importDeclarationFor(StaticImportBuilder bluePrint) {
         StaticImport build = bluePrint.build();
-        return parseImport("import static " + build.className + "." + build.method + ";");
+        // in case it is a star import this information is passed in a flag and not in the name
+        String method = build.isStarImport() ? "" : "." + build.method;
+        Name name = Names.createNameFor(build.className.string + method);
+        return new ImportDeclaration(name, true, build.isStarImport());
     }
+
 }
