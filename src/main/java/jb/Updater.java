@@ -1,8 +1,10 @@
 package jb;
 
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import jb.configuration.Configuration;
+import jb.configuration.JavaParserHelper;
 import jb.configuration.JunitConversionLogicConfiguration;
 import jb.convert.ConversionOutcome;
 import jb.convert.ConversionResult;
@@ -76,10 +78,11 @@ public class Updater {
     }
 
     private void convertCategories() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration());
         project.categoriesToConvert().forEach(path -> {
             try {
                 configuration.javaParser().parse(readSourceFile(path));
-                CompilationUnit cu = StaticJavaParser.parse(path);
+                CompilationUnit cu = JavaParserHelper.extractResultFrom(javaParser.parse(path));
                 new CategoryClassToTagMetaAnnotationConversion().visit(cu, null);
                 String source = configuration.javaParser().print(cu);
                 configuration.changeWriter().write(path, source);
