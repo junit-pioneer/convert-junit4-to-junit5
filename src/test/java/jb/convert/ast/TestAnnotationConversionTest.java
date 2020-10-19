@@ -1,5 +1,6 @@
 package jb.convert.ast;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static jb.JunitConversionLogicFixture.assertAfterAddingClassAfter;
@@ -27,9 +28,9 @@ class TestAnnotationConversionTest {
                 "class A {\n" +
                 "    @Test\n" +
                 "void m() {\n" +
-                "        assertThrows(IllegalArgumentException.class, () -> {\n" +
-                "            throw new IllegalArgumentException();\n" +
-                "        });\n" +
+                "        assertThrows(IllegalArgumentException.class,()->{\n" +
+                "        throw new IllegalArgumentException();\n" +
+                "    });\n" +
                 "    }\n" +
                 "}";
         assertThat(convertedWithPreservedFormatting(junit4), equalTo(junit5));
@@ -52,9 +53,9 @@ class TestAnnotationConversionTest {
                 "class A {\n" +
                 "    @Test\n" +
                 "void m() {\n" +
-                "        assertTimeoutPreemptively(Duration.ofMillis(42L), () -> {\n" +
-                "            System.out.println(\"I'm fast\");\n" +
-                "        });\n" +
+                "        assertTimeoutPreemptively(Duration.ofMillis(42L) ,()->{\n" +
+                "        System.out.println(\"I'm fast\");\n" +
+                "    });\n" +
                 "    }\n" +
                 "}";
         assertThat(convertedWithPreservedFormatting(junit4), equalTo(junit5));
