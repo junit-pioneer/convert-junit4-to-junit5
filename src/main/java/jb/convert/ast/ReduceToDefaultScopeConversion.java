@@ -30,7 +30,7 @@ public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, 
     public Void visit(ClassOrInterfaceDeclaration n, Accumulator arg) {
         Void visit = super.visit(n, arg);
         if (arg.containsTests && !n.isNestedType()) {
-            n.removeModifier(Modifier.PUBLIC);
+            n.removeModifier(Modifier.Keyword.PUBLIC);
             updated();
         }
         return visit;
@@ -50,7 +50,7 @@ public class ReduceToDefaultScopeConversion extends GenericVisitorAdapter<Void, 
 
     private void reduceToDefaultScopeIfAnnotationIsPresent(Class<? extends Annotation> annotationClass, MethodDeclaration n) {
         n.getAnnotationByClass(annotationClass).ifPresent(doNotCare -> {
-            n.removeModifier(Modifier.PUBLIC);
+            n.removeModifier(Modifier.Keyword.PUBLIC);
             updated();
         });
     }

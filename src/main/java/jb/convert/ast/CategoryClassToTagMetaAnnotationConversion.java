@@ -2,7 +2,6 @@ package jb.convert.ast;
 
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -20,7 +19,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +30,7 @@ public class CategoryClassToTagMetaAnnotationConversion extends ModifierVisitor<
     public Visitable visit(ClassOrInterfaceDeclaration n, Void arg) {
         super.visit(n, arg);
 
-        TypeDeclaration<?> replacement = new AnnotationDeclaration(EnumSet.noneOf(Modifier.class), n.getNameAsString());
+        TypeDeclaration<?> replacement = new AnnotationDeclaration(new NodeList<>(), n.getNameAsString());
         n.replace(replacement);
         replacement.setModifiers(n.getModifiers());
 

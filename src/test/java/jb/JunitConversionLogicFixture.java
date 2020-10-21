@@ -82,7 +82,7 @@ public class JunitConversionLogicFixture {
     }
 
     private static String prettyPrint(String string) {
-        return JavaParser.parse(string).toString();
+        return new JavaParser().parse(string).toString();
     }
 
     public static String convertedWithPreservedFormatting(String junit4) {

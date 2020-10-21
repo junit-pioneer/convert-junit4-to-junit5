@@ -1,6 +1,6 @@
 package jb.convert.ast;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +30,7 @@ class CategoryClassToTagMetaAnnotationConversionTest {
                 "public @interface Category {\n" +
                 "}\n";
 
-        CompilationUnit cu = JavaParser.parse(categoryClassSource);
+        CompilationUnit cu = StaticJavaParser.parse(categoryClassSource);
         new CategoryClassToTagMetaAnnotationConversion().visit(cu, null);
 
         assertThat(cu.toString(), equalTo(expectedTagMetaAnnotation));
