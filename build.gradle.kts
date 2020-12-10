@@ -41,4 +41,18 @@ tasks {
             setExceptionFormat("full")
         }
     }
+    register<Jar>("fatJar") {
+        group = "application"
+        manifest {
+            attributes["Implementation-Version"] = archiveVersion
+            attributes["Main-Class"] = "jb.UpdateWithAdditionalOptions"
+        }
+        archiveBaseName.set("${project.name}-fat")
+        from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+        with(jar.get() as CopySpec)
+    }
+    "build" {
+        dependsOn("fatJar")
+    }
 }
+

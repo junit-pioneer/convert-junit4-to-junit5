@@ -3,6 +3,7 @@ package jb;
 import jb.configuration.Configuration;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 
 public class UpdateWithAdditionalOptions {
@@ -12,6 +13,14 @@ public class UpdateWithAdditionalOptions {
                 .excludeMatching(path -> false)
                 .skipFilesWithUnsupportedFeatures()
                 .preserveFormatting();
-        new Updater(configuration.build()).update(Paths.get("/path/to/your/test/directory"));
+
+        for (String arg: args) {
+            try {
+                new Updater(configuration.build()).update(Paths.get(arg));
+            }
+            catch(NoSuchFileException nsfe) {
+                System.err.printf("Error: Directory '%s' not found", nsfe.getMessage());
+            }
+        }
     }
 }
