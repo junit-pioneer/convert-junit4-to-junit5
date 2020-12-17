@@ -46,7 +46,7 @@ tasks {
         group = "application"
         manifest {
             attributes["Implementation-Version"] = archiveVersion
-            attributes["Main-Class"] = "jb.UpdateWithAdditionalOptions"
+            attributes["Main-Class"] = "jb.CommandLineRunner"
         }
         archiveBaseName.set("${project.name}-fat")
         from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
