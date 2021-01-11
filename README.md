@@ -57,6 +57,29 @@ In particular the following will not compile after running the program and requi
 * Rules
 * Categories (there is only basic support for categories)
 
+## Running the update from the command line
+
+When you build the project with Gradle, two Jar files are created:
+
+* `convert-junit4-to-junit5.jar`
+* `convert-junit4-to-junit5-fat.jar`
+
+The latter can be directly executed from the command line,
+using the class [CommandLineRunner](src/main/java/jb/CommandLineRunner.java) as entry point, e.g. like so:
+
+    java -jar build/lib/convert-junit4-to-junit5-fat.jar
+
+This will show the available options:
+
+* `-x`, `--exclude`: Glob pattern (e.g. `ExcludeThis*.java`) of file names to exclude. Default: Nothing is excluded
+* `-h`, `--help`: Show usage
+* `-p`, `--preserve-formatting`: Do no re-format source files. 
+* `-s`, `--skip-unsupported-features`: Skip files with unsupported JUnit4 features
+* `-w`, `--write`: Overwrite files instead of just reporting what would happen
+
+If given a list of directory names, it will scan each one and report what would happen.
+Unless also the `-w` or `--write` option is set, nothing will be written.
+
 ## Configure and Extend
 
 There are [configuration options](src/main/java/jb/configuration/Configuration.java) like `preserve formatting` and `dry run` that are not exposed as command line flags.
