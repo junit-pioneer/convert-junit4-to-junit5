@@ -20,7 +20,7 @@ dependencies {
     implementation(group = "junit", name = "junit", version = "4.13.2")
     implementation(group = "com.github.javaparser", name = "javaparser-core", version = "3.22.1")
     implementation(group = "org.hamcrest", name = "hamcrest-all", version = "1.3")
-    implementation(group = "commons-io", name = "commons-io", version = "2.8.0")
+    implementation(group = "commons-io", name = "commons-io", version = "2.11.0")
     implementation(group = "com.beust", name = "jcommander", version = "1.81")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = "5.$junitMinorVersion")
