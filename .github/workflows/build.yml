@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        java: [ 8, 11, 16 ]
+        java: [ 8, 11, 17 ]
         os: [ubuntu, windows, macos]
     name: with Java ${{ matrix.java }} on ${{ matrix.os }}
     steps:
