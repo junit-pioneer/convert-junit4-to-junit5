@@ -36,6 +36,6 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
       - name: Gradle build
-        uses: eskatos/gradle-command-action@v1
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: --refresh-dependencies --stacktrace --scan clean build
