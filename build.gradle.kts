@@ -49,6 +49,7 @@ tasks {
             attributes["Main-Class"] = "jb.CommandLineRunner"
         }
         archiveBaseName.set("${project.name}-fat")
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
         with(jar.get() as CopySpec)
     }
