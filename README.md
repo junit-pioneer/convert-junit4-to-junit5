@@ -1,7 +1,9 @@
 # JUnit 4 to JUnit 5
 
+⚠️ As of June 2023, this project/repository is [archived](https://docs.github.com/en/repositories/archiving-a-github-repository/archiving-repositories). See #59 for details.
+
 As the name indicates this tool can assist to convert tests written in [JUnit 4](https://github.com/junit-team/junit4/wiki/Getting-started) to [JUnit 5](https://junit.org/junit5/docs/current/user-guide/#writing-tests) (Jupiter, to be precise).
-This programm was always driven by individual needs and is by no means a fully working and supported migration tool.   
+This programm was always driven by individual needs and is by no means a fully working and supported migration tool.
 
 # Some History
 
